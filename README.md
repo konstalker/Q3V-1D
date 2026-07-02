@@ -2,11 +2,22 @@
 
  Quake 3 compilation by KONSTALKER for METARENA server
 
+- The `.zip` archive download does **not** work correctly because game files are too large and stored via Git LFS.
 
 ### IF YOU WANT TO DOWNLOAD NEWEST (not released) VERSION PLS USE "git clone"
-> open your terminal (win + R, write "cmd" and enter on windows)\n
-> use "cd <folder>" to change floder (like "cd ./Games")\n
-> !!! please, check git lfs installed ("git lfs version") (this is reason why i can public compilation on git (files TOO large) and why you cant download it with .zip archive)
-> !!! if it has no version -> install ("git lfs install")
-> use "git clone https://github.com/konstalker/Q3V-1D.git & cd "Q3V-1D" & first_launch.bat"
-> now shortcut on your desktop, have fun!
+1. Open a terminal (Windows: `Win + R` → type `cmd` → Enter)
+2. Navigate to the folder where you want to install:
+
+​```bash
+cd path/to/your/folder
+​```
+
+3. Clone the repository and run the first launch script:
+
+​```bash
+git clone https://github.com/konstalker/Q3V-1D.git
+cd Q3V-1D
+first_launch.bat
+​```
+
+4. A shortcut will appear on your desktop — have fun!
