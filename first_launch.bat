@@ -1,8 +1,10 @@
 @echo off
 
-cd ./engines
-./updater.bat
-cd ../
+echo %~dp0/engines
+cd /d %~dp0/engines
+call ./updater.bat
+echo %~dp0
+cd /d %~dp0
 
 set "shortcutName=%USERPROFILE%\Desktop\Quake 3 Arena.lnk"
 set "targetPath=%~dp0engines\launch.bat"
