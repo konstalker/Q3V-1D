@@ -8,3 +8,108 @@ lagometer
     blendFunc blend
   }
 }
+
+// hitbox edges
+
+gfx/misc/hbox
+{
+	nopicmip
+	{
+		map gfx/misc/hbox.tga
+		blendFunc GL_SRC_ALPHA GL_ONE_MINUS_SRC_ALPHA
+		rgbGen vertex
+		alphaGen const 0.6
+	}
+	{
+		map gfx/misc/hbox.tga
+		blendFunc GL_ONE GL_ONE
+		rgbGen vertex
+		alphaGen const 0.35
+	}	
+}
+
+gfx/misc/hbox_nocull
+{
+	nopicmip
+	cull none
+	{
+		map gfx/misc/hbox.tga
+		blendFunc GL_SRC_ALPHA GL_ONE_MINUS_SRC_ALPHA
+		rgbGen vertex
+		alphaGen const 0.6
+	}
+	{
+		map gfx/misc/hbox.tga
+		blendFunc GL_ONE GL_ONE
+		rgbGen vertex
+		alphaGen const 0.35
+	}	
+}
+
+gfx/2d/bigchars
+{
+	nopicmip
+	nomipmaps
+	{
+		map gfx/2d/BigcharsEliteOrbitron.tga
+		blendFunc GL_SRC_ALPHA GL_ONE_MINUS_SRC_ALPHA
+		rgbgen vertex
+	}
+}
+
+altFullBrightShader
+{
+	sort nearest
+	{
+		map textures/effects/invismap.tga
+		blendfunc GL_ONE GL_ONE
+		tcMod scale 0.5 0.5
+		tcMod turb 0 0.15 0 0.25
+		tcGen environment
+	}
+}
+
+outlineMedium
+{
+	nopicmip
+  	nomipmaps
+    deformVertexes wave 1000 sin 0.45 0 1000 1
+	cull back
+	{
+		clampmap *white
+		blendFunc GL_SRC_ALPHA GL_ONE_MINUS_SRC_ALPHA
+		rgbGen entity 
+		alphaGen const 0.6
+	}
+	{
+		clampmap *white
+		blendFunc GL_ONE GL_ONE
+		rgbGen entity
+		alphaGen const 0.35
+	} 
+}   
+
+outlineThin
+{
+	nopicmip
+  	nomipmaps
+    deformVertexes wave 1000 sin 0.45 0 1000 1
+	cull back
+	{
+		map textures/effects/galaxy.tga
+		tcMod scroll 0 0.04
+		rgbGen identity 
+		blendFunc add
+	}
+}
+
+flareShader
+{
+	nopicmip
+	cull none
+	{
+		map gfx/misc/flare.tga
+		blendFunc GL_ONE GL_ONE
+		rgbGen vertex
+	}
+}

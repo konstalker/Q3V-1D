@@ -1,0 +1,42 @@
+Gibs
+{
+	nopicmip
+	qer_editorimage models/gibs/gibs.tga
+	{
+		animmap 8 models/gibs/gibs.tga models/gibs/gibs2.tga 
+		blendfunc add
+	}
+}
+
+
+bloodExplosionNew
+{
+	nopicmip
+  	nomipmaps
+	{
+		animmap 24 models/weaphits/spark.jpg
+		blendFunc GL_SRC_ALPHA GL_ONE_MINUS_SRC_ALPHA
+		rgbGen entity 
+		alphaGen const 0.6
+	}
+	{
+		animmap 24 models/weaphits/spark.jpg
+		blendFunc GL_ONE GL_ONE
+		rgbGen entity
+		alphaGen const 0.35
+	}
+}
+
+
+bloodExplosionNew2
+{
+	nopicmip
+	nomipmaps
+	cull disable
+	{
+		animmap 5 models/weaphits/blood201.tga models/weaphits/blood202.tga models/weaphits/blood203.tga models/weaphits/blood204.tga models/weaphits/blood205.tga
+		blendfunc blend
+		rgbGen vertex
+		alphaGen const 0.8
+	}
+}
