@@ -8,16 +8,14 @@
 1. Open a terminal (Windows: `Win + R` → type `cmd` → Enter)
 2. Navigate to the folder where you want to install:
 
-​```bash
+​```
 cd path/to/your/folder
 ​```
 
 3. Clone the repository and run the first launch script:
 
-​```bash
-git clone https://github.com/konstalker/Q3V-1D.git
-cd Q3V-1D
-first_launch.bat
+​```
+git clone https://github.com/konstalker/Q3V-1D.git & cd Q3V-1D & first_launch.bat
 ​```
 
 4. A shortcut will appear on your desktop — have fun!
