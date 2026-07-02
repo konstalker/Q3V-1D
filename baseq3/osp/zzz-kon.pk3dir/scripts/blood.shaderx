@@ -40,3 +40,41 @@ bloodExplosionNew2
 		alphaGen const 0.8
 	}
 }
+
+
+bloodMark
+{
+	nopicmip	
+	polygonOffset
+	{
+		clampmap gfx/damage/blood_stain.tga
+		blendFunc GL_SRC_ALPHA GL_ONE_MINUS_SRC_ALPHA
+		rgbGen identityLighting
+		alphaGen vertex
+	}
+}
+
+bloodTrail
+{  
+	nopicmip		
+	entityMergable	
+	{
+		//clampmap gfx/misc/blood.tga
+        clampmap gfx/damage/blood_spurt.tga
+		blendFunc GL_SRC_ALPHA GL_ONE_MINUS_SRC_ALPHA
+		rgbGen		vertex
+		alphaGen	vertex
+	}
+}
+
+viewBloodBlend
+{
+	nopicmip
+    nomipmaps
+    sort nearest
+	cull disable
+	{
+		animmap 60 gfx/damage/blood_screen.tga
+		blendfunc blend
+	}
+}
