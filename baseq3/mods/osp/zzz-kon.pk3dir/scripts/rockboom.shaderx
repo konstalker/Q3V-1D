@@ -1,0 +1,31 @@
+rocketExplosion
+{
+  nopicmip
+  cull disable
+  {
+    animmap 23 models/weaphits/rlboom/1.tga models/weaphits/rlboom/2.tga models/weaphits/rlboom/3.tga models/weaphits/rlboom/4.tga models/weaphits/rlboom/5.tga models/weaphits/rlboom/6.tga models/weaphits/rlboom/7.tga models/weaphits/rlboom/8.tga models/weaphits/rlboom/9.tga  models/weaphits/rlboom/10.tga models/weaphits/rlboom/11.tga models/weaphits/rlboom/12.tga models/weaphits/rlboom/13.tga models/weaphits/rlboom/14.tga models/weaphits/rlboom/15.tga models/weaphits/rlboom/16.tga models/weaphits/rlboom/17.tga models/weaphits/rlboom/18.tga models/weaphits/rlboom/19.tga models/weaphits/rlboom/20.tga models/weaphits/rlboom/21.tga models/weaphits/rlboom/22.tga models/weaphits/rlboom/23.tga 
+    rgbGen wave inversesawtooth 0 1 0 8
+    blendfunc add
+  }
+  {
+    animmap 23 models/weaphits/rlboom/2.tga models/weaphits/rlboom/3.tga models/weaphits/rlboom/4.tga models/weaphits/rlboom/5.tga models/weaphits/rlboom/6.tga models/weaphits/rlboom/7.tga models/weaphits/rlboom/8.tga models/weaphits/rlboom/9.tga  models/weaphits/rlboom/10.tga models/weaphits/rlboom/11.tga models/weaphits/rlboom/12.tga models/weaphits/rlboom/13.tga models/weaphits/rlboom/14.tga models/weaphits/rlboom/15.tga models/weaphits/rlboom/16.tga models/weaphits/rlboom/17.tga models/weaphits/rlboom/18.tga models/weaphits/rlboom/19.tga models/weaphits/rlboom/20.tga models/weaphits/rlboom/21.tga models/weaphits/rlboom/22.tga models/weaphits/rlboom/23.tga textures/effects/black.tga
+    rgbGen wave sawtooth 0 1 0 8
+    blendfunc add
+  }
+}
+
+rocketExplosionNoPicMip
+{
+  nopicmip
+  cull disable
+  {
+    animmap 23 models/weaphits/rlboom/1.tga models/weaphits/rlboom/2.tga models/weaphits/rlboom/3.tga models/weaphits/rlboom/4.tga models/weaphits/rlboom/5.tga models/weaphits/rlboom/6.tga models/weaphits/rlboom/7.tga models/weaphits/rlboom/8.tga models/weaphits/rlboom/9.tga  models/weaphits/rlboom/10.tga models/weaphits/rlboom/11.tga models/weaphits/rlboom/12.tga models/weaphits/rlboom/13.tga models/weaphits/rlboom/14.tga models/weaphits/rlboom/15.tga models/weaphits/rlboom/16.tga models/weaphits/rlboom/17.tga models/weaphits/rlboom/18.tga models/weaphits/rlboom/19.tga models/weaphits/rlboom/20.tga models/weaphits/rlboom/21.tga models/weaphits/rlboom/22.tga models/weaphits/rlboom/23.tga 
+    rgbGen wave inversesawtooth 0 1 0 8
+    blendfunc add
+  }
+  {
+    animmap 23 models/weaphits/rlboom/2.tga models/weaphits/rlboom/3.tga models/weaphits/rlboom/4.tga models/weaphits/rlboom/5.tga models/weaphits/rlboom/6.tga models/weaphits/rlboom/7.tga models/weaphits/rlboom/8.tga models/weaphits/rlboom/9.tga  models/weaphits/rlboom/10.tga models/weaphits/rlboom/11.tga models/weaphits/rlboom/12.tga models/weaphits/rlboom/13.tga models/weaphits/rlboom/14.tga models/weaphits/rlboom/15.tga models/weaphits/rlboom/16.tga models/weaphits/rlboom/17.tga models/weaphits/rlboom/18.tga models/weaphits/rlboom/19.tga models/weaphits/rlboom/20.tga models/weaphits/rlboom/21.tga models/weaphits/rlboom/22.tga models/weaphits/rlboom/23.tga textures/effects/black.tga
+    rgbGen wave sawtooth 0 1 0 8
+    blendfunc add
+  }
+}

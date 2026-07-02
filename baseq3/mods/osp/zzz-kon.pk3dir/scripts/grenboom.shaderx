@@ -1,0 +1,29 @@
+grenadeExplosion
+{
+	cull disable
+	{
+		animmap 8 models/weaphits/glboom/glboom_1.jpg models/weaphits/glboom/glboom_2.jpg models/weaphits/glboom/glboom_3.jpg models/weaphits/glboom/glboom_4.jpg models/weaphits/glboom/glboom_5.jpg models/weaphits/glboom/glboom_6.jpg models/weaphits/glboom/glboom_7.jpg models/weaphits/glboom/glboom_8.jpg
+		blendfunc add
+		rgbGen wave inversesawtooth 0 1 0 8
+	}
+	{
+		animmap 8 models/weaphits/glboom/glboom_2.jpg models/weaphits/glboom/glboom_3.jpg models/weaphits/glboom/glboom_4.jpg models/weaphits/glboom/glboom_5.jpg models/weaphits/glboom/glboom_6.jpg models/weaphits/glboom/glboom_7.jpg models/weaphits/glboom/glboom_8.jpg gfx/colors/black.jpg
+		blendfunc add
+		rgbGen wave sawtooth 0 1 0 8
+	}
+}
+
+grenadeExplosionNoPicMip
+{
+	cull disable
+	{
+		animmap 8 models/weaphits/glboom/glboom_1.jpg models/weaphits/glboom/glboom_2.jpg models/weaphits/glboom/glboom_3.jpg models/weaphits/glboom/glboom_4.jpg models/weaphits/glboom/glboom_5.jpg models/weaphits/glboom/glboom_6.jpg models/weaphits/glboom/glboom_7.jpg models/weaphits/glboom/glboom_8.jpg
+		blendfunc add
+		rgbGen wave inversesawtooth 0 1 0 8
+	}
+	{
+		animmap 8 models/weaphits/glboom/glboom_2.jpg models/weaphits/glboom/glboom_3.jpg models/weaphits/glboom/glboom_4.jpg models/weaphits/glboom/glboom_5.jpg models/weaphits/glboom/glboom_6.jpg models/weaphits/glboom/glboom_7.jpg models/weaphits/glboom/glboom_8.jpg gfx/colors/black.jpg
+		blendfunc add
+		rgbGen wave sawtooth 0 1 0 8
+	}
+}
