@@ -1,0 +1,139 @@
+// shotgun
+
+models/weapons2/shotgun/shotgun_laser
+{
+	nopicmip
+	{
+		map	models/weapons2/shotgun/shotgun_laser.tga
+		blendfunc add
+		tcmod scroll 0.44 0
+	}
+}
+
+
+// rail
+
+railDiscNoPicMip
+{
+	nopicmip
+	nomipmaps
+	sort nearest
+	cull none
+	deformVertexes wave 100 sin 0 .5 0 2.4
+	{
+		clampmap gfx/misc/raildisc_mono2npm.tga
+		blendFunc GL_SRC_ALPHA GL_ONE_MINUS_SRC_ALPHA
+		rgbGen vertex 
+		alphaGen const 0.25
+		tcMod rotate -30
+	}
+	{
+		clampmap gfx/misc/raildisc_mono2npm.tga
+		blendFunc GL_ONE GL_ONE
+		rgbGen vertex
+		alphaGen const 0.3
+		tcMod rotate -30
+	}
+}
+
+railCoreNoPicMip
+{
+	nopicmip
+	nomipmaps
+	sort nearest
+	cull none
+	{
+		map gfx/misc/railcorethin_mononpm.tga
+		blendFunc GL_SRC_ALPHA GL_ONE_MINUS_SRC_ALPHA
+		rgbGen vertex 
+		alphaGen const 0.25
+		tcMod scroll 1 0
+	}
+	{
+		map gfx/misc/railcorethin_mononpm.tga
+		blendFunc GL_ONE GL_ONE
+		rgbGen vertex 
+		alphaGen const 0.25
+		tcMod scroll 1 0
+	}
+}
+
+
+// flash weapon (muzzle flash)
+
+models/weapons2/machinegun/f_machinegun
+{
+	sort additive
+	cull disable
+	{
+		clampmap models/weapons2/f_yellow.tga
+		blendfunc GL_ONE GL_ONE  
+		tcmod rotate 20   
+	}
+}
+
+models/weapons2/shotgun/f_shotgun
+{
+	sort additive
+	cull disable
+	{
+		clampmap models/weapons2/f_yellow.tga
+		blendfunc GL_ONE GL_ONE
+		tcmod rotate 20    
+	}
+}
+
+models/weapons2/grenadel/f_grenadel
+{
+	sort additive
+	cull disable
+	{
+		clampmap models/weapons2/f_yellow.tga
+		blendfunc GL_ONE GL_ONE
+		tcmod rotate 20    
+	}
+}
+
+models/weapons2/rocketl/f_rocketl
+{
+	sort additive
+	cull disable
+	{
+		clampmap models/weapons2/f_yellow.tga
+		blendfunc GL_ONE GL_ONE
+		tcmod rotate 20  
+	}
+}
+
+models/weapons2/railgun/f_railgun2
+{
+	sort additive
+	cull disable
+	{
+		clampmap models/weapons2/f_white.tga
+		blendfunc GL_ONE GL_ONE
+		tcmod rotate 20   
+	}
+}
+
+models/weapons2/plasma/f_plasma
+{
+	sort additive
+	cull disable
+	{
+		clampmap models/weapons2/f_white.tga
+		blendfunc GL_ONE GL_ONE
+		tcmod rotate 20 
+	}
+}
+
+models/weapons2/bfg/f_bfg
+{
+	sort additive
+	cull disable
+	{
+		clampmap models/weapons2/f_white.tga
+		blendfunc GL_ONE GL_ONE         
+		tcmod rotate 20             
+	}
+}

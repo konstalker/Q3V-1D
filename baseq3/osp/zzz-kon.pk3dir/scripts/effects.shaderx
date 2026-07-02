@@ -1,0 +1,10 @@
+// lagometer
+
+lagometer
+{
+  nopicmip
+  {
+    map gfx/2d/lag.tga
+    blendFunc blend
+  }
+}
