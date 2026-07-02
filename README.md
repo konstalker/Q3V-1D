@@ -12,6 +12,12 @@
 cd path/to/your/folder
 ​```
 
+like
+
+```
+cd ./Games
+```
+
 3. Clone the repository and run the first launch script:
 
 ​```
