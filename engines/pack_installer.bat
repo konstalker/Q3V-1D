@@ -1,85 +1,77 @@
 @echo off
 setlocal enabledelayedexpansion
-chcp 65001 >nul
 
-set "LIST_FILE=./pack_list/files.txt"
-
-
-
-:: files
-
-if not exist "%LIST_FILE%" (
-    echo [error]: file list not found, contacts of creator: t.me/konstalker
-    pause
-    exit /b
+if not exist ./temp_files/ (
+    call mkdir "./temp_files"
 )
 
-for /F "usebackq tokens=1,2,3,4 delims=;" %%A in ("%LIST_FILE%") do (
-    set "URL=%%A"
-    set "DL_DIR=%%B"
-    set "FILENAME=%%C"
-    set "INSTALL_CMD=%%D"
 
-    echo.
-    echo installing pack: !FILENAME!
+
+:: packs
+
+for /f "usebackq delims=" %%a in (".\pack_list\files.txt") do (
+    set "line=%%a"
+    set "count=0"
+    
+    call :parse
+    
+    echo installing !list[3]!
+
+    echo downloading...
+
+    curl -L --retry 3 --progress-bar -o "./temp_files/!list[3]!" "!list[1]!"
+
+    if not exist "./temp_files/!list[3]!" (
+        echo [error] failed to download !list[3]!. contact creator: https://t.me/konstalker
+        goto exit
     )
 
-    echo Downloading...
-    curl -# -L -o "!DL_DIR!\!FILENAME!" "!URL!"
-
-    if exist "!DL_DIR!\!FILENAME!" (
-        echo Установка !FILENAME! в заданную локацию...
-        start /wait "" !INSTALL_CMD!
-        echo Установка завершена.
-    ) else (
-        echo [error] url not found, contacts of creator t.me/konstalker
-    )
+    echo installed.
 )
 
 
 
 :: archives
+:: tar -xf pack.zip -C files
 
-set "LIST_FILE=./pack_list/archives.txt"
-
-if not exist "%LIST_FILE%" (
-    echo [error] archive list not found, contacts of creator: t.me/konstalker
-    pause
-    exit /b
-)
-
-:: %%A - URL, %%B - Временная папка, %%C - Имя zip-файла, %%D - Папка назначения
-for /F "usebackq tokens=1,2,3,4 delims=;" %%A in ("%LIST_FILE%") do (
-    set "URL=%%A"
-    set "DL_DIR=%%B"
-    set "ZIP_NAME=%%C"
-    set "EXTRACT_DIR=%%D"
-
-    echo.
-    echo Installing !ZIP_NAME!
-
-    echo Downloading...
-    curl -# -L -o "!DL_DIR!\!ZIP_NAME!" "!URL!"
-
-    if exist "!DL_DIR!\!ZIP_NAME!" (
+for /f "usebackq delims=" %%a in (".\pack_list\archives.txt") do (
+    set "line=%%a"
+    set "count=0"
     
-        :: -x (extract), -f (file), -C (change to directory - куда распаковывать)
-        echo Unpacking...
-        tar -xf "!DL_DIR!\!ZIP_NAME!" -C "!EXTRACT_DIR!"
-        
-        if !errorlevel! equ 0 (
-            echo Installed.
+    call :parse
+    
+    echo downloading temp file !list[3]!
 
-            echo Deleting archive...
-            del /q /f "!DL_DIR!\!ZIP_NAME!"
-            echo everything correct.
-        ) else (
-            echo [error] cannot unpack archive, contacts of creator: t.me/konstalker 
-        )
+    echo downloading...
 
-    ) else (
-        echo [error] cannot download archive, contacts of creator: t.me/konstalker
+    curl -L --retry 3 --progress-bar -o "./temp_files" "!list[1]!"
+
+    if not exist "./temp_files/!list[3]!" (
+        echo [error] failed to download !list[3]!. contact creator: https://t.me/konstalker
+        goto exit
     )
+    echo downloaded.
+
+    call tar -xf "./temp_files/!list[3]!" -C "!list[2]!"
+
 )
 
+goto exit
+
+
+
+:: functions
+
+:exit
 pause
+
+exit /b
+
+:parse
+for /f "tokens=1* delims=;" %%b in ("!line!") do (
+    set /a count+=1
+    set "list[!count!]=%%b"
+    set "line=%%c"
+)
+if defined line goto parse
+exit /b
