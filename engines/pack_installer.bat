@@ -2,7 +2,8 @@
 setlocal enabledelayedexpansion
 
 
-:: packs
+
+echo 9nstalling packs
 
 for /f "usebackq delims=" %%a in (".\pack_list\files.txt") do (
     set "line=%%a"
@@ -27,7 +28,7 @@ for /f "usebackq delims=" %%a in (".\pack_list\files.txt") do (
 
 
 
-:: archives
+echo installing archives
 
 if not exist ./temp_files/ (
     call mkdir "./temp_files"
