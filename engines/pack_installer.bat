@@ -28,7 +28,6 @@ for /f "usebackq delims=" %%a in (".\pack_list\files.txt") do (
 
 
 :: archives
-:: tar -xf pack.zip -C files
 
 if not exist ./temp_files/ (
     call mkdir "./temp_files"
