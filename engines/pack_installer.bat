@@ -19,9 +19,9 @@ for /f "usebackq delims=" %%a in (".\pack_list\files.txt") do (
 
     echo downloading...
 
-    curl -L --retry 3 --progress-bar -o "./temp_files/!list[3]!" "!list[1]!"
+    curl -L --retry 3 --progress-bar -o "!list[2]!" "!list[1]!"
 
-    if not exist "./temp_files/!list[3]!" (
+    if not exist "!list[2]!" (
         echo [error] failed to download !list[3]!. contact creator: https://t.me/konstalker
         goto exit
     )
