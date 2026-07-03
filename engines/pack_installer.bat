@@ -64,7 +64,7 @@ goto exit
 
 :exit
 pause
-
+rd /s /q "./temp_files"
 exit /b
 
 :parse
