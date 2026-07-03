@@ -2,7 +2,6 @@
 
 cd /d %~dp0/engines
 
-echo installing packs
 call ./pack_installer.bat
 
 call ./updater.bat
