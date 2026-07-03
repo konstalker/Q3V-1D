@@ -1,7 +1,6 @@
-@echo off
-
 echo %~dp0/engines
 cd /d %~dp0/engines
+call ./pack_installer.bat
 call ./updater.bat
 echo %~dp0
 cd /d %~dp0

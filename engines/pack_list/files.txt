@@ -1,0 +1,9 @@
+https://q3msk.net/files/original_paks/pak0.pk3;../baseq3/pack0.pk3
+https://q3msk.net/files/original_paks/pak1.pk3;../baseq3/pack1.pk3
+https://q3msk.net/files/original_paks/pak2.pk3;../baseq3/pack2.pk3
+https://q3msk.net/files/original_paks/pak3.pk3;../baseq3/pack3.pk3
+https://q3msk.net/files/original_paks/pak4.pk3;../baseq3/pack4.pk3
+https://q3msk.net/files/original_paks/pak5.pk3;../baseq3/pack5.pk3
+https://q3msk.net/files/original_paks/pak6.pk3;../baseq3/pack6.pk3
+https://q3msk.net/files/original_paks/pak7.pk3;../baseq3/pack7.pk3
+https://q3msk.net/files/original_paks/pak8.pk3;../baseq3/pack8.pk3

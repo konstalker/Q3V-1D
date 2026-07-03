@@ -1,0 +1,1 @@
+https://q3msk.net/files/osp.zip;./temp_files;osp.zip;../baseq3/mods/osp/
