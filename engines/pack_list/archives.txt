@@ -1,1 +1,1 @@
-https://q3msk.net/files/osp.zip;./temp_files;osp.zip;../baseq3/mods/osp/
+https://q3msk.net/files/osp.zip;./temp_files;osp.zip;../baseq3/mods/osp/https://github.com/Defrag-racing/oDFe/releases/download/latest/oDFe-windows-x86_64.zip;./temp_files;oDFe.zip;./
