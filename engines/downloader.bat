@@ -15,11 +15,11 @@ for /f "usebackq delims=" %%a in (%1) do (
 
     echo downloading...
     
-    if %2 == "a" if %3=="skip" if exist "!list[2]!!list[4]!" (
+    if %2 == "a" if %3=="s" if exist "!list[2]!!list[4]!" (
         set "skip=1"
     ) 
 
-    if %2 == "f" if %3=="skip" if exist "!list[2]!!list[4]!" (
+    if %2 == "f" if %3=="s" if exist "!list[2]!!list[3]!" (
         set "skip=1"
     )
     
@@ -31,6 +31,10 @@ for /f "usebackq delims=" %%a in (%1) do (
 
             if not exist "./temp_files/!list[3]!" (
                 set "downloaded=0"
+            )
+
+            if !downloaded! == 1 (
+                powershell -Command "Expand-Archive -Path './temp_files/!list[3]!' -DestinationPath '!list[2]!' -Force"
             )
 
         ) else (
@@ -49,6 +53,8 @@ for /f "usebackq delims=" %%a in (%1) do (
         pause
         goto exit
     )
+
+    echo installed.
 
 )
 
