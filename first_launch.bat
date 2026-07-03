@@ -5,7 +5,6 @@ cd /d %~dp0/engines
 echo installing packs
 call ./pack_installer.bat
 
-echo installing OSP2-BE
 call ./updater.bat
 
 cd /d %~dp0
