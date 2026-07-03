@@ -1,8 +1,6 @@
 @echo off
 setlocal enabledelayedexpansion
 
-call ./updater.bat
-
 set VULKAN_APP="oDFe.vk.x64.exe"
 set FALLBACK_APP="oDFe.x64.exe"
 
