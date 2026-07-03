@@ -1,6 +1,6 @@
 ## Q3V#1D
 
- Quake 3 compilation by KONSTALKER for METARENA server
+ Quake 3 compilation by KONSTALKER for METARENA server (N#N3 clan compilation)
 
 ### CONSOLE INSTALLIATION GUIDE
 1. Open a terminal (Windows: `Win + R` → type `cmd` → Enter)
@@ -39,3 +39,4 @@ git clone https://github.com/konstalker/Q3V-1D.git & cd Q3V-1D & first_launch.ba
 * m1rage<-n8 (n8mare compilation creator, contacts: https://t.me/sxsqd)
 * jayjayNGL (creator of some packs, used in this compilationm, contacts: https://t.me/jayjayQ3)
 * meta (creator of metarena sever, contacts: https://t.me/lisabugx)
+* paragon (q3unite administrator, https://t.me/q3unite)
