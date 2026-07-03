@@ -1,2 +1,2 @@
-https://q3msk.net/files/osp.zip;../baseq3/mods/osp;osp.zip
-https://github.com/Defrag-racing/oDFe/releases/download/latest/oDFe-windows-x86_64.zip;./;oDFe.zip
+https://q3msk.net/files/osp.zip;../baseq3/mods/osp;osp.zip;zz-osp-pak0.pk3
+https://github.com/Defrag-racing/oDFe/releases/download/latest/oDFe-windows-x86_64.zip;./;oDFe.zip;oDFe.x64.exe

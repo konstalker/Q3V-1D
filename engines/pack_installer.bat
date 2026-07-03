@@ -1,11 +1,6 @@
 @echo off
 setlocal enabledelayedexpansion
 
-if not exist ./temp_files/ (
-    call mkdir "./temp_files"
-)
-
-
 
 :: packs
 
@@ -23,6 +18,7 @@ for /f "usebackq delims=" %%a in (".\pack_list\files.txt") do (
 
     if not exist "!list[2]!" (
         echo [error] failed to download !list[3]!. contact creator: https://t.me/konstalker
+        pause
         goto exit
     )
 
@@ -34,6 +30,10 @@ for /f "usebackq delims=" %%a in (".\pack_list\files.txt") do (
 :: archives
 :: tar -xf pack.zip -C files
 
+if not exist ./temp_files/ (
+    call mkdir "./temp_files"
+)
+
 for /f "usebackq delims=" %%a in (".\pack_list\archives.txt") do (
     set "line=%%a"
     set "count=0"
@@ -44,15 +44,25 @@ for /f "usebackq delims=" %%a in (".\pack_list\archives.txt") do (
 
     echo downloading...
 
-    curl -L --retry 3 --progress-bar -o "./temp_files" "!list[1]!"
+    curl -L --retry 3 --progress-bar -o "./temp_files/!list[3]!" "!list[1]!"
 
     if not exist "./temp_files/!list[3]!" (
         echo [error] failed to download !list[3]!. contact creator: https://t.me/konstalker
+        pause
         goto exit
     )
     echo downloaded.
 
-    call tar -xf "./temp_files/!list[3]!" -C "!list[2]!"
+    echo installing...
+    powershell -Command "Expand-Archive -Path './temp_files/!list[3]!' -DestinationPath '!list[2]!' -Force"
+
+    if not exist "./!list[2]!/!list[4]!" (
+        echo [error] failed to install !list[3]!. contact creator: https://t.me/konstalker
+        pause
+        goto exit
+    )
+
+    echo installed.
 
 )
 
@@ -63,7 +73,6 @@ goto exit
 :: functions
 
 :exit
-pause
 rd /s /q "./temp_files"
 exit /b
 

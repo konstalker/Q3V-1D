@@ -1,8 +1,13 @@
-echo %~dp0/engines
+@echo off
+
 cd /d %~dp0/engines
+
+echo installing packs
 call ./pack_installer.bat
+
+echo installing OSP2-BE
 call ./updater.bat
-echo %~dp0
+
 cd /d %~dp0
 
 set "shortcutName=%USERPROFILE%\Desktop\Quake 3 Arena.lnk"
