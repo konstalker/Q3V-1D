@@ -2,9 +2,9 @@
 
 cd /d %~dp0/engines
 
-call ./pack_installer.bat
-
-call ./updater.bat
+call downloader.bat "./pack_list/files.txt" "f" "skip"
+call downloader.bat "./pack_list/archives.txt" "a" "skip"
+call ./beupd.bat
 
 cd /d %~dp0
 

@@ -1,0 +1,7 @@
+https://github.com/konstalker/Q3V-1D/raw/refs/heads/main/baseq3/mods/osp/binds.cfg;../baseq3/mods/osp/;binds.cfg
+https://github.com/konstalker/Q3V-1D/raw/refs/heads/main/baseq3/mods/osp/cg_vars.cfg;../baseq3/mods/osp/;cg_vars.cfg
+https://github.com/konstalker/Q3V-1D/raw/refs/heads/main/baseq3/mods/osp/com_vars.cfg;../baseq3/mods/osp/;com_vars.cfg
+https://github.com/konstalker/Q3V-1D/raw/refs/heads/main/baseq3/mods/osp/r_vars.cfg;../baseq3/mods/osp/;r_vars.cfg
+https://github.com/konstalker/Q3V-1D/raw/refs/heads/main/baseq3/mods/osp/s_vars.cfg;../baseq3/mods/osp/;s_vars.cfg
+https://github.com/konstalker/Q3V-1D/raw/refs/heads/main/baseq3/mods/osp/ui_vars.cfg;../baseq3/mods/osp/;ui_vars.cfg
+https://github.com/konstalker/Q3V-1D/raw/refs/heads/main/baseq3/mods/osp/autoexec.cfg;../baseq3/mods/osp/;autoexec.cfg
