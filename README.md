@@ -37,5 +37,5 @@ git clone https://github.com/konstalker/Q3V-1D.git & cd Q3V-1D & first_launch.ba
 * diwoc (osp2-be creator, contacts: https://t.me/diwoc)
 * Mus1n (q3elite compilation creator, contacts: https://t.me/q3elite)
 * m1rage<-n8 (n8mare compilation creator, contacts: https://t.me/sxsqd)
-* jayjayNGL (creator of some packs, used in this compilationm, contacts: https://t.me/q3osp)
+* jayjayNGL (creator of some packs, used in this compilationm, contacts: https://t.me/jayjayQ3)
 * meta (creator of metarena sever, contacts: https://t.me/lisabugx)
