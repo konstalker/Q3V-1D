@@ -3,7 +3,7 @@ setlocal enabledelayedexpansion
 
 call beupd.bat
 
-set "vurl=https://github.com/konstalker/Q3V-1D/tree/autoupdater/baseq3/mods/osp/zzz-kon.pk3dir/version.txt"
+set "vurl=https://github.com/konstalker/Q3V-1D/raw/refs/heads/autoupdater/baseq3/mods/osp/zzz-kon.pk3dir/version.txt"
 set "temp_version=./temp_files/version.txt"
 set "last_version=../baseq3/mods/osp/zzz-kon.pk3dir/version.txt"
 
@@ -27,9 +27,7 @@ if not exist !last_version! (
 
 :: Read downloaded version into variable
 set "CURRENT_VER="
-if exist "!temp_version!" (
-    set /p CURRENT_VER=<"!temp_version!"
-)
+set /p CURRENT_VER=<"!temp_version!"
 
 :: Read local version into variable
 set "LOCAL_VER="
