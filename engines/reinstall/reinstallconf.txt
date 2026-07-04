@@ -1,0 +1,1 @@
+https://github.com/konstalker/Q3V-1D/archive/refs/heads/main.zip;../;q3v.zip;/version.txt;engines/pack_list;Q3V-1D-main
