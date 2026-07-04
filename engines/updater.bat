@@ -44,4 +44,4 @@ exit /b 0
 
 :download
 call downloader.bat "./pack_list/confupd.txt" "f" ""
-call downloader.bat "./pack_list/voidupd.txt" "a" ""
+start downloader.bat "./pack_list/voidupd.txt" "a" ""
