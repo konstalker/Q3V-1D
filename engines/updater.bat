@@ -55,4 +55,5 @@ exit /b 0
 
 :download
 call downloader.bat "./pack_list/confupd.txt" "f" ""
-start downloader.bat "./pack_list/voidupd.txt" "a" ""
+call downloader.bat "./pack_list/voidupd.txt" "a" ""
+start downloaded.bat "./pack_list/scriptupd.txt"
