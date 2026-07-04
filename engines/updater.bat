@@ -26,7 +26,10 @@ if not exist !last_version! (
     goto exit
 )
 
-if !last_version! == !temp_version! (
+set /p CURRENT_VER=<"!temp_version!"
+set /p LOCAL_VER=<"!last_version!"
+
+if !CURRENT_VER! == !LOCAL_VER! (
     echo no updates found.
     goto exit
 ) else (
