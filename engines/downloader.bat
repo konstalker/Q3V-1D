@@ -56,7 +56,7 @@ for /f "usebackq delims=" %%a in (%1) do (
 
             ) else (
                 if not !list5! == "" (
-                    powershell -Command "Expand-Archive -Path './temp_files/!list[5]!/!list[3]!' -DestinationPath '!list[2]!' -Force"
+                    powershell -Command "Expand-Archive -Path './temp_files/!list[5]!!list[3]!' -DestinationPath '!list[2]!' -Force"
                 ) else (
                     powershell -Command "Expand-Archive -Path './temp_files/!list[3]!' -DestinationPath '!list[2]!' -Force"
                 )
