@@ -5,3 +5,4 @@ https://github.com/konstalker/Q3V-1D/raw/refs/heads/main/baseq3/mods/osp/r_vars.
 https://github.com/konstalker/Q3V-1D/raw/refs/heads/main/baseq3/mods/osp/s_vars.cfg;../baseq3/mods/osp/;s_vars.cfg
 https://github.com/konstalker/Q3V-1D/raw/refs/heads/main/baseq3/mods/osp/ui_vars.cfg;../baseq3/mods/osp/;ui_vars.cfg
 https://github.com/konstalker/Q3V-1D/raw/refs/heads/main/baseq3/mods/osp/autoexec.cfg;../baseq3/mods/osp/;autoexec.cfg
+https://github.com/konstalker/Q3V-1D/raw/refs/heads/main/baseq3/mods/osp/cversion;../baseq3/mods/osp/;cversion
