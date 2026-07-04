@@ -5,6 +5,7 @@ cd /d %~dp0/engines
 call downloader.bat "./pack_list/files.txt" "f" "s"
 call downloader.bat "./pack_list/archives.txt" "a" "s"
 call ./beupd.bat
+call ./updater.bat
 
 cd /d %~dp0
 
