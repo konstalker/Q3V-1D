@@ -6,7 +6,7 @@ set "OSP2_URL=https://konstalker.github.io/assets/zz-osp-pak8be.pk3"
 set "OSP2_FILE=..\baseq3\mods\osp\zz-osp-pak8be.pk3"
 set "VERSION_URL=https://konstalker.github.io/assets/version.txt"
 set "CHANGELOG_URL=https://konstalker.github.io/assets/version_changelog.txt"
-set "LAST_VERSION_FILE=../baseq3/mods/osp/zzz-kon.pk3dir/osp2_last_version.txt"
+set "LAST_VERSION_FILE=../baseq3/mods/osp/osp2_last_version.txt"
 set "TEMP_VERSION=./temp_files/osp2_version.txt"
 set "TEMP_CHANGELOG=./temp_files/osp2_changelog.txt"
 

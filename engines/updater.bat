@@ -37,7 +37,10 @@ if exist "!last_version!" (
     set /p LOCAL_VER=<"!last_version!"
 )
 
-if errorlevel 1 (
+echo "local %LOCAL_VER%"
+echo "current %CURRENT_VER%"
+
+if "%CURRENT_VER%"=="%LOCAL_VER%" (
     echo no updates found.
     goto exit
 ) else (
