@@ -3,7 +3,7 @@ setlocal enabledelayedexpansion
 
 call beupd.bat
 
-set "vurl=https://github.com/konstalker/Q3V-1D/raw/refs/heads/autoupdater/baseq3/mods/osp/zzz-kon.pk3dir/version.txt"
+set "vurl=https://github.com/konstalker/Q3V-1D/raw/refs/heads/main/baseq3/mods/osp/zzz-kon.pk3dir/version.txt"
 set "temp_version=./temp_files/version.txt"
 set "last_version=../baseq3/mods/osp/zzz-kon.pk3dir/version.txt"
 
