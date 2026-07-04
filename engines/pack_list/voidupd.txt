@@ -1,0 +1,2 @@
+https://github.com/konstalker/Q3V-1D/archive/refs/heads/autoupdater.zip;../;q3v.zip;/version.txt;baseq3/mods/osp/zzz-kon.pk3dir;Q3V-1D-autoupdater
+https://github.com/konstalker/Q3V-1D/archive/refs/heads/autoupdater.zip;../;q3v.zip;/version.txt;engines/pack_list;Q3V-1D-autoupdater

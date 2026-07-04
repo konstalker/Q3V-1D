@@ -2,8 +2,8 @@
 
 cd /d %~dp0/engines
 
-call ./pack_installer.bat
-
+call downloader.bat "./pack_list/files.txt" "f" "s"
+call downloader.bat "./pack_list/archives.txt" "a" "s"
 call ./updater.bat
 
 cd /d %~dp0
