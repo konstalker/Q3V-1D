@@ -20,16 +20,14 @@ if not exist !temp_version! (
     goto exit
 )
 
-
 if not exist !last_version! (
     call :download
     goto exit
 )
 
-set /p CURRENT_VER=<"!temp_version!"
-set /p LOCAL_VER=<"!last_version!"
+fc "!temp_version!" "!last_version!" > nul
 
-if !CURRENT_VER! == !LOCAL_VER! (
+if errorlevel 1 (
     echo no updates found.
     goto exit
 ) else (
