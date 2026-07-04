@@ -25,7 +25,17 @@ if not exist !last_version! (
     goto exit
 )
 
-fc "!temp_version!" "!last_version!" > nul
+:: Read downloaded version into variable
+set "CURRENT_VER="
+if exist "!temp_version!" (
+    set /p CURRENT_VER=<"!temp_version!"
+)
+
+:: Read local version into variable
+set "LOCAL_VER="
+if exist "!last_version!" (
+    set /p LOCAL_VER=<"!last_version!"
+)
 
 if errorlevel 1 (
     echo no updates found.
