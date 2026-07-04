@@ -1,17 +1,23 @@
 @echo off
+setlocal enabledelayedexpansion
+
 call beupd.bat
 
-
-set "vurl=https://github.com/konstalker/Q3V-1D/tree/main/baseq3/mods/osp/zzz-kon.pk3dir/version.txt"
+set "vurl=https://github.com/konstalker/Q3V-1D/tree/autoupdater/baseq3/mods/osp/zzz-kon.pk3dir/version.txt"
 set "temp_version=./temp_files/version.txt"
 set "last_version=../baseq3/mods/osp/zzz-kon.pk3dir/version.txt"
 
-echo checking for updates...
-curl -L --retry 3 --silent -o "%TEMP_VERSION%" "%VERSION_URL%"
+echo ""
+echo ""
+echo ""
+echo checking for Q3V#1D updates...
+
+call mkdir "./temp_files"
+curl -L --retry 3 --silent -o "!temp_version!" "!vurl!"
 
 if not exist !temp_version! (
     echo [error] failed to download version information. contact creator: https://t.me/konstalker
-    exit /b 1
+    goto exit
 )
 
 
@@ -32,6 +38,7 @@ echo updated.
 goto exit
 
 :exit
+rd /s /q "./temp_files"
 exit /b 0
 
 :download

@@ -1,7 +1,7 @@
 @echo off
 setlocal enabledelayedexpansion
 
-if not exist ./temp_files/ (
+if not exist ./temp_files/ if %2 == "a" (
     call mkdir "./temp_files"
 )
 
