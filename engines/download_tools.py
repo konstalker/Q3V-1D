@@ -8,7 +8,7 @@ import time
 
 def __download_proc(file_url, file_path, skip, index, processes, total_length, chunk_size):
 
-    downloaded = index * (total_length // processes) + os.path.getsize(file_path + file_name + f'part{index}')
+    downloaded = index * (total_length // processes) + os.path.getsize(file_path + file_name + f'.part{index}')
     if processes - 1 == index:
         partend = ''
     else:
@@ -46,11 +46,12 @@ def download(file_url, file_path, file_name, skip=False, processes=1, chunk_size
         
         for i in range(processes):
             downloaders.append(Process(target=__download_proc, args=(file_url, file_path, skip, i, processes, total_length, chunk_size)))
+            downloaders[i].start()
 
         while all([downloaders[i].is_alive() for i in range(processes)]):
             for i in range(processes):
-                if os.path.exists(file_path + file_name + f'part{i}'):
-                    downloaded += os.path.getsize(file_path + file_name + f'part{i}')
+                if os.path.exists(file_path + file_name + f'.part{i}'):
+                    downloaded += os.path.getsize(file_path + file_name + f'.part{i}')
                     
             last_percent = percent
             percent = int((downloaded / total_length) * 100)
@@ -59,7 +60,14 @@ def download(file_url, file_path, file_name, skip=False, processes=1, chunk_size
             time.sleep(0.5)
 
         Delete(downloaders)
-        
+
+    with open(file_path + file_name, 'wb') as out_file:
+        for i in range(processes):
+            with open(file_path + file_name + f".part{i}", 'rb') as in_file:
+                out_file.write(in_file.read())
+            
+            os.remove(file_path + file_name + f".part{i}")
+    
     print("\ninstalled")
 
         
