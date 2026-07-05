@@ -119,13 +119,10 @@ def download(conf_file, skip=False):
 
 
 if __name__ == "__main__":
-    url = argv[1]
-    file_path = argv[2]
-    file_name = argv[3]
-    skip = False
-    print(argv[4])
-    if argv[4] == "s":
-        skip = True
-    print(argv[4] == "s")
+    download_conf = argv[1]
+    if len(argv) >= 3 and argv[2] == "s":
+        s = True
+    else:
+        s = False
     
-    __downloader(url, file_path, file_name, skip)
+    download(download_conf, s)
