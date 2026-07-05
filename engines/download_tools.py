@@ -3,7 +3,7 @@ from math import floor
 
 from sys import argv
 import os
-# from zipfile import
+import zipfile
 
 
 def download(file_url, file_path, file_name, skip=False):
@@ -54,12 +54,13 @@ def download(file_url, file_path, file_name, skip=False):
     print("\ninstalled.")
 
 
-def unzip(file_url, file_path, file_name, skip=False, files=False, ):
+def unzip(file_url, file_path, temp_name, skip=False, file_names=[]):
     os.mkdir("./temp_files")
-    download(file_url, "./tem_files", file_name, skip=skip)
+    download(file_url, "./tem_files", temp_name, skip=skip)
 
-    if os.path.exists(f"{file_path}/{file_name}"):
-        pass
+    if file_names != 0:
+        for file_name in file_names:
+            
 
 
 if __name__ == "__main__":
