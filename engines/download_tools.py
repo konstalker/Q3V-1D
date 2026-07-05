@@ -80,13 +80,10 @@ def unzip(file_url, name, file_paths=[], skip=False):
             temp_name = f"./temp_files/{name}dir/{file_path[0]}"
             
             assert os.path.exists(temp_name), f"no such file or directory: {temp_name}"
-            print('hi')
 
             if not os.path.isfile(file_path[1]):
-                print('hi1')
                 shutil.copy(temp_name, file_path[1])
             else:
-                print('hi2')
                 shutil.copytree(temp_name, file_path[1])
 
     except Exception as err:
