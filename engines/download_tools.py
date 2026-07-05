@@ -1,3 +1,4 @@
+import shutil
 import urllib.request
 from math import floor
 from caption import caption
@@ -5,6 +6,7 @@ from caption import caption
 from sys import argv
 import os
 import zipfile
+from shutil import rmtree
 
 
 def download(file_url, file_path, file_name, skip=False):
@@ -70,7 +72,6 @@ def unzip(file_url, name, file_paths=[], skip=False):
         if not os.path.exists("./temp_files"):
             os.mkdir("./temp_files")
         download(file_url, "./temp_files/", name, skip=True)
-        assert not os.path.exists(temp_name), f"no such file or directory: {temp_name}"
     
         with zipfile.ZipFile(f"./temp_files/{name}", 'r') as zip_ref:
             zip_ref.extractall(f"./temp_files/{name}dir")
@@ -78,15 +79,21 @@ def unzip(file_url, name, file_paths=[], skip=False):
         for file_path in file_paths:
             temp_name = f"./temp_files/{name}dir/{file_path[0]}"
             
-            print(temp_name, file_path[1])
-            
-            if os.path.isfile(temp_name):
-                os.remove(file_path[1])
-            os.replace(temp_name, file_path[1])
+            assert os.path.exists(temp_name), f"no such file or directory: {temp_name}"
+            print('hi')
+
+            if not os.path.isfile(file_path[1]):
+                print('hi1')
+                shutil.copy(temp_name, file_path[1])
+            else:
+                print('hi2')
+                shutil.copytree(temp_name, file_path[1])
 
     except Exception as err:
         print(f"[error] not installed {name}")
         print(f'[log] {err}')
+        input()
+        rmtree(f"./temp_files/{name}dir", )
         caption()
         
 
