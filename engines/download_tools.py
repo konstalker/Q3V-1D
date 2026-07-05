@@ -1,7 +1,9 @@
 import urllib.request
+from math import floor
+
 from sys import argv
 import os
-from math import floor
+# from zipfile import
 
 
 def download(file_url, file_path, file_name, skip=False):
@@ -51,6 +53,13 @@ def download(file_url, file_path, file_name, skip=False):
     
     print("\ninstalled.")
 
+
+def unzip(file_url, file_path, file_name, skip=False, files=False, ):
+    os.mkdir("./temp_files")
+    download(file_url, "./tem_files", file_name, skip=skip)
+
+    if os.path.exists(f"{file_path}/{file_name}"):
+        pass
 
 
 if __name__ == "__main__":
