@@ -30,7 +30,7 @@ def download(file_url, file_path, file_name, skip=False):
         
         chunk_size = 8192
 
-    req = urllib.request.Request(url, headers=headers)
+    req = urllib.request.Request(file_url, headers=headers)
     
     with urllib.request.urlopen(req) as response, open(file_path + file_name, 'ab') as out_file:
     
