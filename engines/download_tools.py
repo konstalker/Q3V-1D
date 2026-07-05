@@ -64,20 +64,21 @@ def download(file_url, file_path, file_name, skip=False):
 def unzip(file_url, name, file_paths=[], skip=False):
     try:
         
+        if os.path.exists("./temp_files/" + name) and not skip:
+            os.remove("./temp_files/" + name)
+        
         if not os.path.exists("./temp_files"):
             os.mkdir("./temp_files")
-        download(file_url, "./tem_files/" + name, name, skip=skip)
-    
-        if os.path.exists("./temp_files/" + name):
-            os.remove("./temp_files/" + name)
+        download(file_url, "./temp_files/", name, skip=True)
+        assert not os.path.exists(temp_name), f"no such file or directory: {temp_name}"
     
         with zipfile.ZipFile(f"./temp_files/{name}", 'r') as zip_ref:
-            zip_ref.extractall(f"./temp_fiiles/{name}dir")
+            zip_ref.extractall(f"./temp_files/{name}dir")
         
         for file_path in file_paths:
             temp_name = f"./temp_files/{name}dir/{file_path[0]}"
             
-            assert not os.path.exists(temp_name), "no such file or directory: {temp_name}"
+            print(temp_name, file_path[1])
             
             if os.path.isfile(temp_name):
                 os.remove(file_path[1])

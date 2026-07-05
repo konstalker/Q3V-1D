@@ -1,6 +1,2 @@
-https://q3msk.net/files/osp.zip;osp.zip;zz-osp-pak0.pk3;../baseq3/mods/osp/
-https://q3msk.net/files/osp.zip;osp.zip;zz-osp-pak1.pk3;../baseq3/mods/osp/
-https://q3msk.net/files/osp.zip;osp.zip;zz-osp-pak2.pk3;../baseq3/mods/osp/
-https://q3msk.net/files/osp.zip;osp.zip;zz-osp-pak3.pk3;../baseq3/mods/osp/
-https://github.com/Defrag-racing/oDFe/releases/download/latest/oDFe-windows-x86_64.zip;oDFe.zip;oDFe.x64.exe;./
-https://github.com/Defrag-racing/oDFe/releases/download/latest/oDFe-windows-x86_64.zip;oDFe.zip;oDFe.vk.x64.exe;./
+https://q3msk.net/files/osp.zip;osp.zip;zz-osp-pak0.pk3;../baseq3/mods/osp/;zz-osp-pak1.pk3;../baseq3/mods/osp/;zz-osp-pak2.pk3;../baseq3/mods/osp/;zz-osp-pak3.pk3;../baseq3/mods/osp/
+https://github.com/Defrag-racing/oDFe/releases/download/latest/oDFe-windows-x86_64.zip;oDFe.zip;oDFe.x64.exe;./;oDFe.vk.x64.exe;./
