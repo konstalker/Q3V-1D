@@ -1,11 +1,7 @@
 @echo off
 setlocal enabledelayedexpansion
 
-if exist ./updater.bat (
-    call ./updater.bat
-) else (
-    ./downloader.bat "./reinstall/reinstallconf.txt" "f" "s"
-)
+call python update.py
 
 set VULKAN_APP="oDFe.vk.x64.exe"
 set FALLBACK_APP="oDFe.x64.exe"
