@@ -8,6 +8,6 @@ with open("./pack_files/files.xml", 'r') as pack_file:
 
             url, path, name = _.split(';')
             
-            dt.download(url, path, name, skip=True, processes=4)
+            dt.download(url, path, name, skip=True)
 
 print("All packs installed.")
