@@ -1,5 +1,6 @@
 import urllib.request
 from math import floor
+from caption import caption
 
 from sys import argv
 import os
@@ -8,59 +9,85 @@ import zipfile
 
 def download(file_url, file_path, file_name, skip=False):
 
-    percent = 0
-    
-    with urllib.request.urlopen(file_url) as response:
+    try:
+        percent = 0
         
-        total_length = response.info().get('Content-Length')
-        
-        print(f"Installing {file_name}")
-        total_length = int(total_length)
-        
-        if skip and os.path.exists(file_path + file_name) and os.path.getsize(file_path + file_name) == total_length:
-            print("File exists, skipping.")
-            return
-        
-        downloaded = 0
-
-        headers = {}
-        
-        if skip and os.path.exists(file_path + file_name):
-            downloaded = os.path.getsize(file_path + file_name)
-            headers = {'Range': f'bytes={downloaded}-'}
-        
-        chunk_size = 8192
-
-    req = urllib.request.Request(file_url, headers=headers)
-    
-    with urllib.request.urlopen(req) as response, open(file_path + file_name, 'ab') as out_file:
-    
-        print("downloading...")
-        while True:
-            chunk = response.read(chunk_size)
-            if not chunk:
-                break 
+        with urllib.request.urlopen(file_url) as response:
             
-            out_file.write(chunk)
-            downloaded += len(chunk)
+            total_length = response.info().get('Content-Length')
             
-            # 3. Высчитываем проценты и обновляем строку в консоли
-            last_percent = percent
-            percent = int((downloaded / total_length) * 100)
-
-            if last_percent != percent:
-                print(f"\r[{"#" * floor(percent / 5)}{' ' * ((100 - percent) // 5)}] {percent}% ({total_length // 1048576} MB)   ", end='')
+            print(f"Installing {file_name}")
+            total_length = int(total_length)
+            
+            if skip and os.path.exists(file_path + file_name) and os.path.getsize(file_path + file_name) == total_length:
+                print("File exists, skipping.")
+                return
+            
+            downloaded = 0
     
-    print("\ninstalled.")
-
-
-def unzip(file_url, file_path, temp_name, skip=False, file_names=[]):
-    os.mkdir("./temp_files")
-    download(file_url, "./tem_files", temp_name, skip=skip)
-
-    if file_names != 0:
-        for file_name in file_names:
+            headers = {}
             
+            if skip and os.path.exists(file_path + file_name):
+                downloaded = os.path.getsize(file_path + file_name)
+                headers = {'Range': f'bytes={downloaded}-'}
+            
+            chunk_size = 8192
+    
+        req = urllib.request.Request(file_url, headers=headers)
+        
+        with urllib.request.urlopen(req) as response, open(file_path + file_name, 'ab') as out_file:
+        
+            print("downloading...")
+            while True:
+                chunk = response.read(chunk_size)
+                if not chunk:
+                    break 
+                
+                out_file.write(chunk)
+                downloaded += len(chunk)
+                
+                # 3. Высчитываем проценты и обновляем строку в консоли
+                last_percent = percent
+                percent = int((downloaded / total_length) * 100)
+    
+                if last_percent != percent:
+                    print(f"\r[{"#" * floor(percent / 5)}{' ' * ((100 - percent) // 5)}] {percent}% ({total_length // 1048576} MB)   ", end='')
+        
+        print("\ninstalled.")
+        
+    except Exception as err:
+        print(f"[error] not installed {file_name}")
+        print(f'[log] {err}')
+        caption()
+
+
+def unzip(file_url, name, file_paths=[], skip=False):
+    try:
+        
+        if not os.path.exists("./temp_files"):
+            os.mkdir("./temp_files")
+        download(file_url, "./tem_files/" + name, name, skip=skip)
+    
+        if os.path.exists("./temp_files/" + name):
+            os.remove("./temp_files/" + name)
+    
+        with zipfile.ZipFile(f"./temp_files/{name}", 'r') as zip_ref:
+            zip_ref.extractall(f"./temp_fiiles/{name}dir")
+        
+        for file_path in file_paths:
+            temp_name = f"./temp_files/{name}dir/{file_path[0]}"
+            
+            assert not os.path.exists(temp_name), "no such file or directory: {temp_name}"
+            
+            if os.path.isfile(temp_name):
+                os.remove(file_path[1])
+            os.replace(temp_name, file_path[1])
+
+    except Exception as err:
+        print(f"[error] not installed {name}")
+        print(f'[log] {err}')
+        caption()
+        
 
 
 if __name__ == "__main__":
