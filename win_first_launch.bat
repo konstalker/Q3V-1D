@@ -4,6 +4,7 @@ cd /d %~dp0/engines
 
 call %~dp0/engines/python/setup_python.bat download_tools.py "./pack_files/base.dconf" "skip"
 call %~dp0/engines/python/setup_python.bat download_tools.py "./pack_files/win.dconf" "skip"
+call %~dp0/engines/python/setup_python.bat "./upd.py"
 
 cd /d %~dp0
 
