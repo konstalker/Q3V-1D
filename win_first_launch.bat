@@ -2,8 +2,8 @@
 
 cd /d %~dp0/engines
 
-call python download_tools.py "./pack_files/base.xml" "skip"
-call python download_tools.py "./pack_files/win.xml" "skip"
+call python download_tools.py "./pack_files/base.dconf" "skip"
+call python download_tools.py "./pack_files/win.dconf" "skip"
 
 cd /d %~dp0
 
