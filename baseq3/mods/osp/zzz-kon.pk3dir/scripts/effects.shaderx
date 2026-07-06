@@ -11,41 +11,6 @@ lagometer
 
 // hitbox edges
 
-gfx/misc/hbox
-{
-	nopicmip
-	{
-		map gfx/misc/hbox.tga
-		blendFunc GL_SRC_ALPHA GL_ONE_MINUS_SRC_ALPHA
-		rgbGen vertex
-		alphaGen const 0.6
-	}
-	{
-		map gfx/misc/hbox.tga
-		blendFunc GL_ONE GL_ONE
-		rgbGen vertex
-		alphaGen const 0.35
-	}	
-}
-
-gfx/misc/hbox_nocull
-{
-	nopicmip
-	cull none
-	{
-		map gfx/misc/hbox.tga
-		blendFunc GL_SRC_ALPHA GL_ONE_MINUS_SRC_ALPHA
-		rgbGen vertex
-		alphaGen const 0.6
-	}
-	{
-		map gfx/misc/hbox.tga
-		blendFunc GL_ONE GL_ONE
-		rgbGen vertex
-		alphaGen const 0.35
-	}	
-}
-
 gfx/2d/bigchars
 {
 	nopicmip

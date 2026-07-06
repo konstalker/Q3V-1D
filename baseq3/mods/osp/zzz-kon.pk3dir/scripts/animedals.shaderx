@@ -2,7 +2,7 @@ medal_excellent
 {
         nopicmip
 	{
-	animMap 10  animedals/excellent/0.tga animedals/excellent/1.tga animedals/excellent/2.tga animedals/excellent/3.tga animedals/excellent/4.tga animedals/excellent/5.tga animedals/excellent/6.tga animedals/excellent/7.tga animedals/excellent/8.tga animedals/excellent/9.tga
+	animMap 10  animedals/excellent/0.tga animedals/excellent/1.tga animedals/excellent/2.tga animedals/excellent/3.tga animedals/excellent/4.tga animedals/excellent/5.tga
     blendFunc blend
 	}
 }
@@ -21,7 +21,7 @@ medal_impressive
 {
         nopicmip
 	{
-	animMap 10  animedals/impressive/0.tga animedals/impressive/1.tga animedals/impressive/2.tga animedals/impressive/3.tga animedals/impressive/4.tga animedals/impressive/5.tga animedals/impressive/6.tga animedals/impressive/7.tga animedals/impressive/8.tga animedals/impressive/9.tga
+	animMap 10  animedals/impressive/0.tga animedals/impressive/1.tga animedals/impressive/2.tga animedals/impressive/3.tga animedals/impressive/4.tga animedals/impressive/5.tga
     blendFunc blend
 	}
 }
@@ -30,8 +30,7 @@ medal_assist
 {
         nopicmip
   {
-	animMap 10  animedals/assist/0.tga animedals/assist/1.tga animedals/assist/2.tga animedals/assist/3.tga animedals/assist/4.tga animedals/assist/5.tga animedals/assist/6.tga animedals/assist/7.tga animedals/assist/8.tga animedals/assist/9.tga
-    blendFunc blend
+	animMap 10  animedals/assist/0.tga animedals/assist/1.tga animedals/assist/2.tga animedals/assist/3.tga animedals/assist/4.tga animedals/assist/5.tga
   }
 }
 
@@ -39,7 +38,7 @@ medal_defend
 {
         nopicmip
   {
-	animMap 10  animedals/defend/0.tga animedals/defend/1.tga animedals/defend/2.tga animedals/defend/3.tga animedals/defend/4.tga animedals/defend/5.tga animedals/defend/6.tga animedals/defend/7.tga animedals/defend/8.tga animedals/defend/9.tga
+	animMap 10  animedals/defend/0.tga animedals/defend/1.tga animedals/defend/2.tga animedals/defend/3.tga animedals/defend/4.tga animedals/defend/5.tga
     blendFunc blend
   }
 }
