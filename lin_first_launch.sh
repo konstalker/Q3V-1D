@@ -14,7 +14,7 @@ cd "../"
 DESKTOP_DIR=$(xdg-user-dir DESKTOP)
 SHORTCUT_NAME="Q3V#1D"
 SHORTCUT_FILE="$SCRIPT_DIR/engines/launch.sh"
-ICON_NAME="$SCRIPT_DIR/engines/icons/b3.ico"
+ICON_NAME="$SCRIPT_DIR/engines/icons/b3.png"
 EXEC_PATH="$SCRIPT_DIR/engines"
 
 cat <<EOF > "$DESKTOP_DIR/Q3V#1D.desktop"
