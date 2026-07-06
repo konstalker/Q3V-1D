@@ -1,6 +1,7 @@
 #!/bin/bash
 
-cd $(dirname "$0")
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+cd $SCRIPT_DIR
 
 cd "./engines"
 python download_tools.py "./pack_files/base.xml" "skip"
@@ -12,9 +13,9 @@ cd "../"
 
 DESKTOP_DIR=$(xdg-user-dir DESKTOP)
 SHORTCUT_NAME="Q3V#1D"
-SHORTCUT_FILE="$(dirname "$0")/engines/launch.sh"
-ICON_NAME="$(dirname "$0")/engines/icons/b3.ico"
-EXEC_PATH="$(dirname "$0")/engines"
+SHORTCUT_FILE="$SCRIPT_DIR/engines/launch.sh"
+ICON_NAME="$SCRIPT_DIR/engines/icons/b3.ico"
+EXEC_PATH="$SCRIPT_DIR/engines"
 
 cat <<EOF > "$DESKTOP_DIR/Q3V#1D.desktop"
 [Desktop Entry]
