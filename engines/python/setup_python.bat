@@ -1,11 +1,11 @@
 @echo off
 setlocal enabledelayedexpansion
 
-set "PYPY_URL=https://www.python.org/ftp/python/3.15.0/python-3.15.0b3-embed-amd64.zip"
+set "PYPY_URL=https://downloads.python.org/pypy/pypy3.11-v7.3.23-win64.zip"
 set "BASE_DIR=%~dp0"
-set "ZIP_FILE=%BASE_DIR%python.zip"
-set "EXTRACT_DIR=%BASE_DIR%python"
-set "PYPY_FOLDER=%EXTRACT_DIR%\python"
+set "ZIP_FILE=%BASE_DIR%pypy-portable.zip"
+set "EXTRACT_DIR=%BASE_DIR%pypy-portable"
+set "PYPY_FOLDER=%EXTRACT_DIR%\pypy3.11-v7.3.23-win64"
 
 :: 1. Проверяем системный Python (ИГНОРИРУЯ пустышки от Windows Store)
 set "PYTHON_EXEC="
@@ -28,6 +28,10 @@ if defined PYTHON_EXEC goto :run_python
 :: 2. Если системного Python нет, ищем портативную версию
 if exist "%PYPY_FOLDER%\python.exe" (
     set "PYTHON_EXEC="%PYPY_FOLDER%\python.exe""
+    goto :run_python
+)
+if exist "%PYPY_FOLDER%\pypy3.exe" (
+    set "PYTHON_EXEC="%PYPY_FOLDER%\pypy3.exe""
     goto :run_python
 )
 
