@@ -33,7 +33,7 @@ git clone https://github.com/konstalker/Q3V-1D.git & cd Q3V-1D & first_launch.ba
 
 
 #### special thanks to:
-* oDFe engine (open DeFrag engine, contacts: https://github.com/Defrag-racing/oDFe)
+* q3e engine (quake3e engine, git: https://github.com/ec-/Quake3e)
 * diwoc (osp2-be creator, contacts: https://t.me/diwoc)
 * Mus1n (q3elite compilation creator, contacts: https://t.me/q3elite)
 * m1rage<-n8 (n8mare compilation creator, contacts: https://t.me/sxsqd)

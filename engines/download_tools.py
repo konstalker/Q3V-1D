@@ -9,7 +9,7 @@ import zipfile
 from shutil import rmtree
 
 
-def __downloader(file_url, file_path, file_name, skip=False):
+def downloader(file_url, file_path, file_name, skip=False):
     percent = 0
     
     with urllib.request.urlopen(file_url) as response:
@@ -56,13 +56,13 @@ def __downloader(file_url, file_path, file_name, skip=False):
     print("\ninstalled.")
 
 
-def __unziper(file_url, name, file_paths=[], skip=False):
+def unziper(file_url, name, file_paths=[], skip=False):
     if os.path.exists("./temp_files/" + name) and not skip:
         os.remove("./temp_files/" + name)
     
     if not os.path.exists("./temp_files"):
         os.mkdir("./temp_files")
-    __downloader(file_url, "./temp_files/", name, skip=True)
+    downloader(file_url, "./temp_files/", name, skip=True)
 
     with zipfile.ZipFile(f"./temp_files/{name}", 'r') as zip_ref:
         zip_ref.extractall(f"./temp_files/{name}dir")
@@ -100,11 +100,11 @@ def download(conf_file, skip=False):
                         for start, end in zip(arr[3::2], arr[4::2]):
                             files.append([start, end])
     
-                        __unziper(url, name, files, skip=skip)
+                        unziper(url, name, files, skip=skip)
                         
                     elif arr[0] == 'f':
     
-                        __downloader(arr[2], arr[3], arr[1], skip=skip)
+                        downloader(arr[2], arr[3], arr[1], skip=skip)
     
                     else:
                         pass # raise TypeError(f"uncorrect datatype: {arr[0]} in {}")
@@ -120,7 +120,7 @@ def download(conf_file, skip=False):
 
 if __name__ == "__main__":
     download_conf = argv[1]
-    if len(argv) >= 3 and argv[2] == "s":
+    if len(argv) >= 3 and argv[2] == "skip":
         s = True
     else:
         s = False

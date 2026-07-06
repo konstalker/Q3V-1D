@@ -2,7 +2,7 @@
 
 cd /d %~dp0/engines
 
-call python ./download_tools "./pack_files/base.xml" "skip"
+call python download_tools.py "./pack_files/base.xml" "skip"
 
 cd /d %~dp0
 
