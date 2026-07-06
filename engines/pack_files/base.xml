@@ -8,4 +8,3 @@ f;pak6.pk3;https://q3msk.net/files/original_paks/pak6.pk3;../baseq3/
 f;pak7.pk3;https://q3msk.net/files/original_paks/pak7.pk3;../baseq3/
 f;pak8.pk3;https://q3msk.net/files/original_paks/pak8.pk3;../baseq3/
 a;osp.zip;https://q3msk.net/files/osp.zip;zz-osp-pak0.pk3;../baseq3/mods/osp/;zz-osp-pak1.pk3;../baseq3/mods/osp/;zz-osp-pak2.pk3;../baseq3/mods/osp/;zz-osp-pak3.pk3;../baseq3/mods/osp/
-a;q3e.zip;https://github.com/ec-/Quake3e/releases/download/latest/quake3e-windows-mingw-x86_64.zip;quake3e.x64.exe;./;quake3e-vulkan.x64.exe;./
