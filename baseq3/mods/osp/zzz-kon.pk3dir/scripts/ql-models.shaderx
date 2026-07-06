@@ -1,0 +1,1014 @@
+models/players/crash/icon_pm
+{
+    nopicmip
+    nomipmaps
+    {
+        clampmap models/players/crash/icon_pm.tga
+        blendFunc GL_SRC_ALPHA GL_ONE_MINUS_SRC_ALPHA
+        rgbGen identity
+        alphaGen identity
+        alphaFunc GT0
+        depthWrite
+    }
+}
+
+models/players/crash/crash
+{
+	novlcollapse
+	nopicmip
+    {
+        map textures/effects/envmapblue.tga
+        tcGen environment
+        rgbGen lightingdiffuse
+    }
+    {
+        map models/players/crash/crash.tga
+		rgbGen lightingdiffuse
+    }
+}
+
+models/players/crash/crash_f
+{
+   	q3map_surfacelight 10
+	nopicmip
+	{
+	animmap 18 models/players/doom/TV/2.jpg models/players/doom/TV/3.jpg models/players/doom/TV/4.jpg models/players/doom/TV/5.jpg models/players/doom/TV/6.jpg models/players/doom/TV/7.jpg models/players/doom/TV/8.jpg models/players/doom/TV/9.jpg models/players/doom/TV/10.jpg models/players/doom/TV/11.jpg models/players/doom/TV/13.jpg models/players/doom/TV/14.jpg models/players/doom/TV/15.jpg models/players/doom/TV/16.jpg  models/players/doom/TV/17.jpg models/players/doom/TV/18.jpg models/players/doom/TV/19.jpg models/players/doom/TV/20.jpg models/players/doom/TV/21.jpg models/players/doom/TV/22.jpg models/players/doom/TV/23.jpg models/players/doom/TV/24.jpg models/players/doom/TV/1.jpg
+	tcMod scale 1 1.3
+	tcMod stretch sin 1 .035 0.5 0.4
+	rgbGen identity
+	//blendfunc add
+	}
+	{
+	map models/players/crash/crash_f.tga
+	blendFunc GL_ONE GL_ONE
+	rgbGen lightingdiffuse
+	}
+	{
+	map models/players/doom/glow2.jpg
+	blendFunc GL_ONE GL_ONE
+	tcMod scroll 3 0.65
+    }
+}
+
+models/players/crash/crash_t
+{
+	novlcollapse
+	nopicmip
+    {
+        map textures/effects/envmapblue.tga
+        tcGen environment
+        rgbGen lightingdiffuse
+    }
+    {
+        map models/players/crash/crash_t.tga
+		rgbGen lightingdiffuse
+    }
+}
+
+models/players/crash/blue
+{
+	novlcollapse
+	nopicmip
+	{
+		map models/players/crash/blue.tga
+		rgbGen lightingdiffuse
+	}
+}
+
+models/players/crash/blue_t
+{
+	novlcollapse
+	nopicmip
+	{
+		map models/players/crash/blue_t.tga
+		rgbGen lightingdiffuse
+	}
+}
+
+models/players/crash/red
+{
+	novlcollapse
+	nopicmip
+	{
+		map models/players/crash/red.tga
+		rgbGen lightingdiffuse
+	}
+}
+
+models/players/crash/red_f
+{
+   	q3map_surfacelight 10
+	nopicmip
+	{
+	animmap 18 models/players/doom/TV/2.jpg models/players/doom/TV/3.jpg models/players/doom/TV/4.jpg models/players/doom/TV/5.jpg models/players/doom/TV/6.jpg models/players/doom/TV/7.jpg models/players/doom/TV/8.jpg models/players/doom/TV/9.jpg models/players/doom/TV/10.jpg models/players/doom/TV/11.jpg models/players/doom/TV/13.jpg models/players/doom/TV/14.jpg models/players/doom/TV/15.jpg models/players/doom/TV/16.jpg  models/players/doom/TV/17.jpg models/players/doom/TV/18.jpg models/players/doom/TV/19.jpg models/players/doom/TV/20.jpg models/players/doom/TV/21.jpg models/players/doom/TV/22.jpg models/players/doom/TV/23.jpg models/players/doom/TV/24.jpg models/players/doom/TV/1.jpg
+	tcMod scale 1 1.3
+	tcMod stretch sin 1 .035 0.5 0.4
+	rgbGen identity
+	//blendfunc add
+	}
+	{
+	map models/players/crash/crash_f.tga
+	blendFunc GL_ONE GL_ONE
+	rgbGen lightingdiffuse
+	}
+	{
+	map models/players/doom/glow2.jpg
+	blendFunc GL_ONE GL_ONE
+	tcMod scroll 3 0.65
+	}
+}
+
+models/players/crash/red_t
+{
+	novlcollapse
+	nopicmip
+	{
+		map models/players/crash/red_t.tga
+		rgbGen lightingdiffuse
+	}
+}
+
+models/players/crash/blue_f
+{
+   	q3map_surfacelight 10
+	nopicmip
+	{
+	animmap 18 models/players/doom/TV/2.jpg models/players/doom/TV/3.jpg models/players/doom/TV/4.jpg models/players/doom/TV/5.jpg models/players/doom/TV/6.jpg models/players/doom/TV/7.jpg models/players/doom/TV/8.jpg models/players/doom/TV/9.jpg models/players/doom/TV/10.jpg models/players/doom/TV/11.jpg models/players/doom/TV/13.jpg models/players/doom/TV/14.jpg models/players/doom/TV/15.jpg models/players/doom/TV/16.jpg  models/players/doom/TV/17.jpg models/players/doom/TV/18.jpg models/players/doom/TV/19.jpg models/players/doom/TV/20.jpg models/players/doom/TV/21.jpg models/players/doom/TV/22.jpg models/players/doom/TV/23.jpg models/players/doom/TV/24.jpg models/players/doom/TV/1.jpg
+	tcMod scale 1 1.3
+	tcMod stretch sin 1 .035 0.5 0.4
+	rgbGen identity
+	//blendfunc add
+	}
+	{
+	map models/players/crash/crash_f.tga
+	blendFunc GL_ONE GL_ONE
+	rgbGen lightingdiffuse
+	}
+	{
+	map models/players/doom/glow2.jpg
+	blendFunc GL_ONE GL_ONE
+	tcMod scroll 3 0.65
+	}
+}
+
+models/players/crash/ep
+{
+	novlcollapse
+	nopicmip
+	{
+		map models/players/crash/ep.tga
+	}
+	{
+		map models/players/crash/ep.tga
+		blendfunc GL_ONE GL_ZERO
+		alphaFunc GE128
+		rgbGen entity
+	}
+}
+
+models/players/crash/ep_t
+{
+	novlcollapse
+	nopicmip
+	{
+		map models/players/crash/ep_t.tga
+	}
+	{
+		map models/players/crash/ep_t.tga
+		blendfunc GL_ONE GL_ZERO
+		alphaFunc GE128
+		rgbGen entity
+	}
+}
+
+models/players/crash/ep_f
+{
+   	q3map_surfacelight 10
+	nopicmip
+	{
+	animmap 18 models/players/doom/TV/2.jpg models/players/doom/TV/3.jpg models/players/doom/TV/4.jpg models/players/doom/TV/5.jpg models/players/doom/TV/6.jpg models/players/doom/TV/7.jpg models/players/doom/TV/8.jpg models/players/doom/TV/9.jpg models/players/doom/TV/10.jpg models/players/doom/TV/11.jpg models/players/doom/TV/13.jpg models/players/doom/TV/14.jpg models/players/doom/TV/15.jpg models/players/doom/TV/16.jpg  models/players/doom/TV/17.jpg models/players/doom/TV/18.jpg models/players/doom/TV/19.jpg models/players/doom/TV/20.jpg models/players/doom/TV/21.jpg models/players/doom/TV/22.jpg models/players/doom/TV/23.jpg models/players/doom/TV/24.jpg models/players/doom/TV/1.jpg
+	tcMod scale 1 1.3
+	tcMod stretch sin 1 .035 0.5 0.4
+	rgbGen identity
+	//blendfunc add
+	}
+	{
+	map models/players/doom/doom_f.tga
+	blendFunc GL_ONE GL_ONE
+	rgbGen lightingdiffuse
+	}
+	{
+	map models/players/doom/glow2.jpg
+	blendFunc GL_ONE GL_ONE
+	tcMod scroll 3 0.65
+	}
+}
+
+
+
+models/players/doom/icon_pm
+{
+    nopicmip
+    nomipmaps
+    {
+        clampmap models/players/doom/icon_pm.tga
+        blendFunc GL_SRC_ALPHA GL_ONE_MINUS_SRC_ALPHA
+        rgbGen identity
+        alphaGen identity
+        alphaFunc GT0
+        depthWrite
+    }
+}
+
+models/players/doom/doom
+{
+	novlcollapse
+	nopicmip
+	{
+		map models/players/doom/doom.tga
+        rgbGen lightingdiffuse
+	}
+}
+
+models/players/doom/doom_f
+{
+   	q3map_surfacelight 10
+	nopicmip
+	{
+	animmap 18 models/players/doom/TV/2.jpg models/players/doom/TV/3.jpg models/players/doom/TV/4.jpg models/players/doom/TV/5.jpg models/players/doom/TV/6.jpg models/players/doom/TV/7.jpg models/players/doom/TV/8.jpg models/players/doom/TV/9.jpg models/players/doom/TV/10.jpg models/players/doom/TV/11.jpg models/players/doom/TV/13.jpg models/players/doom/TV/14.jpg models/players/doom/TV/15.jpg models/players/doom/TV/16.jpg  models/players/doom/TV/17.jpg models/players/doom/TV/18.jpg models/players/doom/TV/19.jpg models/players/doom/TV/20.jpg models/players/doom/TV/21.jpg models/players/doom/TV/22.jpg models/players/doom/TV/23.jpg models/players/doom/TV/24.jpg models/players/doom/TV/1.jpg
+	tcMod scale 1 1.3
+	tcMod stretch sin 1 .035 0.5 0.4
+	rgbGen identity
+	//blendfunc add
+	}
+	{
+	map models/players/doom/doom_f.tga
+	blendFunc GL_ONE GL_ONE
+	rgbGen lightingdiffuse
+	}
+	{
+	map models/players/doom/glow2.jpg
+	blendFunc GL_ONE GL_ONE
+	tcMod scroll 3 0.65
+	}
+}
+
+models/players/doom/phobos
+{
+	novlcollapse
+	nopicmip
+    {
+        map models/players/doom/phobos_fx.tga
+        blendFunc GL_ONE GL_ZERO
+        tcmod scale 7 7
+        tcMod scroll 5 -5
+        tcmod rotate 360
+	}
+    {
+		map models/players/doom/phobos.tga
+        blendFunc GL_SRC_ALPHA GL_ONE_MINUS_SRC_ALPHA
+        rgbGen lightingdiffuse
+	}
+}
+
+models/players/doom/phobos_f
+{
+   	q3map_surfacelight 10
+	nopicmip
+	{
+	animmap 18 models/players/doom/TV/2.jpg models/players/doom/TV/3.jpg models/players/doom/TV/4.jpg models/players/doom/TV/5.jpg models/players/doom/TV/6.jpg models/players/doom/TV/7.jpg models/players/doom/TV/8.jpg models/players/doom/TV/9.jpg models/players/doom/TV/10.jpg models/players/doom/TV/11.jpg models/players/doom/TV/13.jpg models/players/doom/TV/14.jpg models/players/doom/TV/15.jpg models/players/doom/TV/16.jpg  models/players/doom/TV/17.jpg models/players/doom/TV/18.jpg models/players/doom/TV/19.jpg models/players/doom/TV/20.jpg models/players/doom/TV/21.jpg models/players/doom/TV/22.jpg models/players/doom/TV/23.jpg models/players/doom/TV/24.jpg models/players/doom/TV/1.jpg
+	tcMod scale 1 1.3
+	tcMod stretch sin 1 .035 0.5 0.4
+	rgbGen identity
+	//blendfunc add
+	}
+	{
+	map models/players/doom/doom_f.tga
+	blendFunc GL_ONE GL_ONE
+	rgbGen lightingdiffuse
+	}
+	{
+	map models/players/doom/glow2.jpg
+	blendFunc GL_ONE GL_ONE
+	tcMod scroll 3 0.65
+	}
+}
+
+models/players/doom/blue
+{
+	novlcollapse
+	nopicmip
+	{
+		map models/players/doom/blue.tga
+        rgbGen lightingdiffuse
+	}
+}
+
+models/players/doom/red
+{
+	novlcollapse
+	nopicmip
+	{
+		map models/players/doom/red.tga
+        rgbGen lightingdiffuse
+	}
+}
+
+models/players/doom/red_f
+{
+   	q3map_surfacelight 10
+	nopicmip
+	{
+	animmap 18 models/players/doom/TV/2.jpg models/players/doom/TV/3.jpg models/players/doom/TV/4.jpg models/players/doom/TV/5.jpg models/players/doom/TV/6.jpg models/players/doom/TV/7.jpg models/players/doom/TV/8.jpg models/players/doom/TV/9.jpg models/players/doom/TV/10.jpg models/players/doom/TV/11.jpg models/players/doom/TV/13.jpg models/players/doom/TV/14.jpg models/players/doom/TV/15.jpg models/players/doom/TV/16.jpg  models/players/doom/TV/17.jpg models/players/doom/TV/18.jpg models/players/doom/TV/19.jpg models/players/doom/TV/20.jpg models/players/doom/TV/21.jpg models/players/doom/TV/22.jpg models/players/doom/TV/23.jpg models/players/doom/TV/24.jpg models/players/doom/TV/1.jpg
+	tcMod scale 1 1.3
+	tcMod stretch sin 1 .035 0.5 0.4
+	rgbGen identity
+	//blendfunc add
+	}
+	{
+	map models/players/doom/doom_f.tga
+	blendFunc GL_ONE GL_ONE
+	rgbGen lightingdiffuse
+	}
+	{
+	map models/players/doom/glow2.jpg
+	blendFunc GL_ONE GL_ONE
+	tcMod scroll 3 0.65
+	}
+}
+
+models/players/doom/ep
+{
+	novlcollapse
+	nopicmip
+	{
+		map models/players/doom/ep.tga
+	}
+	{
+		map models/players/doom/ep.tga
+		blendfunc GL_ONE GL_ZERO
+		alphaFunc GE128
+		rgbGen entity
+	}
+}
+
+models/players/doom/ep_f
+{
+   	q3map_surfacelight 10
+	nopicmip
+	{
+	animmap 18 models/players/doom/TV/2.jpg models/players/doom/TV/3.jpg models/players/doom/TV/4.jpg models/players/doom/TV/5.jpg models/players/doom/TV/6.jpg models/players/doom/TV/7.jpg models/players/doom/TV/8.jpg models/players/doom/TV/9.jpg models/players/doom/TV/10.jpg models/players/doom/TV/11.jpg models/players/doom/TV/13.jpg models/players/doom/TV/14.jpg models/players/doom/TV/15.jpg models/players/doom/TV/16.jpg  models/players/doom/TV/17.jpg models/players/doom/TV/18.jpg models/players/doom/TV/19.jpg models/players/doom/TV/20.jpg models/players/doom/TV/21.jpg models/players/doom/TV/22.jpg models/players/doom/TV/23.jpg models/players/doom/TV/24.jpg models/players/doom/TV/1.jpg
+	tcMod scale 1 1.3
+	tcMod stretch sin 1 .035 0.5 0.4
+	rgbGen identity
+	//blendfunc add
+	}
+	{
+	map models/players/doom/doom_f.tga
+	blendFunc GL_ONE GL_ONE
+	rgbGen lightingdiffuse
+	}
+	{
+	map models/players/doom/glow2.jpg
+	blendFunc GL_ONE GL_ONE
+	tcMod scroll 3 0.65
+	}
+}
+
+
+
+models/players/slash/icon_pm
+{
+    nopicmip
+    nomipmaps
+    {
+        clampmap models/players/slash/icon_pm.tga
+        blendFunc GL_SRC_ALPHA GL_ONE_MINUS_SRC_ALPHA
+        rgbGen identity
+        alphaGen identity
+        alphaFunc GT0
+        depthWrite
+    }
+}
+
+models/players/slash/blue
+{
+	novlcollapse
+	nopicmip
+	{
+		map models/players/slash/blue.tga
+        rgbGen lightingdiffuse
+	}
+}
+
+models/players/slash/blue_h
+{
+	novlcollapse
+	nopicmip
+	{
+		map models/players/slash/blue_h.tga
+        rgbGen lightingdiffuse
+	}
+}
+
+models/players/slash/grrl
+{
+	novlcollapse
+	nopicmip
+	{
+		map models/players/slash/grrl.tga
+        rgbGen lightingdiffuse
+	}
+}
+
+models/players/slash/grrl_h
+{
+	novlcollapse
+	nopicmip
+    {
+        map textures/effects/tinfx2d.tga
+        tcGen environment
+        rgbGen lightingdiffuse
+    }
+    {
+        map models/players/slash/grrl_h.tga
+        rgbGen lightingdiffuse
+        blendfunc blend
+    }       
+}
+
+models/players/slash/red
+{
+	novlcollapse
+	nopicmip
+	{
+		map models/players/slash/red.tga
+        rgbGen lightingdiffuse
+	}
+}
+
+models/players/slash/red_h
+{
+	novlcollapse
+	nopicmip
+	{
+		map models/players/slash/red_h.tga
+        rgbGen lightingdiffuse
+	}
+}
+
+models/players/slash/slash
+{
+	novlcollapse
+	nopicmip
+	{
+		map models/players/slash/slash.tga
+        rgbGen lightingdiffuse
+	}
+}
+
+models/players/slash/slash_h
+{
+	novlcollapse
+	nopicmip
+	{
+		map models/players/slash/slash_h.tga
+        rgbGen lightingdiffuse
+	}
+}
+
+models/players/slash/slashskate
+{
+	novlcollapse
+	nopicmip
+	sort additive
+	cull disable
+	{
+		clampmap models/players/slash/slashskate.tga
+		blendFunc GL_ONE GL_ONE
+        tcMod stretch sin .9 0.1 0 1.1
+        rgbgen identity
+	}
+}
+
+models/players/slash/yuriko
+{
+	novlcollapse
+	nopicmip
+    {
+        map textures/effects/envmaproc.tga
+        tcGen environment
+    }
+    {
+        map models/players/slash/yuriko.tga
+        rgbGen lightingdiffuse
+        blendFunc blend 
+    }
+}
+
+models/players/slash/yuriko_h
+{
+	novlcollapse
+	nopicmip
+    {
+        map textures/effects/envmaproc.tga
+        tcGen environment
+    }
+    {
+        map models/players/slash/yuriko_h.tga
+        rgbGen lightingdiffuse
+        blendFunc blend
+    }
+}
+
+models/players/slash/yurikoskate
+{
+	novlcollapse
+	nopicmip
+	cull disable
+    deformVertexes autoSprite
+    {
+		clampmap models/players/slash/yurikoskate.tga
+        rgbGen lightingdiffuse
+		blendFunc blend
+        tcmod rotate 999
+	}
+    {
+		clampmap models/players/slash/yurikoskate.tga
+        rgbGen lightingdiffuse
+		blendFunc blend
+        tcMod stretch sin .9 0 0 0
+        tcmod rotate 20
+	}
+}
+
+models/players/slash/ep
+{
+	novlcollapse
+	nopicmip
+	{
+		map models/players/slash/ep.tga
+	}
+	{
+		map models/players/slash/ep.tga
+		blendfunc GL_ONE GL_ZERO
+		alphaFunc GE128
+		rgbGen entity
+	}
+}
+
+models/players/slash/ep_h
+{
+	novlcollapse
+	nopicmip
+	{
+		map models/players/slash/ep_h.tga
+	}
+	{
+		map models/players/slash/ep_h.tga
+		blendfunc GL_ONE GL_ZERO
+		alphaFunc GE128
+		rgbGen entity
+	}
+}
+
+models/players/slash/skate_ql
+{
+	novlcollapse
+	nopicmip
+	sort additive
+	cull disable
+	{
+		clampmap models/players/slash/skate.tga
+		blendfunc add
+        tcMod stretch sin .9 0.1 0 1.1
+        rgbgen identity
+	}
+}
+
+
+
+models/players/keel/icon_pm
+{
+    nopicmip
+    nomipmaps
+    {
+        clampmap models/players/keel/icon_pm.tga
+        blendFunc GL_SRC_ALPHA GL_ONE_MINUS_SRC_ALPHA
+        rgbGen identity
+        alphaGen identity
+        alphaFunc GT0
+        depthWrite
+    }
+}
+
+models/players/keel/blue
+{
+	novlcollapse
+	nopicmip
+	{
+		map models/players/keel/blue.tga
+        rgbGen lightingdiffuse
+	}
+}
+
+models/players/keel/blue_h
+{
+	novlcollapse
+	nopicmip
+	{
+		map models/players/keel/blue_h.tga
+        rgbGen lightingdiffuse
+	}
+}
+
+models/players/keel/keel
+{
+	novlcollapse
+	nopicmip
+	{
+		map models/players/keel/keel.tga
+        rgbGen lightingdiffuse
+	}
+}
+
+models/players/keel/keel_h
+{
+	novlcollapse
+	nopicmip
+	{
+		AnimMap 4 models/players/keel/keel_h.tga 
+        rgbGen lightingdiffuse
+	}
+}
+
+models/players/keel/red
+{
+	novlcollapse
+	nopicmip
+	{
+		map models/players/keel/red.tga
+        rgbGen lightingdiffuse
+	}
+}
+
+models/players/keel/red_h
+{
+	novlcollapse
+	nopicmip
+	{
+		map models/players/keel/red_h.tga
+        rgbGen lightingdiffuse
+	}
+}
+
+models/players/keel/ep
+{
+	novlcollapse
+	nopicmip
+	if ( $sx_sportSkins == 1 )
+	{
+		map models/players/keel/sport.tga
+	}
+	else
+	{
+		map models/players/keel/ep.tga
+		blendFunc GL_ONE GL_ZERO
+		alphaFunc GE128
+		rgbGen entity
+	}
+	{
+		map models/players/keel/ep.tga
+		blendFunc GL_ONE GL_ZERO
+		alphaFunc LT128
+		rgbGen identity
+	}
+}
+
+models/players/keel/ep_h
+{
+	novlcollapse
+	nopicmip
+	if ( $sx_sportSkins == 1 )
+	{
+		map models/players/keel/sport_h.tga
+	}
+	else
+	{
+		map models/players/keel/ep_h.tga
+		blendFunc GL_ONE GL_ZERO
+		alphaFunc GE128
+		rgbGen entity
+	}
+	{
+		map models/players/keel/ep_h.tga
+		blendFunc GL_ONE GL_ZERO
+		alphaFunc LT128
+		rgbGen identity
+	}
+}
+
+
+
+models/players/klesk/icon_pm
+{
+    nopicmip
+    nomipmaps
+    {
+        clampmap models/players/klesk/icon_pm.tga
+        blendFunc GL_SRC_ALPHA GL_ONE_MINUS_SRC_ALPHA
+        rgbGen identity
+        alphaGen identity
+        alphaFunc GT0
+        depthWrite
+    }
+}
+
+models/players/klesk/blue
+{
+	novlcollapse
+	nopicmip
+	{
+		map models/players/klesk/blue.tga
+        rgbGen lightingdiffuse
+	}
+}
+
+models/players/klesk/blue_h
+{
+	novlcollapse
+	nopicmip
+	{
+		map models/players/klesk/blue_h.tga
+        rgbGen lightingdiffuse
+	}
+}
+
+models/players/klesk/flisk
+{
+	novlcollapse
+	nopicmip
+    {
+		map $whiteimage
+	}
+	{
+        map models/players/klesk/flisk.tga
+        rgbGen lightingdiffuse
+		blendFunc GL_DST_COLOR GL_SRC_ALPHA
+		alphaGen lightingSpecular
+	}
+}
+
+models/players/klesk/flisk_h
+{
+	novlcollapse
+	nopicmip
+    {
+		map models/players/klesk/flisk_h.tga
+        rgbGen lightingdiffuse
+        blendFunc GL_ONE GL_ZERO
+	} 
+    {
+        map textures/sfx/bolts.tga
+        rgbGen lightingdiffuse
+        blendFunc GL_ONE GL_ONE
+        tcmod scale 2 2
+        tcmod scroll 2 2
+	}   
+    {
+		map models/players/klesk/flisk_h.tga
+        rgbGen lightingdiffuse
+        blendFunc GL_SRC_ALPHA GL_ONE_MINUS_SRC_ALPHA
+	}
+}
+
+models/players/klesk/klesk
+{
+	novlcollapse
+	nopicmip
+	{
+		map models/players/klesk/klesk.tga
+        rgbGen lightingdiffuse
+	}
+}
+
+models/players/klesk/klesk_h
+{
+	novlcollapse
+	nopicmip
+	{
+		map models/players/klesk/klesk_h.tga
+        rgbGen lightingdiffuse
+        blendfunc GL_ONE GL_ZERO
+    }
+	{
+		map models/players/klesk/klesk_g.tga
+        rgbGen lightingdiffuse
+		blendfunc GL_ONE GL_ONE
+		rgbGen wave triangle .5 1 0 .5
+	}
+}
+
+models/players/klesk/red
+{
+	novlcollapse
+	nopicmip
+	{
+		map models/players/klesk/red.tga
+        rgbGen lightingdiffuse
+	}
+}
+
+models/players/klesk/red_h
+{
+	novlcollapse
+	nopicmip
+	{
+		map models/players/klesk/red_h.tga
+        rgbGen lightingdiffuse
+	}
+}
+
+models/players/klesk/ep
+{
+	novlcollapse
+	nopicmip
+	{
+		map models/players/klesk/ep.tga
+	}
+	{
+		map models/players/klesk/ep.tga
+		blendfunc GL_ONE GL_ZERO
+		alphaFunc GE128
+		rgbGen entity
+	}
+}
+
+models/players/klesk/ep_h
+{
+	novlcollapse
+	nopicmip
+	{
+		map models/players/klesk/ep_h.tga
+	}
+	{
+		map models/players/klesk/ep_h.tga
+		blendfunc GL_ONE GL_ZERO
+		alphaFunc GE128
+		rgbGen entity
+	}
+}
+
+
+
+models/players/tankjr/icon_pm
+{
+    nopicmip
+    nomipmaps
+    {
+        clampmap models/players/tankjr/icon_pm.tga
+        blendFunc GL_SRC_ALPHA GL_ONE_MINUS_SRC_ALPHA
+        rgbGen identity
+        alphaGen identity
+        alphaFunc GT0
+        depthWrite
+    }
+}
+
+models/players/tankjr/blue
+{
+	novlcollapse
+	nopicmip
+	{
+		map models/players/tankjr/blue.tga
+		rgbGen lightingDiffuse
+	}
+}
+
+models/players/tankjr/tankjr
+{
+	novlcollapse
+	nopicmip
+    {
+		map $whiteimage
+	}
+	{
+        map models/players/tankjr/tankjr.tga
+		blendFunc GL_DST_COLOR GL_SRC_ALPHA
+		rgbGen lightingDiffuse
+		alphaGen lightingSpecular
+	}
+}
+
+models/players/tankjr/red
+{
+	novlcollapse
+	nopicmip
+	{
+		map models/players/tankjr/red.tga
+		rgbGen lightingDiffuse
+	}
+}
+
+models/players/tankjr/ep
+{
+	novlcollapse
+	nopicmip
+	if ( $sx_sportSkins == 1 )
+	{
+		map models/players/tankjr/sport.tga
+	}
+	else
+	{
+		map models/players/tankjr/ep.tga
+		blendFunc GL_ONE GL_ZERO
+		alphaFunc GE128
+		rgbGen entity
+	}
+	{
+		map models/players/tankjr/ep.tga
+		blendFunc GL_ONE GL_ZERO
+		alphaFunc LT128
+		rgbGen identity
+	}
+}
+
+
+
+models/players/visor/icon_pm
+{
+    nopicmip
+    nomipmaps
+    {
+        clampmap models/players/visor/icon_pm.tga
+        blendFunc GL_SRC_ALPHA GL_ONE_MINUS_SRC_ALPHA
+        rgbGen identity
+        alphaGen identity
+        alphaFunc GT0
+        depthWrite
+    }
+}
+
+models/players/visor/blue
+{
+	novlcollapse
+	nopicmip
+	{
+		map models/players/visor/blue.tga
+		rgbGen lightingDiffuse
+	}
+}
+
+models/players/visor/gorre
+{
+	novlcollapse
+	nopicmip
+    {
+        map textures/sfx/firegorre.tga
+        blendFunc GL_ONE GL_ZERO
+        tcmod scroll 0 1
+        tcMod turb 0 .25 0 1.6
+        tcmod scale 4 4
+        rgbGen identity
+	}        
+    {
+		map models/players/visor/gorre.tga
+		rgbGen lightingDiffuse
+        blendFunc GL_SRC_ALPHA GL_ONE_MINUS_SRC_ALPHA
+	}
+}
+
+models/players/visor/red
+{
+	novlcollapse
+	nopicmip
+	{
+		map models/players/visor/red.tga
+		rgbGen lightingDiffuse
+	}
+}
+
+models/players/visor/visor
+{
+	novlcollapse
+	nopicmip
+	{
+		map models/players/visor/visor.tga
+		rgbGen lightingDiffuse
+	}
+}
+
+models/players/visor/ep
+{
+	novlcollapse
+	nopicmip
+	{
+		map models/players/visor/ep.tga
+	}
+	{
+		map models/players/visor/ep.tga
+		blendfunc GL_ONE GL_ZERO
+		alphaFunc GE128
+		rgbGen entity
+	}
+}
