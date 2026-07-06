@@ -51,7 +51,7 @@ def downloader(file_url, file_path, file_name, skip=False):
             percent = int((downloaded / total_length) * 100)
 
             if last_percent != percent:
-                print(f"\r[{"#" * floor(percent / 5)}{' ' * floor((100 - percent) // 5)}] {percent}% ({total_length // 1048576} MB)   ", end='')
+                print(f"\r[{'#' * floor(percent / 5)}{' ' * floor((100 - percent) // 5)}] {percent}% ({total_length // 1048576} MB)   ", end='')
     
     print("\ninstalled.")
 
