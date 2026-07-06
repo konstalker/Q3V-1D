@@ -6,6 +6,8 @@ cd "./engines"
 python download_tools.py "./pack_files/base.xml" "skip"
 python download_tools.py "./pack_files/lin.xml" "skip"
 python upd.py
+
+chmod +x ./quake3e-vulkan.x64
 cd "../"
 
 DESKTOP_DIR=$(xdg-user-dir DESKTOP)
