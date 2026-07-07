@@ -54,6 +54,8 @@ rd /s /q "./temp_files"
 exit /b 0
 
 :download
-call downloader.bat "./pack_list/confupd.txt" "f" ""
-call downloader.bat "./pack_list/voidupd.txt" "a" ""
-start downloader.bat "./pack_list/scriptupd.txt" "f" ""
+echo [warning] this is batch version of Q3V#1D, autoupdate has been disabled for this version.
+echo [warning] now im working on a new (python) version.
+echo [warning] thank you for using Q3V#1D
+echo [warning] contact creator: https://t.me/konstalker
+echo [warning] git repository: https://github.com/konstalker/Q3V-1D

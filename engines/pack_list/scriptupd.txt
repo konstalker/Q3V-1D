@@ -1,4 +1,0 @@
-https://github.com/konstalker/Q3V-1D/raw/refs/heads/main/engines/beupd.bat;./;beupd.bat
-https://github.com/konstalker/Q3V-1D/raw/refs/heads/main/engines/launch.bat;./;launch.bat
-https://github.com/konstalker/Q3V-1D/raw/refs/heads/main/engines/updater.bat;./;updater.bat
-https://github.com/konstalker/Q3V-1D/raw/refs/heads/main/first_launch.bat;./;first_launch.bat
