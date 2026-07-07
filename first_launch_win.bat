@@ -3,7 +3,11 @@
 cd /d %~dp0/engines
 
 call %~dp0/engines/python/setup_python.bat download_tools.py "./download_confs/base.dconf" "skip"
-echo "windows" >> ./mod_tree/branch.txt
+
+findstr /C:"windows" "%~dp0engines\mod_tree\branch.txt" >nul
+if errorlevel 1 (
+    echo windows>> "%~dp0engines\mod_tree\branch.txt"
+)
 
 cd /d %~dp0
 

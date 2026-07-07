@@ -5,7 +5,10 @@ cd $SCRIPT_DIR
 
 cd "./engines"
 python download_tools.py "./download_confs/base.dconf" "skip"
-echo "linux" >> ./mod_tree/branch.txt
+
+if ! grep -qx "linux" "$SCRIPT_DIR/engines/mod_tree/branch.txt"; then
+    echo "linux" >> "$SCRIPT_DIR/engines/mod_tree/branch.txt"
+fi
 
 chmod +x ./oDFe.vk.x64
 cd "../"

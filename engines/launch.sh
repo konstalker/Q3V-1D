@@ -1,7 +1,7 @@
 #!/bin/bash
 cd $(dirname "$0")
 
-python upd.py
+python autoupdater.py
 
 ARGS="+set fs_homepath ../baseq3/mods +set fs_basepath ../ +set fs_game osp"
 

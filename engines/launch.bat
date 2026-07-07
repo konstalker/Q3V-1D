@@ -1,7 +1,7 @@
 @echo off
 setlocal enabledelayedexpansion
 
-call ./engines/python/setup_python.bat upd.py
+call ./engines/python/setup_python.bat autoupdate.py
 
 set VULKAN_APP="oDFe.vk.x64.exe"
 set FALLBACK_APP="oDFe.x64.exe"

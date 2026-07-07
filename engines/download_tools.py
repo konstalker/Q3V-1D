@@ -80,13 +80,14 @@ def unziper(file_url, name, file_paths=[], skip=False):
     rmtree("./temp_files")
 
         
-def download(conf_file, skip=False):
+def download(conf_file, skip=False, out_data=False):
     arr = [None]
     
     try:
         
         with open(conf_file, 'r') as pack_file:
             pack_list = pack_file.read().split('\n')
+            installed = []
             
             for (i, _) in enumerate(pack_list):
                 if ';' in _:
@@ -101,14 +102,22 @@ def download(conf_file, skip=False):
                             files.append([start, end])
     
                         unziper(url, name, files, skip=skip)
+
+                        installed = list(map(lambda x: x[1], files))
                         
                     elif arr[0] == 'f':
     
                         downloader(arr[2], arr[3], arr[1], skip=skip)
+
+                        installed = [arr[3] + arr[1]]
     
                     else:
-                        pass # raise TypeError(f"uncorrect datatype: {arr[0]} in {}")
-                    
+
+                        raise TypeError (f"uncorrect datatype: {arr[0]} in {arr[1]}")
+
+                if out_data:
+                    yield installed
+
     except Exception as err:
         print(f"[error] not installed {arr[1]}")
         print(f'[log] {err}')
@@ -125,4 +134,4 @@ if __name__ == "__main__":
     else:
         s = False
     
-    download(download_conf, s)
+    download(download_conf, skip=s, out_data=False)
