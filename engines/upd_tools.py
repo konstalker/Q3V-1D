@@ -3,7 +3,41 @@ import zipfile
 import os
 
 import download_tools as dt
-from caption import caption
+from base_methods import *
+
+
+def update(repo_name):
+    if not os.path.exists("./temp_files"):
+        os.mkdir("./temp_files")
+
+    modlist = {}
+    dt.downloader(furl('[RURL]index.modlist'), "./temp_files/", "modlist.txt", skip=False)
+    with open("./temp_files/modlist.txt", 'r') as f:
+        for x in modlist.split('\n'):
+            mod = list(x.split(';'))
+
+            if mod[0] == repo_name:
+                dt.downloader(furl(mod[1]), )
+
+    shutil.rmtree("./temp_files/")
+
+
+def __install(repo_name, compilation_branch, mod_branch, local_name=''):
+    try:
+        
+        if not os.path.exists("./download_confs/local_name"):
+            dt.download()
+
+        if not os.path.exists("./temp_files"):
+            os.mkdir("./temp_files")
+
+        
+
+    except Exception as e:
+        print("[error] not installed {repo_name}")
+        print(f"[log] error: {e}")
+        caption()
+
 
 
 # def update_be():
@@ -47,10 +81,5 @@ from caption import caption
 #         caption()
 
 
-def update_osp():
-    # Implementation for updating OSP
-    pass
-
-
 if __name__ == "__main__":
-    update_osp()
+    print(furl("[RURL]index.modlist"))

@@ -3,8 +3,7 @@
 cd /d %~dp0/engines
 
 call %~dp0/engines/python/setup_python.bat download_tools.py "./download_confs/base.dconf" "skip"
-call %~dp0/engines/python/setup_python.bat download_tools.py "./download_confs/win.dconf" "skip"
-call %~dp0/engines/python/setup_python.bat "./upd.py"
+echo "windows" >> ./mod_tree/branch.txt
 
 cd /d %~dp0
 

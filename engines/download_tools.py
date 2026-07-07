@@ -1,7 +1,7 @@
 import shutil
 import urllib.request
 from math import floor
-from caption import caption
+from base_methods import *
 
 from sys import argv
 import os

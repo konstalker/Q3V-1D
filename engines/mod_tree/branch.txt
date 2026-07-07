@@ -1,2 +1,4 @@
 python
 main
+https://github.com/konstalker/V-1D_modlist/raw/refs/heads/main/
+windows

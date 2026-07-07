@@ -5,10 +5,9 @@ cd $SCRIPT_DIR
 
 cd "./engines"
 python download_tools.py "./download_confs/base.dconf" "skip"
-python download_tools.py "./download_confs/lin.dconf" "skip"
-python upd.py
+echo "linux" >> ./mod_tree/branch.txt
 
-chmod +x ./quake3e-vulkan.x64
+chmod +x ./oDFe.vk.x64
 cd "../"
 
 DESKTOP_DIR=$(xdg-user-dir DESKTOP)
