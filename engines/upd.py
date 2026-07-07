@@ -1,5 +1,5 @@
 from beupd import update_be
 # import download_tools as dt
 
-update_be()
+update_osp()
 # dt.download()

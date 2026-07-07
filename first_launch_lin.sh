@@ -4,8 +4,8 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 cd $SCRIPT_DIR
 
 cd "./engines"
-python download_tools.py "./pack_files/base.dconf" "skip"
-python download_tools.py "./pack_files/lin.dconf" "skip"
+python download_tools.py "./download_confs/base.dconf" "skip"
+python download_tools.py "./download_confs/lin.dconf" "skip"
 python upd.py
 
 chmod +x ./quake3e-vulkan.x64

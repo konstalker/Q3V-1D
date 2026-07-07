@@ -3,8 +3,8 @@ setlocal enabledelayedexpansion
 
 call ./engines/python/setup_python.bat upd.py
 
-set VULKAN_APP="quake3e-vulkan.x64.exe"
-set FALLBACK_APP="quake3e.x64.exe"
+set VULKAN_APP="oDFe.vk.x64.exe"
+set FALLBACK_APP="oDFe.x64.exe"
 
 set ARGS=+set fs_homepath "%%~fI\baseq3\mods" +set fs_basepath "%%~fI" +set fs_game "osp"
 
