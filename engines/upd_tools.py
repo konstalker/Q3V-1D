@@ -23,10 +23,22 @@ def update(repo_name):
                 continue
             
             dt.downloader(furl(mod[1]), './download_confs/', f'{repo_name}.dconf', skip=True)
-            mod_loader = dt.download(f'./download_confs/{repo_name}.dconf', skip=False, out_data=True)
-            version_path = next(mod_loader)[0]
-            with open(version_path, 'r') as version_file:
-                version = version_file.read().split('\n')[0]
+            
+            with open(f'./download_confs/{repo_name}.dconf', 'r') as file:
+                vconf = file.read().split('\n')[0]
+
+                if vconf == 'git':
+                    version = "1" # заглушка
+                elif vconf[0] == 'v':
+                    version = vconf[0]
+                else:
+                    vconf = 'url'
+            
+            if vconf == 'url':
+                mod_loader = dt.download(f'./download_confs/{repo_name}.dconf', skip=False, out_data=True)
+                version_path = next(mod_loader)[0]
+                with open(version_path, 'r') as version_file:
+                    version = version_file.read().split('\n')[0]
 
             if version > dmod_conf[repo_name]:
                 print('need to update')
@@ -55,8 +67,3 @@ def __install(repo_name, compilation_branch, mod_branch, local_name=''):
         print("[error] not installed {repo_name}")
         print(f"[log] error: {e}")
         caption()
-
-
-if __name__ == "__main__":
-    update("osp2-be")
-    update("oDFe")

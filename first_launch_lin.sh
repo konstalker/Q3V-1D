@@ -4,7 +4,7 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 cd $SCRIPT_DIR
 
 cd "./engines"
-python download_tools.py "./download_confs/base.dconf" "skip"
+python flaunch.py
 
 if ! grep -qx "linux" "$SCRIPT_DIR/engines/mod_tree/branch.txt"; then
     echo "linux" >> "$SCRIPT_DIR/engines/mod_tree/branch.txt"

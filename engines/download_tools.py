@@ -53,10 +53,15 @@ def downloader(file_url, file_path, file_name, skip=False):
             if last_percent != percent:
                 print(f"\r[{'#' * floor(percent / 5)}{' ' * floor((100 - percent) // 5)}] {percent}% ({total_length // 1048576} MB)   ", end='')
     
-    print("\ninstalled.")
+    if downloaded == total_length:
+        print("\ninstalled.")
+        return file_path + file_name
 
 
 def unziper(file_url, name, file_paths=[], skip=False):
+
+    installed = []
+
     if os.path.exists("./temp_files/" + name) and not skip:
         os.remove("./temp_files/" + name)
     
@@ -74,12 +79,16 @@ def unziper(file_url, name, file_paths=[], skip=False):
 
         if not os.path.isfile(file_path[1]):
             shutil.copy(temp_name, file_path[1])
+            installed.append(temp_name)
         else:
             shutil.copytree(temp_name, file_path[1])
+            installed.extend(get_relative_paths(file_path[1]))
     try:
         rmtree("./temp_files")
     except Exception:
         pass
+
+    return installed
 
         
 def download(conf_file, skip=False, out_data=False):
@@ -89,9 +98,10 @@ def download(conf_file, skip=False, out_data=False):
     
         with open(conf_file, 'r') as pack_file:
             pack_list = pack_file.read().split('\n')
-            installed = []
             
             for (i, _) in enumerate(pack_list):
+                installed = []
+                
                 if ';' in _:
                     arr = _.split(';')
 
@@ -104,14 +114,10 @@ def download(conf_file, skip=False, out_data=False):
                             files.append([start, end])
 
                         unziper(url, name, files, skip=skip)
-
-                        installed = list(map(lambda x: x[1], files))
                         
                     elif arr[0] == 'f':
 
-                        downloader(arr[2], arr[3], arr[1], skip=skip)
-
-                        installed = [arr[3] + arr[1]]
+                        installed.append(downloader(arr[2], arr[3], arr[1], skip=skip))
 
                     else:
 

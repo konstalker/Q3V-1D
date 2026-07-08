@@ -35,12 +35,12 @@ class dmod:
     
     def mod_list(self):
         
-        mod_list = []
+        mods = []
 
         for x in self.mod_info:
-            self.mod_list.append(self.mod_info[x][-1][0])
+            mods.append(self.mod_info[x][-1][0])
 
-        return mod_list
+        return mods
         
     def save(self):
         
