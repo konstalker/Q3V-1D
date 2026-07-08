@@ -113,11 +113,11 @@ def download(conf_file, skip=False, out_data=False):
                         for start, end in zip(arr[3::2], arr[4::2]):
                             files.append([start, end])
 
-                        unziper(url, name, files, skip=skip)
+                        unziper(furl(url), name, files, skip=skip)
                         
                     elif arr[0] == 'f':
 
-                        installed.append(downloader(arr[2], arr[3], arr[1], skip=skip))
+                        installed.append(downloader(furl(arr[2]), arr[3], arr[1], skip=skip))
 
                     else:
 
