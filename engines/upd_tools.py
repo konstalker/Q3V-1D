@@ -27,7 +27,8 @@ def update(repo_name):
             with open(version_path, 'r') as version_file:
                version = version_file.read().split('\n')[0]
 
-            if version
+            if version:
+                pass
 
     shutil.rmtree("./temp_files/")
 

@@ -1,3 +1,4 @@
 python
-q3elite
+v1.5
+main
 https://raw.githubusercontent.com/konstalker/V-1D_modlist/refs/heads/main/
