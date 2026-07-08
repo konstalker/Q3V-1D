@@ -52,8 +52,14 @@ def update(repo_name):
                 with open(version_path, 'r') as version_file:
                     version = version_file.read().split('\n')[0]
 
+            else:
+                mod_loader = dt.download(f'./download_confs/{repo_name}.dconf', skip=False, out_data=True)
+                next(mod_loader)
+
             if version > dmod_conf[repo_name]:
                 print('need to update')
+
+                next(mod_loader)
 
             else:
                 print("normal")

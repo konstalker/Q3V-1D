@@ -77,10 +77,14 @@ def unziper(file_url, name, file_paths=[], skip=False):
         
         assert os.path.exists(temp_name), f"no such file or directory: {temp_name}"
 
-        if not os.path.isfile(file_path[1]):
+        if os.path.isfile(temp_name):
+            print('hi')
+            print(temp_name)
             shutil.copy(temp_name, file_path[1])
             installed.append(temp_name)
         else:
+            if os.path.exists(temp_name) and os.path.exists(file_path[1]):
+                shutil.rmtree(temp_name, file_path[1])
             shutil.copytree(temp_name, file_path[1])
             installed.extend(get_relative_paths(file_path[1]))
     try:
