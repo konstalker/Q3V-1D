@@ -6,7 +6,7 @@ import os
 import download_tools as dt
 from base_methods import caption, furl, c_info
 
-from dmods_tools import dmod
+from dmods_tools import dmod_conf
 
 
 def update(repo_name):
@@ -21,16 +21,22 @@ def update(repo_name):
 
             if mod[0] != repo_name:
                 continue
-
-            mod_loader = dt.download(furl(mod[1]), skip=False, out_data=True)
-            version_path = next(mod_loader)[1]
+            
+            dt.downloader(furl(mod[1]), './temp_files/', f'{repo_name}.dconf', skip=True)
+            mod_loader = dt.download(f'./temp_files/{repo_name}.dconf', skip=False, out_data=True)
+            version_path = next(mod_loader)[0]
             with open(version_path, 'r') as version_file:
                version = version_file.read().split('\n')[0]
 
-            if version:
-                pass
+            if version > dmod_conf[repo_name]:
+                print('need to update')
+            else:
+                print("normal")
 
-    shutil.rmtree("./temp_files/")
+    try:
+        shutil.rmtree("./temp_files/")
+    except Exception:
+        pass
 
 
 def __install(repo_name, compilation_branch, mod_branch, local_name=''):
@@ -93,4 +99,5 @@ def __install(repo_name, compilation_branch, mod_branch, local_name=''):
 
 
 if __name__ == "__main__":
-    print(furl("[RURL]index.modlist"))
+    update("osp2-be")
+    update("oDFe")

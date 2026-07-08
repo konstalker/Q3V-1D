@@ -76,15 +76,17 @@ def unziper(file_url, name, file_paths=[], skip=False):
             shutil.copy(temp_name, file_path[1])
         else:
             shutil.copytree(temp_name, file_path[1])
-
-    rmtree("./temp_files")
+    try:
+        rmtree("./temp_files")
+    except Exception:
+        pass
 
         
 def download(conf_file, skip=False, out_data=False):
     arr = [None]
     
     try:
-        
+    
         with open(conf_file, 'r') as pack_file:
             pack_list = pack_file.read().split('\n')
             installed = []
@@ -92,7 +94,7 @@ def download(conf_file, skip=False, out_data=False):
             for (i, _) in enumerate(pack_list):
                 if ';' in _:
                     arr = _.split(';')
-    
+
                     if arr[0] == "a":
                         
                         files = []
@@ -100,17 +102,17 @@ def download(conf_file, skip=False, out_data=False):
                         
                         for start, end in zip(arr[3::2], arr[4::2]):
                             files.append([start, end])
-    
+
                         unziper(url, name, files, skip=skip)
 
                         installed = list(map(lambda x: x[1], files))
                         
                     elif arr[0] == 'f':
-    
+
                         downloader(arr[2], arr[3], arr[1], skip=skip)
 
                         installed = [arr[3] + arr[1]]
-    
+
                     else:
 
                         raise TypeError (f"uncorrect datatype: {arr[0]} in {arr[1]}")
@@ -119,8 +121,8 @@ def download(conf_file, skip=False, out_data=False):
                     yield installed
 
     except Exception as err:
-        print(f"[error] not installed {arr[1]}")
         print(f'[log] {err}')
+        print(f"[error] not installed {arr[1]}")
         input()
         if arr[0] == 'a':
             rmtree(f"./temp_files/{arr[1]}dir", )

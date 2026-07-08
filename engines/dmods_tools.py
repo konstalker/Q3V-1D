@@ -25,8 +25,31 @@ class dmod:
                             mods[-1][1] = "0"
 
                 self.mod_info.update({tag: mods})
+    
+    def __getitem__(self, key):
+        for x in self.mod_info:
+            if self.mod_info[x][-1][0] == key:
+                return self.mod_info[x][-1][1]
         
+        raise KeyError(f'{key} modaification not found in active dmod list')
+    
+    def mod_list(self):
+        
+        mod_list = []
 
-if __name__ == '__main__':
-    main = dmod()
-    print(*list(map(lambda x: f"{x}: {main.mod_info[x]}", main.mod_info)), sep='\n')
+        for x in self.mod_info:
+            self.mod_list.append(self.mod_info[x][-1][0])
+
+        return mod_list
+        
+    def save(self):
+        
+        with open(f'./mod_tree/{c_info.mod_branch}.dmod', 'w') as mod_branch:
+            for x in self.mod_info:
+                s = ""
+                for y in self.mod_info[x]:
+                    s += f';{y[0]}|{y[1]}'
+                mod_branch.write(f'{x}{s}\n')
+
+
+dmod_conf = dmod()

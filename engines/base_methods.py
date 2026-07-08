@@ -1,3 +1,6 @@
+from pathlib import Path
+
+
 def caption():
     print("contacts of creator: https://t.me/konstalker")
     print("you can add issue on github: https://github.com/konstalker/Q3V-1D/issues")
@@ -23,3 +26,18 @@ class C_INFO:
 
 furl = C_INFO()
 c_info = C_INFO()
+
+
+def get_relative_paths(folder_path: str) -> list[str]:
+    base_dir = Path(folder_path)
+    relative_paths = []
+    
+    # rglob('*') рекурсивно обходит все файлы и папки
+    for item in base_dir.rglob('*'):
+        if item.is_file():
+            # Получаем путь относительно базовой папки
+            rel_path = item.relative_to(base_dir)
+            # Формируем строку с ведущим слешем и приводим слеши к unix-стилю
+            relative_paths.append(f"/{rel_path.as_posix()}")
+            
+    return relative_paths
