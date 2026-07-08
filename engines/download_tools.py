@@ -31,7 +31,7 @@ def downloader(file_url, file_path, file_name, skip=False):
             downloaded = os.path.getsize(file_path + file_name)
             headers = {'Range': f'bytes={downloaded}-'}
         
-        chunk_size = 8192
+        chunk_size = 16384
 
     req = urllib.request.Request(file_url, headers=headers)
     

@@ -22,14 +22,15 @@ def update(repo_name):
             if mod[0] != repo_name:
                 continue
             
-            dt.downloader(furl(mod[1]), './temp_files/', f'{repo_name}.dconf', skip=True)
-            mod_loader = dt.download(f'./temp_files/{repo_name}.dconf', skip=False, out_data=True)
+            dt.downloader(furl(mod[1]), './download_confs/', f'{repo_name}.dconf', skip=True)
+            mod_loader = dt.download(f'./download_confs/{repo_name}.dconf', skip=False, out_data=True)
             version_path = next(mod_loader)[0]
             with open(version_path, 'r') as version_file:
-               version = version_file.read().split('\n')[0]
+                version = version_file.read().split('\n')[0]
 
             if version > dmod_conf[repo_name]:
                 print('need to update')
+
             else:
                 print("normal")
 
@@ -58,3 +59,4 @@ def __install(repo_name, compilation_branch, mod_branch, local_name=''):
 
 if __name__ == "__main__":
     update("osp2-be")
+    update("oDFe")
