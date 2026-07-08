@@ -10,7 +10,6 @@ if ! grep -qx "linux" "$SCRIPT_DIR/engines/mod_tree/branch.txt"; then
     echo "linux" >> "$SCRIPT_DIR/engines/mod_tree/branch.txt"
 fi
 
-chmod +x ./oDFe.vk.x64
 cd "../"
 
 DESKTOP_DIR=$(xdg-user-dir DESKTOP)

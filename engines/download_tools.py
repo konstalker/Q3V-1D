@@ -97,6 +97,7 @@ def unziper(file_url, name, file_paths=[], skip=False):
         
 def download(conf_file, skip=False, out_data=False):
     arr = [None]
+    print('asd')
     
     try:
     
@@ -141,9 +142,10 @@ def download(conf_file, skip=False, out_data=False):
 
 if __name__ == "__main__":
     download_conf = argv[1]
+    print('hi')
     if len(argv) >= 3 and argv[2] == "skip":
         s = True
     else:
         s = False
-    
-    download(download_conf, skip=s, out_data=False)
+        
+    next(download(download_conf, skip=s, out_data=False))

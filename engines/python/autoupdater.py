@@ -13,6 +13,8 @@ def autoupdate():
         for x in dmod_conf.mod_list():
             update(x)
 
+    dmod_conf.save()
+
     try:
         shutil.rmtree("./temp_files/")
     except Exception:
