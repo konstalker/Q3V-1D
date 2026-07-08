@@ -21,3 +21,6 @@ baseq3/mods/osp/zz-osp-pak8be.pk3
 engines/quake3e-vulkan.x64
 engines/quake3e.x64
 baseq3/mods/pk3cache.dat
+engines/download_confs/oDFe.dconf
+engines/download_confs/osp2-be.dconf
+engines/download_confs/kon.dconf

@@ -21,7 +21,7 @@ def downloader(file_url, file_path, file_name, skip=False):
         
         if skip and os.path.exists(file_path + file_name) and os.path.getsize(file_path + file_name) == total_length:
             print("File exists, skipping.")
-            return
+            return [file_path + file_name]
         
         downloaded = 0
 
@@ -32,11 +32,11 @@ def downloader(file_url, file_path, file_name, skip=False):
             headers = {'Range': f'bytes={downloaded}-'}
         
         chunk_size = 16384
-
+    
     req = urllib.request.Request(file_url, headers=headers)
     
-    with urllib.request.urlopen(req) as response, open(file_path + file_name, 'ab') as out_file:
-    
+    with urllib.request.urlopen(req) as response, open(file_path + file_name, 'ab' if skip else 'wb') as out_file:
+
         print("downloading...")
         while True:
             chunk = response.read(chunk_size)
