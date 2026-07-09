@@ -11,13 +11,19 @@ from shutil import rmtree
 
 def downloader(file_url, file_path, file_name, skip=False):
     percent = 0
+    chunk_size = 16384
     
     with urllib.request.urlopen(file_url) as response:
         
         total_length = response.info().get('Content-Length')
         
         print(f"Installing {file_name}")
-        total_length = int(total_length)
+
+        if total_length != None:
+            total_length = int(total_length)
+        else:
+            total_length = chunk_size
+            print(file_url, 'has no length data')
         
         if skip and os.path.exists(file_path + file_name) and os.path.getsize(file_path + file_name) == total_length:
             print("File exists, skipping.")
@@ -30,8 +36,6 @@ def downloader(file_url, file_path, file_name, skip=False):
         if skip and os.path.exists(file_path + file_name):
             downloaded = os.path.getsize(file_path + file_name)
             headers = {'Range': f'bytes={downloaded}-'}
-        
-        chunk_size = 16384
     
     req = urllib.request.Request(file_url, headers=headers)
     
@@ -73,7 +77,7 @@ def unziper(file_url, name, file_paths=[], skip=False):
         zip_ref.extractall(f"./temp_files/{name}dir")
     
     for file_path in file_paths:
-        temp_name = f"./temp_files/{name}dir/{file_path[0]}"
+        temp_name = furl(f"./temp_files/{name}dir/{file_path[0]}")
         
         assert os.path.exists(temp_name), f"no such file or directory: {temp_name}"
 
