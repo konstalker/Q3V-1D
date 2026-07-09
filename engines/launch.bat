@@ -6,7 +6,7 @@ call ./engines/python/setup_python.bat autoupdate.py
 set "VULKAN_APP="
 set "FALLBACK_APP="
 
-< "engines.txt" (
+< "engine.txt" (
     set /p "VULKAN_APP="
     set /p "FALLBACK_APP="
 )
