@@ -1,6 +1,6 @@
-scripts;scripts|@
+scripts;scripts|$
+compilation;kon|@
 engine;oDFe|0
 osp2;osp2-be|0
-configs;kon_conf|@
-binds;kon_bind|@
-defrag;defrag|0
+configs;kon_conf|$
+binds;kon_bind|$
