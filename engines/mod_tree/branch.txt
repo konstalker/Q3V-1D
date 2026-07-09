@@ -1,4 +1,5 @@
 python
-@
+v1.5
+v1
 main
 https://raw.githubusercontent.com/konstalker/V-1D_modlist/refs/heads/main/

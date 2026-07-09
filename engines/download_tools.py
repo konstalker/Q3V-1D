@@ -10,56 +10,61 @@ from shutil import rmtree
 
 
 def downloader(file_url, file_path, file_name, skip=False):
-    percent = 0
-    chunk_size = 16384
-    
-    with urllib.request.urlopen(file_url) as response:
-        
-        total_length = response.info().get('Content-Length')
-        
-        print(f"Installing {file_name}")
 
-        if total_length != None:
-            total_length = int(total_length)
-        else:
-            total_length = chunk_size
-            print(file_url, 'has no length data')
+    try:
+        percent = 0
+        chunk_size = 16384
         
-        if skip and os.path.exists(file_path + file_name) and os.path.getsize(file_path + file_name) == total_length:
-            print("File exists, skipping.")
-            return [file_path + file_name]
-        
-        downloaded = 0
-
-        headers = {}
-        
-        if skip and os.path.exists(file_path + file_name):
-            downloaded = os.path.getsize(file_path + file_name)
-            headers = {'Range': f'bytes={downloaded}-'}
-    
-    req = urllib.request.Request(file_url, headers=headers)
-    
-    with urllib.request.urlopen(req) as response, open(file_path + file_name, 'ab' if skip else 'wb') as out_file:
-
-        print("downloading...")
-        while True:
-            chunk = response.read(chunk_size)
-            if not chunk:
-                break 
+        with urllib.request.urlopen(file_url) as response:
             
-            out_file.write(chunk)
-            downloaded += len(chunk)
+            total_length = response.info().get('Content-Length')
             
-            # 3. Высчитываем проценты и обновляем строку в консоли
-            last_percent = percent
-            percent = int((downloaded / total_length) * 100)
-
-            if last_percent != percent:
-                print(f"\r[{'#' * floor(percent / 5)}{' ' * floor((100 - percent) // 5)}] {percent}% ({total_length // 1048576} MB)   ", end='')
+            print(f"Installing {file_name}")
     
-    if downloaded == total_length:
-        print("\ninstalled.")
-        return file_path + file_name
+            if total_length != None:
+                total_length = int(total_length)
+            else:
+                total_length = chunk_size
+                print(file_url, 'has no length data')
+            
+            if skip and os.path.exists(file_path + file_name) and os.path.getsize(file_path + file_name) == total_length:
+                print("File exists, skipping.")
+                return [file_path + file_name]
+            
+            downloaded = 0
+    
+            headers = {}
+            
+            if skip and os.path.exists(file_path + file_name):
+                downloaded = os.path.getsize(file_path + file_name)
+                headers = {'Range': f'bytes={downloaded}-'}
+        
+        req = urllib.request.Request(file_url, headers=headers)
+        
+        with urllib.request.urlopen(req) as response, open(file_path + file_name, 'ab' if skip else 'wb') as out_file:
+    
+            print("downloading...")
+            while True:
+                chunk = response.read(chunk_size)
+                if not chunk:
+                    break 
+                
+                out_file.write(chunk)
+                downloaded += len(chunk)
+                
+                # 3. Высчитываем проценты и обновляем строку в консоли
+                last_percent = percent
+                percent = int((downloaded / total_length) * 100)
+    
+                if last_percent != percent:
+                    print(f"\r[{'#' * floor(percent / 5)}{' ' * floor((100 - percent) // 5)}] {percent}% ({total_length // 1048576} MB)   ", end='')
+        
+        if downloaded == total_length:
+            print("\ninstalled.")
+            return file_path + file_name
+
+    except Exception:
+        downloader(file_url, file_path, file_name)
 
 
 def unziper(file_url, name, file_paths=[], skip=False):
@@ -82,7 +87,6 @@ def unziper(file_url, name, file_paths=[], skip=False):
         assert os.path.exists(temp_name), f"no such file or directory: {temp_name}"
 
         if os.path.isfile(temp_name):
-            print('hi')
             print(temp_name)
             shutil.copy(temp_name, file_path[1])
             installed.append(temp_name)
@@ -106,7 +110,6 @@ def download(conf_file, skip=False, out_data=False):
         return fast_download(conf_file,skip)
 
     arr = [None]
-    print('asd')
     
     try:
     
@@ -137,8 +140,7 @@ def download(conf_file, skip=False, out_data=False):
 
                         raise TypeError (f"uncorrect datatype: {arr[0]} in {arr[1]}")
 
-                if out_data:
-                    yield installed
+                yield installed
 
     except Exception as err:
         print(f'[log] {err}')
@@ -200,4 +202,4 @@ if __name__ == "__main__":
     else:
         s = False
         
-    download(download_conf, skip=s, out_data=False)
+    next(download(download_conf, skip=s, out_data=False))

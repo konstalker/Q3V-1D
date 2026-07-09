@@ -24,12 +24,26 @@ class dmod:
                         else:
                             mods[-1][1] = "0"
 
+                    if mods[-1][1] == '$':
+                        if len(line) == i + 1:
+                            mods[-1][1] = c_info.sversion
+                        else:
+                            mods[-1][1] = "0"
+
                 self.mod_info.update({tag: mods})
     
     def __getitem__(self, key):
         for x in self.mod_info:
             if self.mod_info[x][-1][0] == key:
                 return self.mod_info[x][-1][1]
+        
+        raise KeyError(f'{key} modaification not found in active dmod list')
+
+    def __setitem__(self, key, value):
+        for x in self.mod_info:
+            if self.mod_info[x][-1][0] == key:
+                self.mod_info[x][-1][1] = value
+                return
         
         raise KeyError(f'{key} modaification not found in active dmod list')
     
@@ -43,6 +57,8 @@ class dmod:
         return mods
         
     def save(self):
+
+        print('saving')
         
         with open(f'./mod_tree/{c_info.mod_branch}.dmod', 'w') as mod_branch:
             for x in self.mod_info:
@@ -50,6 +66,8 @@ class dmod:
                 for y in self.mod_info[x]:
                     s += f';{y[0]}|{y[1]}'
                 mod_branch.write(f'{x}{s}\n')
+
+        print('saved')
 
 
 dmod_conf = dmod()
