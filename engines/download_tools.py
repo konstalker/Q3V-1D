@@ -133,6 +133,8 @@ def download(conf_file, skip=False, out_data=False):
 
                         raise TypeError (f"uncorrect datatype: {arr[0]} in {arr[1]}")
 
+                if out_data:
+                    yield installed
 
     except Exception as err:
         print(f'[log] {err}')
