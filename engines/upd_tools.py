@@ -54,7 +54,7 @@ def update(repo_name):
 
             else:
                 mod_loader = dt.download(f'./download_confs/{repo_name}.dconf', skip=False, out_data=True)
-                next(mod_loader)
+                list(mod_loader)
 
             if version > dmod_conf[repo_name]:
                 print('need to update')

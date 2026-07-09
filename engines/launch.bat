@@ -3,8 +3,13 @@ setlocal enabledelayedexpansion
 
 call ./engines/python/setup_python.bat autoupdate.py
 
-set VULKAN_APP="oDFe.vk.x64.exe"
-set FALLBACK_APP="oDFe.x64.exe"
+set "VULKAN_APP="
+set "FALLBACK_APP="
+
+< "engines.txt" (
+    set /p "VULKAN_APP="
+    set /p "FALLBACK_APP="
+)
 
 set ARGS=+set fs_homepath "%%~fI\baseq3\mods" +set fs_basepath "%%~fI" +set fs_game "osp"
 

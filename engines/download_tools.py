@@ -147,7 +147,6 @@ def download(conf_file, skip=False, out_data=False):
 
 def fast_download(conf_file, skip=False):
     arr = [None]
-    print('asd')
     
     try:
     
@@ -192,10 +191,9 @@ def fast_download(conf_file, skip=False):
 
 if __name__ == "__main__":
     download_conf = argv[1]
-    print('hi')
     if len(argv) >= 3 and argv[2] == "skip":
         s = True
     else:
         s = False
         
-    next(download(download_conf, skip=s, out_data=False))
+    download(download_conf, skip=s, out_data=False)

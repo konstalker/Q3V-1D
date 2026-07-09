@@ -7,7 +7,7 @@ with open('./mod_tree/branch.txt', 'r') as bfile, open('../version', 'r') as vfi
 with open('./mod_tree/branch.txt', 'w') as bfile:
     bfile.write(text)
 
-next(dt.download('./download_confs/base.dconf', skip=True, out_data=False))
+dt.download('./download_confs/base.dconf', skip=True, out_data=False)
 
 autoupdate()
 
