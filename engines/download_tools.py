@@ -202,4 +202,4 @@ if __name__ == "__main__":
     else:
         s = False
         
-    next(download(download_conf, skip=s, out_data=False))
+    list(download(download_conf, skip=s, out_data=False))
