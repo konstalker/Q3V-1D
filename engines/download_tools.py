@@ -104,10 +104,7 @@ def unziper(file_url, name, file_paths=[], skip=False):
 
 
 
-def download(conf_file, skip=False, out_data=False):
-
-    if not out_data:
-        return fast_download(conf_file,skip)
+def download(conf_file, skip=False):
 
     arr = [None]
     
@@ -151,50 +148,6 @@ def download(conf_file, skip=False, out_data=False):
         caption()
 
 
-def fast_download(conf_file, skip=False):
-    arr = [None]
-    
-    try:
-    
-        with open(conf_file, 'r') as pack_file:
-            pack_list = pack_file.read().split('\n')
-            
-            for (i, _) in enumerate(pack_list):
-                installed = []
-                
-                if ';' in _:
-                    arr = _.split(';')
-
-                    if arr[0] == "a":
-                        
-                        files = []
-                        url, name = arr[2], arr[1]
-                        
-                        for start, end in zip(arr[3::2], arr[4::2]):
-                            files.append([start, end])
-
-                        unziper(furl(url), name, files, skip=skip)
-                        
-                    elif arr[0] == 'f':
-
-                        installed.append(downloader(furl(arr[2]), arr[3], arr[1], skip=skip))
-
-                    else:
-
-                        raise TypeError (f"uncorrect datatype: {arr[0]} in {arr[1]}")
-        
-        return files
-
-    except Exception as err:
-        print(f'[log] {err}')
-        print(f"[error] not installed {arr[1]}")
-        input()
-        if arr[0] == 'a':
-            rmtree(f"./temp_files/{arr[1]}dir", )
-        caption()
-
-
-
 if __name__ == "__main__":
     download_conf = argv[1]
     if len(argv) >= 3 and argv[2] == "skip":
@@ -202,4 +155,4 @@ if __name__ == "__main__":
     else:
         s = False
         
-    list(download(download_conf, skip=s, out_data=False))
+    list(download(download_conf, skip=s))

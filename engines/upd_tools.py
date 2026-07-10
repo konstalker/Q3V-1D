@@ -46,7 +46,7 @@ def update(repo_name):
                             break
                 
                 if vconf == 'url':
-                    mod_loader = dt.download(f'./download_confs/{repo_name}.dconf', skip=False, out_data=True)
+                    mod_loader = dt.download(f'./download_confs/{repo_name}.dconf', skip=False)
                     version_path = next(mod_loader)
                     print(version_path)
                     version_path = version_path[0]
@@ -54,7 +54,7 @@ def update(repo_name):
                         version = version_file.read().split('\n')[0]
     
                 else:
-                    mod_loader = dt.download(f'./download_confs/{repo_name}.dconf', skip=False, out_data=True)
+                    mod_loader = dt.download(f'./download_confs/{repo_name}.dconf', skip=False)
                     try:
                         next(mod_loader)
                     except Exception:
