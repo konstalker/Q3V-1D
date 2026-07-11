@@ -2,7 +2,7 @@
 
 cd /d %~dp0/engines
 
-call %~dp0/engines/python/setup_python.bat download_tools.py "./download_confs/base.dconf" "skip"
+call %~dp0/engines/python/setup_python.bat flaunch.py
 
 findstr /C:"windows" "%~dp0engines\mod_tree\branch.txt" >nul
 if errorlevel 1 (

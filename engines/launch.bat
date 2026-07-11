@@ -1,7 +1,7 @@
 @echo off
 setlocal enabledelayedexpansion
 
-call ./engines/python/setup_python.bat autoupdate.py
+call ./engines/python/setup_python.bat autoupdater.py
 
 set "VULKAN_APP="
 set "FALLBACK_APP="
@@ -11,7 +11,7 @@ set "FALLBACK_APP="
     set /p "FALLBACK_APP="
 )
 
-set ARGS=+set fs_homepath "%%~fI\baseq3\mods" +set fs_basepath "%%~fI" +set fs_game "osp"
+set "ARGS=+set fs_homepath "%%~fI\baseq3\mods" +set fs_basepath "%%~fI" +set fs_game "osp""
 
 set VULKAN_PRESENT=0
 if exist "%SystemRoot%\System32\vulkan-1.dll" set VULKAN_PRESENT=1
