@@ -1,7 +1,7 @@
 @echo off
 setlocal enabledelayedexpansion
 
-call %~dp0engines/python/setup_python.bat autoupdater.py
+call ./python/setup_python.bat autoupdater.py
 
 set "VULKAN_APP="
 set "FALLBACK_APP="
