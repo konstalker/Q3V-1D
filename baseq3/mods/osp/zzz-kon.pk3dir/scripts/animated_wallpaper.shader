@@ -26,3 +26,18 @@ menubacknologo
 		rgbGen wave sin .6 .8 0.7 .15
 	}
 }
+
+levelShotDetail
+{
+    nomipmaps
+    nopicmip
+    {
+        map NewWallpaper/Background.tga
+        alphagen const 0.5
+        blendfunc blend
+    }
+    {
+		animMap 8 NewWallpaper/q3void/2.tga NewWallpaper/q3void/1.tga NewWallpaper/q3void/3.tga NewWallpaper/q3void/4.tga
+		blendfunc blend
+    }
+}
