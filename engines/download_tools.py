@@ -9,7 +9,7 @@ import zipfile
 from shutil import rmtree
 
 
-def downloader(file_url, file_path, file_name, skip=False, attempt=1, max_attempts=5):
+def downloader(file_url, file_path, file_name, skip=False, attempt=0, max_attempts=5):
 
     if attempt == max_attempts:
         return
