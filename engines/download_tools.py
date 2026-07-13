@@ -1,4 +1,5 @@
 import shutil
+import time
 import urllib.request
 from math import floor
 from base_methods import *
@@ -9,7 +10,7 @@ import zipfile
 from shutil import rmtree
 
 
-def downloader(file_url, file_path, file_name, skip=False, attempt=0, max_attempts=5):
+def downloader(file_url, file_path, file_name, skip=False, attempt=0, max_attempts=10):
 
     if attempt == max_attempts:
         return
@@ -18,7 +19,7 @@ def downloader(file_url, file_path, file_name, skip=False, attempt=0, max_attemp
         percent = 0
         chunk_size = 16384
         
-        with urllib.request.urlopen(file_url, timeout=10) as response:
+        with urllib.request.urlopen(file_url, timeout=4) as response:
             
             total_length = response.info().get('Content-Length')
             
@@ -44,7 +45,7 @@ def downloader(file_url, file_path, file_name, skip=False, attempt=0, max_attemp
         
         req = urllib.request.Request(file_url, headers=headers)
         
-        with urllib.request.urlopen(req, timeout=10) as response, open(file_path + file_name, 'ab' if skip else 'wb') as out_file:
+        with urllib.request.urlopen(req, timeout=4) as response, open(file_path + file_name, 'ab' if skip else 'wb') as out_file:
     
             print("downloading...")
             while True:
@@ -67,6 +68,7 @@ def downloader(file_url, file_path, file_name, skip=False, attempt=0, max_attemp
             return file_path + file_name
 
     except Exception:
+        time.sleep(2)
         downloader(file_url, file_path, file_name, attempt=attempt + 1, max_attempts=max_attempts)
 
 
