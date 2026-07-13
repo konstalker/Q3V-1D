@@ -9,13 +9,16 @@ import zipfile
 from shutil import rmtree
 
 
-def downloader(file_url, file_path, file_name, skip=False):
+def downloader(file_url, file_path, file_name, skip=False, attempt=1, max_attempts=5):
+
+    if attempt == max_attempts:
+        return
 
     try:
         percent = 0
         chunk_size = 16384
         
-        with urllib.request.urlopen(file_url) as response:
+        with urllib.request.urlopen(file_url, timeout=10) as response:
             
             total_length = response.info().get('Content-Length')
             
@@ -41,7 +44,7 @@ def downloader(file_url, file_path, file_name, skip=False):
         
         req = urllib.request.Request(file_url, headers=headers)
         
-        with urllib.request.urlopen(req) as response, open(file_path + file_name, 'ab' if skip else 'wb') as out_file:
+        with urllib.request.urlopen(req, timeout=10) as response, open(file_path + file_name, 'ab' if skip else 'wb') as out_file:
     
             print("downloading...")
             while True:
@@ -64,7 +67,7 @@ def downloader(file_url, file_path, file_name, skip=False):
             return file_path + file_name
 
     except Exception:
-        downloader(file_url, file_path, file_name)
+        downloader(file_url, file_path, file_name, attempt=attempt + 1, max_attempts=max_attempts)
 
 
 def unziper(file_url, name, file_paths=[], skip=False):
