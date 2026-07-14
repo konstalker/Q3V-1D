@@ -13,7 +13,8 @@ from shutil import rmtree
 def downloader(file_url, file_path, file_name, skip=False, attempt=0, max_attempts=10):
 
     if attempt == max_attempts:
-        return
+         print(f"{file_name} not downloaded.")
+         return []
 
     try:
         percent = 0
