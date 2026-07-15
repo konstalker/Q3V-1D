@@ -10,7 +10,7 @@ import zipfile
 from shutil import rmtree
 
 
-def downloader(file_url, file_path, file_name, skip=False, attempt=0, max_attempts=10):
+def downloader(file_url, file_path, file_name, skip=False, attempt=0, max_attempts=50):
 
     if attempt == max_attempts:
          print(f"{file_name} not downloaded.")
@@ -38,11 +38,11 @@ def downloader(file_url, file_path, file_name, skip=False, attempt=0, max_attemp
             
             downloaded = 0
     
-            headers = {}
+            headers = {'User-Agent': 'Mozilla/5.0'}
             
             if skip and os.path.exists(file_path + file_name):
                 downloaded = os.path.getsize(file_path + file_name)
-                headers = {'Range': f'bytes={downloaded}-'}
+                headers.update({'Range': f'bytes={downloaded}-'})
         
         req = urllib.request.Request(file_url, headers=headers)
         
@@ -67,9 +67,10 @@ def downloader(file_url, file_path, file_name, skip=False, attempt=0, max_attemp
         if downloaded == total_length:
             print("\ninstalled.")
             return file_path + file_name
-
-    except Exception:
+        
+    except urllib.error.URLError as e:
         time.sleep(2)
+        print(f'trying to download, retrying ({attempt}/{max_attempts})')
         downloader(file_url, file_path, file_name, attempt=attempt + 1, max_attempts=max_attempts)
 
 
@@ -82,9 +83,13 @@ def unziper(file_url, name, file_paths=[], skip=False):
     
     if not os.path.exists("./temp_files"):
         os.mkdir("./temp_files")
-    downloader(file_url, "./temp_files/", name, skip=True)
+    
+    if not os.path.exists("./cache"):
+        os.mkdir("./cache")
 
-    with zipfile.ZipFile(f"./temp_files/{name}", 'r') as zip_ref:
+    downloader(file_url, "./cache/", name, skip=True)
+
+    with zipfile.ZipFile(f"./cache/{name}", 'r') as zip_ref:
         zip_ref.extractall(f"./temp_files/{name}dir")
     
     for file_path in file_paths:

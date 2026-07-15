@@ -66,10 +66,7 @@ def update(repo_name):
                     print(version)
                     print(dmod_conf[repo_name])
     
-                    try:
-                        list(mod_loader)
-                    except Exception:
-                        print('WTF????')
+                    list(mod_loader)
 
                     dmod_conf[repo_name] = version
     

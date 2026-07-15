@@ -36,12 +36,9 @@ def get_relative_paths(folder_path: str) -> list[str]:
     base_dir = Path(folder_path)
     relative_paths = []
     
-    # rglob('*') рекурсивно обходит все файлы и папки
     for item in base_dir.rglob('*'):
         if item.is_file():
-            # Получаем путь относительно базовой папки
             rel_path = item.relative_to(base_dir)
-            # Формируем строку с ведущим слешем и приводим слеши к unix-стилю
             relative_paths.append(f"/{rel_path.as_posix()}")
             
     return relative_paths
