@@ -10,7 +10,7 @@ import zipfile
 from shutil import rmtree
 
 
-def downloader(file_url, file_path, file_name, skip=False, attempt=0, max_attempts=50):
+def downloader(file_url, file_path, file_name, skip=False, attempt=0, max_attempts=100):
 
     if attempt == max_attempts:
          print(f"{file_name} not downloaded.")
@@ -20,7 +20,7 @@ def downloader(file_url, file_path, file_name, skip=False, attempt=0, max_attemp
         percent = 0
         chunk_size = 16384
         
-        with urllib.request.urlopen(file_url, timeout=4) as response:
+        with urllib.request.urlopen(file_url, timeout=9) as response:
             
             total_length = response.info().get('Content-Length')
             
@@ -46,7 +46,7 @@ def downloader(file_url, file_path, file_name, skip=False, attempt=0, max_attemp
         
         req = urllib.request.Request(file_url, headers=headers)
         
-        with urllib.request.urlopen(req, timeout=4) as response, open(file_path + file_name, 'ab' if skip else 'wb') as out_file:
+        with urllib.request.urlopen(req, timeout=9) as response, open(file_path + file_name, 'ab' if skip else 'wb') as out_file:
     
             print("downloading...")
             while True:
@@ -69,8 +69,8 @@ def downloader(file_url, file_path, file_name, skip=False, attempt=0, max_attemp
             return file_path + file_name
         
     except urllib.error.URLError as e:
-        time.sleep(2)
-        print(f'trying to download, retrying ({attempt}/{max_attempts})')
+        time.sleep(1)
+        print(f'trying to download, retrying ({attempt + 1}/{max_attempts})')
         downloader(file_url, file_path, file_name, attempt=attempt + 1, max_attempts=max_attempts)
 
 
