@@ -2,7 +2,7 @@ from pathlib import Path
 
 
 def caption():
-    print("contacts of creator: https://t.me/konstalker")
+    print("contacts of creator: https://telegram.me/konstalker")
     print("you can add issue on github: https://github.com/konstalker/Q3V-1D/issues")
     print("thank you for use Q3V#1D")
     input("press enter to continue running")
