@@ -1,5 +1,5 @@
 import download_tools as dt
-from launch import autoupdate
+from upd_tools import autoupdate
 from dmods_tools import *
 
 
