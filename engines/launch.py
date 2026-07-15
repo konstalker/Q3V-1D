@@ -4,23 +4,6 @@ from dmods_tools import *
 import subprocess
 
 
-def autoupdate():
-    if not os.path.exists("./temp_files"):
-        os.mkdir("./temp_files")
-
-    dt.downloader(furl('[RURL]index.modlist'), "./temp_files/", "modlist.txt", skip=True)
-   
-    with open("./temp_files/modlist.txt", 'r') as f:
-        for x in dmod_conf.mod_list():
-            update(x)
-
-    dmod_conf.save()
-
-    try:
-        shutil.rmtree("./temp_files/")
-    except Exception:
-        pass
-
 def launch(args='+set fs_homepath "../baseq3/mods" +set fs_basepath "../" +set fs_game "osp"'):
     autoupdate()
 
