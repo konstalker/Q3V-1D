@@ -1,5 +1,6 @@
 import shlex
 from upd_tools import *
+import subprocess
 
 
 def launch(args='+set fs_homepath "../baseq3/mods" +set fs_basepath "../" +set fs_game "osp"'):
