@@ -1,10 +1,67 @@
-f;pak0.pk3;https://q3msk.net/files/original_paks/pak0.pk3;../baseq3/
-f;pak1.pk3;https://q3msk.net/files/original_paks/pak1.pk3;../baseq3/
-f;pak2.pk3;https://q3msk.net/files/original_paks/pak2.pk3;../baseq3/
-f;pak3.pk3;https://q3msk.net/files/original_paks/pak3.pk3;../baseq3/
-f;pak4.pk3;https://q3msk.net/files/original_paks/pak4.pk3;../baseq3/
-f;pak5.pk3;https://q3msk.net/files/original_paks/pak5.pk3;../baseq3/
-f;pak6.pk3;https://q3msk.net/files/original_paks/pak6.pk3;../baseq3/
-f;pak7.pk3;https://q3msk.net/files/original_paks/pak7.pk3;../baseq3/
-f;pak8.pk3;https://q3msk.net/files/original_paks/pak8.pk3;../baseq3/
-a;osp.zip;https://q3msk.net/files/osp.zip;zz-osp-pak0.pk3;../baseq3/mods/osp/;zz-osp-pak1.pk3;../baseq3/mods/osp/;zz-osp-pak2.pk3;../baseq3/mods/osp/;zz-osp-pak3.pk3;../baseq3/mods/osp/
+[
+  {
+    "type": "f",
+    "name": "pak0.pk3",
+    "url": "https://q3msk.net/files/original_paks/pak0.pk3",
+    "param": "../baseq3/"
+  },
+  {
+    "type": "f",
+    "name": "pak1.pk3",
+    "url": "https://q3msk.net/files/original_paks/pak1.pk3",
+    "param": "../baseq3/"
+  },
+  {
+    "type": "f",
+    "name": "pak2.pk3",
+    "url": "https://q3msk.net/files/original_paks/pak2.pk3",
+    "param": "../baseq3/"
+  },
+  {
+    "type": "f",
+    "name": "pak3.pk3",
+    "url": "https://q3msk.net/files/original_paks/pak3.pk3",
+    "param": "../baseq3/"
+  },
+  {
+    "type": "f",
+    "name": "pak4.pk3",
+    "url": "https://q3msk.net/files/original_paks/pak4.pk3",
+    "param": "../baseq3/"
+  },
+  {
+    "type": "f",
+    "name": "pak5.pk3",
+    "url": "https://q3msk.net/files/original_paks/pak5.pk3",
+    "param": "../baseq3/"
+  },
+  {
+    "type": "f",
+    "name": "pak6.pk3",
+    "url": "https://q3msk.net/files/original_paks/pak6.pk3",
+    "param": "../baseq3/"
+  },
+  {
+    "type": "f",
+    "name": "pak7.pk3",
+    "url": "https://q3msk.net/files/original_paks/pak7.pk3",
+    "param": "../baseq3/"
+  },
+  {
+    "type": "f",
+    "name": "pak8.pk3",
+    "url": "https://q3msk.net/files/original_paks/pak8.pk3",
+    "param": "../baseq3/"
+  },
+  {
+    "type": "a",
+    "name": "osp.zip",
+    "url": "https://q3msk.net/files/osp.zip",
+    "files": [
+      ["zz-osp-pak0.pk3", "../baseq3/mods/osp/"],
+      ["zz-osp-pak1.pk3", "../baseq3/mods/osp/"],
+      ["zz-osp-pak2.pk3", "../baseq3/mods/osp/"],
+      ["zz-osp-pak3.pk3", "../baseq3/mods/osp/"]
+    ]
+  }
+]
