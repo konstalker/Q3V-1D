@@ -1,7 +1,8 @@
 import shutil
-from sys import version
+from sys import version, argv
 import zipfile
 import os
+import json
 
 import download_tools as dt
 from base_methods import caption, furl, c_info
@@ -32,67 +33,19 @@ def update(repo_name):
         if not os.path.exists("./temp_files"):
             os.mkdir("./temp_files")
     
-        modlist = {}
-        dt.downloader(furl('[RURL]index.modlist'), "./temp_files/", "modlist.txt", skip=True)
-        with open("./temp_files/modlist.txt", 'r') as f:
-            for x in f.read().split('\n'):
-                mod = list(x.split(';'))
-    
-                if mod[0] != repo_name:
-                    continue
-    
-                can_skip = True
-                while True:
-                    dt.downloader(furl(mod[1]), './download_confs/', f'{repo_name}.dconf', skip=can_skip)
-    
-                    if not can_skip:
-                        break
-                    
-                    with open(f'./download_confs/{repo_name}.dconf', 'r') as file:
-                        vconf = file.read().split('\n')[0]
         
-                        if vconf == 'git':
-                            version = "1" # заглушка
-    
-                            break
-                        elif vconf[0] == 'v':
-                            version = vconf[0]
-                            can_skip = False
-                        else:
-                            vconf = 'url'
-    
-                            break
-                
-                if vconf == 'url':
-                    mod_loader = dt.download(f'./download_confs/{repo_name}.dconf', skip=False)
-                    version_path = next(mod_loader)
-                    print(version_path)
-                    version_path = version_path[0]
-                    with open(version_path, 'r') as version_file:
-                        version = version_file.read().split('\n')[0]
-    
-                else:
-                    mod_loader = dt.download(f'./download_confs/{repo_name}.dconf', skip=False)
-                    try:
-                        next(mod_loader)
-                    except Exception:
-                        pass
-    
-                if version > dmod_conf[repo_name]:
-                    print('need to update')
+        dt.downloader(furl('[RURL]index.json'), "./temp_files/", "modlist.json", skip=True)
+        with open('./temp_files/modlist.json', 'r', encoding='utf-8') as f:
+            modlist = json.load(f)
 
-                    print(version)
-                    print(dmod_conf[repo_name])
-    
-                    list(mod_loader)
-
-                    dmod_conf[repo_name] = version
-    
-                else:
-                    print("normal")
+            print(modlist[repo_name])
             
 
     except Exception as e:
         print(f"[error] not installed {repo_name}")
         print(f"[log] error: {e}")
         caption()
+
+
+if __name__ == "__main__":
+    update(argv[1])

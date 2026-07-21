@@ -68,6 +68,9 @@ class dmod:
                 mod_branch.write(f'{x}{s}\n')
 
         print('saved')
+    
+    def __iter__(self):
+        return self.mod_info
 
 
 dmod_conf = dmod()
