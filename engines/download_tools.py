@@ -12,10 +12,8 @@ import urllib.error
 import http.client
 from math import floor
 
-import json
 
-
-def downloader(file_url, file_path, file_name, skip=False, max_attempts=50):
+def downloader(file_url, file_path, file_name, skip=False, max_attempts=100):
     full_path = os.path.join(file_path, file_name)
     os.makedirs(file_path, exist_ok=True)
     
@@ -27,6 +25,7 @@ def downloader(file_url, file_path, file_name, skip=False, max_attempts=50):
         try:
             total_length = None
             
+            # 1. Быстро узнаем размер файла через HEAD-запрос (без скачивания тела)
             try:
                 head_req = urllib.request.Request(file_url, headers=headers, method='HEAD')
                 with urllib.request.urlopen(head_req, timeout=9) as resp:
@@ -34,13 +33,16 @@ def downloader(file_url, file_path, file_name, skip=False, max_attempts=50):
                     if total_length is not None:
                         total_length = int(total_length)
             except Exception:
+                # Если сервер не поддерживает HEAD-запросы, обработаем это позже в GET
                 pass
 
+            # 2. Проверяем, скачан ли уже файл полностью
             if skip and total_length and os.path.exists(full_path):
                 if os.path.getsize(full_path) == total_length:
                     print(f"\nFile {file_name} already exists and is complete. Skipping.")
                     return full_path
 
+            # 3. Настраиваем докачку (Range Request)
             downloaded = 0
             write_mode = 'wb'
             req_headers = headers.copy()
@@ -53,18 +55,23 @@ def downloader(file_url, file_path, file_name, skip=False, max_attempts=50):
 
             req = urllib.request.Request(file_url, headers=req_headers)
             
+            # 4. Основной запрос на получение данных
             with urllib.request.urlopen(req, timeout=9) as response:
                 status = response.getcode()
                 
+                # Защита от повреждения: если сервер проигнорировал Range и вернул 200 вместо 206,
+                # значит докачка не поддерживается. Сбрасываем запись на начало файла ('wb')
                 if write_mode == 'ab' and status != 206:
                     write_mode = 'wb'
                     downloaded = 0
                 
+                # Если не получили размер из HEAD, берем из текущего ответа
                 if total_length is None or status == 206:
                     content_len = response.info().get('Content-Length')
                     if content_len is not None:
                         total_length = downloaded + int(content_len) if status == 206 else int(content_len)
 
+                # Если размер так и остался неизвестным, ставим заглушку
                 if total_length is None or total_length <= 0:
                     total_length = chunk_size
 
@@ -74,8 +81,10 @@ def downloader(file_url, file_path, file_name, skip=False, max_attempts=50):
                 with open(full_path, write_mode) as out_file:
                     while True:
                         try:
+                            # Читаем данные чанками
                             chunk = response.read(chunk_size)
                         except http.client.IncompleteRead as e:
+                            # Важно: если связь оборвалась на полуслове, спасаем то, что успело прийти
                             chunk = e.partial
                         
                         if not chunk:
@@ -84,6 +93,7 @@ def downloader(file_url, file_path, file_name, skip=False, max_attempts=50):
                         out_file.write(chunk)
                         downloaded += len(chunk)
                         
+                        # Вывод прогресс-бара
                         if total_length > 0:
                             last_percent = percent
                             percent = int((downloaded / total_length) * 100)
@@ -93,6 +103,7 @@ def downloader(file_url, file_path, file_name, skip=False, max_attempts=50):
                                 spaces = ' ' * floor((100 - percent) // 5)
                                 print(f"\r[{bar}{spaces}] {percent}% ({mb_total} MB)   ", end='', flush=True)
 
+                # Проверяем целостность скачанного файла по размеру
                 if downloaded >= total_length:
                     print("\nInstalled successfully.")
                     return full_path
@@ -148,44 +159,48 @@ def unziper(file_url, name, file_paths=[], skip=False):
     return installed
 
 
+
 def download(conf_file, skip=False):
 
-    entry = None
-
+    arr = [None]
+    
     try:
-        with open(conf_file, 'r', encoding='utf-8') as pack_file:
-            pack_list = json.load(pack_file)
-
-            for entry in pack_list:
+    
+        with open(conf_file, 'r') as pack_file:
+            pack_list = pack_file.read().split('\n')
+            
+            for (i, _) in enumerate(pack_list):
                 installed = []
-                entry_type = entry.get('type')
+                
+                if ';' in _:
+                    arr = _.split(';')
 
-                if entry_type == 'a':
-                    name = entry['name']
-                    url = entry['url']
-                    files = entry.get('files', [])  # список пар [start, end]
+                    if arr[0] == "a":
+                        
+                        files = []
+                        url, name = arr[2], arr[1]
+                        
+                        for start, end in zip(arr[3::2], arr[4::2]):
+                            files.append([start, end])
 
-                    unziper(furl(url), name, files, skip=skip)
+                        unziper(furl(url), name, files, skip=skip)
+                        
+                    elif arr[0] == 'f':
 
-                elif entry_type == 'f':
-                    name = entry['name']
-                    url = entry['url']
-                    param = entry['param']
+                        installed.append(downloader(furl(arr[2]), arr[3], arr[1], skip=skip))
 
-                    installed.append(downloader(furl(url), param, name, skip=skip))
+                    else:
 
-                else:
-                    raise TypeError(f"uncorrect datatype: {entry_type} in {entry.get('name')}")
+                        raise TypeError (f"uncorrect datatype: {arr[0]} in {arr[1]}")
 
                 yield installed
 
     except Exception as err:
         print(f'[log] {err}')
-        name = entry.get('name') if entry else None
-        print(f"[error] not installed {name}")
+        print(f"[error] not installed {arr[1]}")
         input()
-        if entry and entry.get('type') == 'a':
-            rmtree(f"./temp_files/{name}dir")
+        if arr[0] == 'a':
+            rmtree(f"./temp_files/{arr[1]}dir", )
         caption()
 
 
