@@ -13,10 +13,14 @@ import http.client
 from math import floor
 
 
-def downloader(file_url, file_path, file_name, skip=False, max_attempts=100):
+def downloader(file_url, file_path, file_name, skip=False, max_attempts=10):
+
+    file_url = furl(file_url)
+    
     full_path = os.path.join(file_path, file_name)
     os.makedirs(file_path, exist_ok=True)
     
+    print(f"Installing {file_name}...")
     headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)'}
     attempt = 0
     chunk_size = 16384
@@ -75,7 +79,6 @@ def downloader(file_url, file_path, file_name, skip=False, max_attempts=100):
                 if total_length is None or total_length <= 0:
                     total_length = chunk_size
 
-                print(f"Installing {file_name}...")
                 percent = 0
                 
                 with open(full_path, write_mode) as out_file:
@@ -99,8 +102,8 @@ def downloader(file_url, file_path, file_name, skip=False, max_attempts=100):
                             percent = int((downloaded / total_length) * 100)
                             if last_percent != percent:
                                 mb_total = total_length // 1048576
-                                bar = '#' * floor(percent / 5)
-                                spaces = ' ' * floor((100 - percent) // 5)
+                                bar = '#' * int(percent / 5)
+                                spaces = ' ' * floor((100 - percent) / 5)
                                 print(f"\r[{bar}{spaces}] {percent}% ({mb_total} MB)   ", end='', flush=True)
 
                 # Проверяем целостность скачанного файла по размеру
@@ -121,6 +124,8 @@ def downloader(file_url, file_path, file_name, skip=False, max_attempts=100):
 
 def unziper(file_url, name, file_paths=[], skip=False):
 
+    file_url = furl(file_url)
+    
     installed = []
 
     if os.path.exists("./temp_files/" + name) and not skip:

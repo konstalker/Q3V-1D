@@ -1,5 +1,13 @@
 from pathlib import Path
+import urllib.request
+import urllib.error
 
+def check_url(url):
+    try:
+        response = urllib.request.urlopen(url, timeout=5)
+        return response.status == 200
+    except Exception:
+        return False
 
 def caption():
     print("contacts of creator: https://telegram.me/konstalker")
@@ -42,3 +50,6 @@ def get_relative_paths(folder_path: str) -> list[str]:
             relative_paths.append(f"/{rel_path.as_posix()}")
             
     return relative_paths
+
+if __name__ == "__main__":
+    print(check_url('git'))
