@@ -103,7 +103,7 @@ def downloader(file_url, file_path, file_name, skip=False, max_attempts=10):
                             if last_percent != percent:
                                 mb_total = total_length // 1048576
                                 bar = '#' * int(percent / 5)
-                                spaces = ' ' * floor((100 - percent) / 5)
+                                spaces = ' ' * (20 - int(percent / 5))
                                 print(f"\r[{bar}{spaces}] {percent}% ({mb_total} MB)   ", end='', flush=True)
 
                 # Проверяем целостность скачанного файла по размеру
