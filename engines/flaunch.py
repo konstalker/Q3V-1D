@@ -3,8 +3,13 @@ from upd_tools import autoupdate
 from dmods_tools import *
 
 
+# needed paths
+
 if not os.path.exists('../baseq3/mods/baseq3'):
     os.mkdir('../baseq3/mods/baseq3')
+
+if not os.path.exists('../baseq3/mods/osp/demos'):
+    os.mkdir('../baseq3/mods/osp/demos')
 
 if not os.path.exists('./cache'):
     os.mkdir('./cache')

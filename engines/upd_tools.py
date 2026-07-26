@@ -29,7 +29,7 @@ def autoupdate():
 
 
 def update(repo_name):
-    print(f'updating {repo_name}...')
+    print(f'Updating {repo_name}...')
     try:
         if not os.path.exists("./temp_files"):
             os.mkdir("./temp_files")
