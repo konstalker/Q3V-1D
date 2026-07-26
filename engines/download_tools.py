@@ -156,13 +156,13 @@ def unziper(file_url, name, file_paths=[], skip=False):
                 shutil.rmtree(temp_name, file_path[1])
             shutil.copytree(temp_name, file_path[1])
             installed.extend(get_relative_paths(file_path[1]))
+            
     try:
         rmtree("./temp_files")
     except Exception:
         pass
 
     return installed
-
 
 
 def download(conf_file, skip=False):

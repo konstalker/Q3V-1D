@@ -53,12 +53,15 @@ def update(repo_name):
                 version = file.read().rstrip()
         
         if dmod_conf[repo_name] == '0':
+
+            if version == 'git':
+                version = '1'
             need_update = True
 
         else:
 
             if version == 'git':
-                version = 1 # need to check hash
+                version = "1" # need to check hash
                 if dmod_conf[repo_name] != version:
                     need_update = True
             
@@ -67,7 +70,7 @@ def update(repo_name):
                    need_update = True
             
             else:
-                with open('version.txt', 'r') as file:
+                with open('./temp_files/version.txt', 'r') as file:
                     version = file.read().rstrip()
                 
                 if version > dmod_conf[repo_name]:
@@ -79,7 +82,7 @@ def update(repo_name):
 
         if need_update:
             dt.downloader(modlist[repo_name]["link"], './download_confs/', f'{repo_name}.dconf', skip=True)
-            dt.download(f'./download_confs/{repo_name}.dconf', skip=False)
+            list(dt.download(f'./download_confs/{repo_name}.dconf', skip=False))
             dmod_conf[repo_name] = version
 
     except Exception as e:
