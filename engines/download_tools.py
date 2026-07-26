@@ -20,7 +20,7 @@ def downloader(file_url, file_path, file_name, skip=False, max_attempts=10):
     full_path = os.path.join(file_path, file_name)
     os.makedirs(file_path, exist_ok=True)
     
-    print(f"Installing {file_name}...")
+    print(f"Downloading {file_name}...")
     headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)'}
     attempt = 0
     chunk_size = 16384
@@ -108,7 +108,7 @@ def downloader(file_url, file_path, file_name, skip=False, max_attempts=10):
 
                 # Проверяем целостность скачанного файла по размеру
                 if downloaded >= total_length:
-                    print("\nInstalled successfully.")
+                    print("\nDownloaded successfully.")
                     return full_path
                 else:
                     raise Exception("Connection closed prematurely (size mismatch).")
@@ -145,7 +145,7 @@ def unziper(file_url, name, file_paths=[], skip=False):
     for file_path in file_paths:
         temp_name = furl(f"./temp_files/{name}dir/{file_path[0]}")
         
-        assert os.path.exists(temp_name), f"no such file or directory: {temp_name}"
+        assert os.path.exists(temp_name), f"No such file or directory: {temp_name}"
 
         if os.path.isfile(temp_name):
             print(temp_name)
@@ -196,7 +196,7 @@ def download(conf_file, skip=False):
 
                     else:
 
-                        raise TypeError (f"uncorrect datatype: {arr[0]} in {arr[1]}")
+                        raise TypeError (f"Incorrect datatype: {arr[0]} in {arr[1]}")
 
                 yield installed
 

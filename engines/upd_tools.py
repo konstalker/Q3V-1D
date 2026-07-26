@@ -29,6 +29,7 @@ def autoupdate():
 
 
 def update(repo_name):
+    print(f'updating {repo_name}...')
     try:
         if not os.path.exists("./temp_files"):
             os.mkdir("./temp_files")
@@ -37,8 +38,12 @@ def update(repo_name):
         with open('./temp_files/modlist.json', 'r', encoding='utf-8') as f:
             modlist = json.load(f)
 
+        if repo_name not in modlist:
+            print(f'{repo_name} not in modlist, skipping.')
+            return
+        
         need_update = False
-
+        
         version = modlist[repo_name]["version"]        
         if (version[0] != 'v' or version[0] != 'git') and\
            check_url(modlist[repo_name]["version"]):
@@ -62,16 +67,11 @@ def update(repo_name):
                    need_update = True
             
             else:
-                if check_url(version):
-
-                    with open('version.txt', 'r') as file:
-                        version = file.read().rstrip()
-                    
-                    if version > dmod_conf[repo_name]:
-                        need_update = True
-
-                else:
-                    raise ValueError(f'Unknown version type: {modlist[repo_name]["version"]}')
+                with open('version.txt', 'r') as file:
+                    version = file.read().rstrip()
+                
+                if version > dmod_conf[repo_name]:
+                    need_update = True
                 
         print(f'Old version: {dmod_conf[repo_name]}')
         print(f'New version: {version}')
