@@ -110,14 +110,17 @@ def remove(repo_name):
             dconf = list(dconf_file.read().split('\n'))
 
         for x in dconf:
-            x = list(x.split(';'))[3::2]
+            x = list(x.split(';'))[4::2]
 
             for path in x:
+
+                print('remove:', path)
                 if os.path.isfile(path):
                     os.remove(path)
                 else:
                     shutil.rmtree(path)
-        
+                    
+        bmod_conf[repo_name] = None
         autoupdate(skip=True)
         
     except Exception as e:
