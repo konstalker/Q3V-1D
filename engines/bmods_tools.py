@@ -3,10 +3,10 @@ from base_methods import *
 import os
 
 
-class dmod:
+class bmod:
     def __init__(self):
 
-        with open(f"./mod_tree/{c_info.mod_branch}.dmod", 'r') as mod_branch:
+        with open(f"./mod_tree/{c_info.mod_branch}.bmod", 'r') as mod_branch:
             self.mod_info = {}
 
             mod_branch = list(mod_branch.read().rstrip().split('\n'))
@@ -31,13 +31,15 @@ class dmod:
                             mods[-1][1] = "0"
 
                 self.mod_info.update({tag: mods})
+
+        if not os.path.exists(f'./mod_tree/{c_info.mod_branch}.btree')
     
     def __getitem__(self, key):
         for x in self.mod_info:
             if self.mod_info[x][-1][0] == key:
                 return self.mod_info[x][-1][1]
         
-        raise KeyError(f'{key} modaification not found in active dmod list')
+        raise KeyError(f'{key} modaification not found in active bmod list')
 
     def __setitem__(self, key, value):
         for x in self.mod_info:
@@ -45,7 +47,7 @@ class dmod:
                 self.mod_info[x][-1][1] = value
                 return
         
-        raise KeyError(f'{key} modaification not found in active dmod list')
+        raise KeyError(f'{key} modaification not found in active bmod list')
     
     def mod_list(self):
         
@@ -60,7 +62,7 @@ class dmod:
 
         print('saving')
         
-        with open(f'./mod_tree/{c_info.mod_branch}.dmod', 'w') as mod_branch:
+        with open(f'./mod_tree/{c_info.mod_branch}.bmod', 'w') as mod_branch:
             for x in self.mod_info:
                 s = ""
                 for y in self.mod_info[x]:
@@ -73,4 +75,4 @@ class dmod:
         return self.mod_info
 
 
-dmod_conf = dmod()
+bmod_conf = bmod()

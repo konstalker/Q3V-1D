@@ -1,6 +1,6 @@
 import download_tools as dt
 from upd_tools import autoupdate
-from dmods_tools import *
+from bmods_tools import *
 
 
 # needed paths
@@ -15,7 +15,7 @@ if not os.path.exists('./cache'):
     os.mkdir('./cache')
 
 
-dmod_conf.save()
+bmod_conf.save()
 
 list(dt.download('./download_confs/base.dconf', skip=True))
 

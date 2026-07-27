@@ -7,7 +7,7 @@ import json
 import download_tools as dt
 from base_methods import *
 
-from dmods_tools import dmod_conf
+from bmods_tools import bmod_conf
 
 
 def autoupdate():
@@ -17,10 +17,10 @@ def autoupdate():
     dt.downloader(furl('[RURL]index.json'), "./temp_files/", "modlist.json", skip=True)
    
     with open("./temp_files/modlist.json", 'r') as f:
-        for x in dmod_conf.mod_list():
+        for x in bmod_conf.mod_list():
             update(x)
 
-    dmod_conf.save()
+    bmod_conf.save()
 
     try:
         shutil.rmtree("./temp_files/")
@@ -52,7 +52,7 @@ def update(repo_name):
             with open('./temp_files/version.txt', 'r') as file:
                 version = file.read().rstrip()
         
-        if dmod_conf[repo_name] == '0':
+        if bmod_conf[repo_name] == '0':
 
             if version == 'git':
                 version = '1'
@@ -62,33 +62,38 @@ def update(repo_name):
 
             if version == 'git':
                 version = "1" # need to check hash
-                if dmod_conf[repo_name] != version:
+                if bmod_conf[repo_name] != version:
                     need_update = True
             
             elif version[0] == 'v':
-                if dmod_conf[repo_name] < version:
+                if bmod_conf[repo_name] < version:
                    need_update = True
             
             else:
                 with open('./temp_files/version.txt', 'r') as file:
                     version = file.read().rstrip()
                 
-                if version > dmod_conf[repo_name]:
+                if version > bmod_conf[repo_name]:
                     need_update = True
                 
-        print(f'Old version: {dmod_conf[repo_name]}')
+        print(f'Old version: {bmod_conf[repo_name]}')
         print(f'New version: {version}')
         print('Update required.' if need_update else 'Last version installed.')
 
         if need_update:
             dt.downloader(modlist[repo_name]["link"], './download_confs/', f'{repo_name}.dconf', skip=True)
             list(dt.download(f'./download_confs/{repo_name}.dconf', skip=False))
-            dmod_conf[repo_name] = version
+            bmod_conf[repo_name] = version
 
     except Exception as e:
         print(f"[error] not installed {repo_name}")
         print(f"[log] error: {e}")
         caption()
+
+
+def remove(repo_name):
+    print(f'Removing {repo_name}...')
+    
 
 
 if __name__ == "__main__":
