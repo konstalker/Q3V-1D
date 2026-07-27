@@ -31,8 +31,6 @@ class bmod:
                             mods[-1][1] = "0"
 
                 self.mod_info.update({tag: mods})
-
-        if not os.path.exists(f'./mod_tree/{c_info.mod_branch}.btree')
     
     def __getitem__(self, key):
         for x in self.mod_info:

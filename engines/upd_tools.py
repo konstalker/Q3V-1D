@@ -10,7 +10,7 @@ from base_methods import *
 from bmods_tools import bmod_conf
 
 
-def autoupdate():
+def autoupdate(skip=False):
     if not os.path.exists("./temp_files"):
         os.mkdir("./temp_files")
 
@@ -18,7 +18,7 @@ def autoupdate():
    
     with open("./temp_files/modlist.json", 'r') as f:
         for x in bmod_conf.mod_list():
-            update(x)
+            update(x, skip=skip)
 
     bmod_conf.save()
 
@@ -28,7 +28,7 @@ def autoupdate():
         pass
 
 
-def update(repo_name):
+def update(repo_name, skip=False):
     print(f'Updating {repo_name}...')
     try:
         if not os.path.exists("./temp_files"):
@@ -81,8 +81,8 @@ def update(repo_name):
         print('Update required.' if need_update else 'Last version installed.')
 
         if need_update:
-            dt.downloader(modlist[repo_name]["link"], './download_confs/', f'{repo_name}.dconf', skip=True)
-            list(dt.download(f'./download_confs/{repo_name}.dconf', skip=False))
+            dt.downloader(modlist[repo_name]["link"], './download_confs/', f'{repo_name}.dconf', skip=skip)
+            list(dt.download(f'./download_confs/{repo_name}.dconf', skip=skip))
             bmod_conf[repo_name] = version
 
     except Exception as e:
@@ -93,7 +93,35 @@ def update(repo_name):
 
 def remove(repo_name):
     print(f'Removing {repo_name}...')
+
+    try:
+        
+        if not os.path.exists(f'./download_confs/{repo_name}.dconf'):
+            dt.downloader(furl('[RURL]index.json'), "./temp_files/", "modlist.json", skip=True)
+            with open('./temp_files/modlist.json', 'r', encoding='utf-8') as f:
+                modlist = json.load(f)
     
+            assert repo_name not in modlist, "mod not in modlist, cannot be removed."
+
+            dt.downloader(modlist[repo_name]["link"], './download_confs/', f'{repo_name}.dconf', skip=True)
+            
+        with open(f'./download_confs/{repo_name}.dconf', 'r') as dconf_file:
+            dconf = list(dconf_file.read().split('\n'))
+
+        for x in dconf:
+            x = list(x.split(';'))[3::2]
+
+            for path in x:
+                if os.path.isfile(path):
+                    os.remove(path)
+                else:
+                    shutil.rmtree(path)
+        
+        autoupdate(skip=True)
+        
+    except Exception as e:
+        print(f"[error] not removed {repo_name}")
+        print(f"[log] error: {e}")
 
 
 if __name__ == "__main__":
