@@ -39,8 +39,15 @@ class bmod:
                     
         return '0'
 
-    def __setitem__(self, key, value):
-        
+    def __setitem__(self, key, value, tag=''):
+
+        if not tag:
+            if key not in self.mod_info[tag]:
+                self.mod_info[tag][self.mod_info[tag].index(key)][0] = key
+                self.mod_info[tag][self.mod_info[tag].index(key)][1] = value
+            else:
+                self.mod_info[tag].append([key, value])
+            
         for x in self.mod_info:
             for y in range(len(self.mod_info[x])):
                 if self.mod_info[x][y][0] == key:
@@ -51,6 +58,7 @@ class bmod:
                     else:
                         self.mod_info[x][y][1] = value
                     return
+        
     
     def mod_list(self):
         

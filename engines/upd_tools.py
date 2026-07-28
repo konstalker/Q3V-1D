@@ -20,8 +20,6 @@ def autoupdate(skip=False):
         for x in bmod_conf.mod_list():
             update(x, skip=skip)
 
-    bmod_conf.save()
-
     try:
         shutil.rmtree("./temp_files/")
     except Exception:
@@ -85,6 +83,7 @@ def update(repo_name, skip=False):
             list(dt.download(f'./download_confs/{repo_name}.dconf', skip=skip))
             
             bmod_conf[repo_name] = version
+            bmod_conf.save()
 
     except Exception as e:
         print(f"[error] not installed {repo_name}")
