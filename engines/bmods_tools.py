@@ -56,7 +56,7 @@ class bmod:
             if position >= 0:
                 self.mod_info[tag][position][0] = key
                 if value == None:
-                    self.mod_info[key].remove(y)
+                    self.mod_info[key].pop(position)
                     if not self.mod_info[key]:
                         self.mod_info.pop(key)
                 else:
