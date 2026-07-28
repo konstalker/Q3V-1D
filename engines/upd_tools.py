@@ -112,10 +112,14 @@ def remove(repo_name):
             for path in x:
 
                 print('remove:', path)
-                if os.path.isfile(path):
-                    os.remove(path)
-                else:
-                    shutil.rmtree(path)
+
+                try:
+                    if os.path.isfile(path):
+                        os.remove(path)
+                    else:
+                        shutil.rmtree(path)
+                except Exception:
+                    print('[warning] files not found.')
                     
         bmod_conf[repo_name] = None, modlist[repo_name]["tag"]
         autoupdate(skip=True)
