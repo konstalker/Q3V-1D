@@ -33,17 +33,19 @@ class bmod:
                 self.mod_info.update({tag: mods})
     
     def __getitem__(self, key):
-        return self.mod_info[key][-1][1]
-        
+        for x in self.mod_info:
+            if self.mod_info[x][-1][0] == key:
+                return self.mod_info[x][-1][1]
+                    
         raise KeyError(f'{key} modaification not found in active bmod list')
 
     def __setitem__(self, key, value):
-        if value == None:
-            self.mod_info[key].remove(-1)
-            if not self.mod_info[key]:
-                self.mod_info.pop(key)
-        self.mod_info[key][-1][1] = value
         
+        for x in self.mod_info:
+            if self.mod_info[x][-1][0] == key:
+                self.mod_info[x][-1][1] = value
+                return
+
         raise KeyError(f'{key} modaification not found in active bmod list')
     
     def mod_list(self):
