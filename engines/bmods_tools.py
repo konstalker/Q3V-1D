@@ -1,7 +1,4 @@
-from typing_extensions import Iterable
-
 from base_methods import *
-
 import os
 
 
