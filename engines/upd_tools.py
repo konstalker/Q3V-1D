@@ -95,15 +95,13 @@ def remove(repo_name):
     print(f'Removing {repo_name}...')
 
     try:
-        
-        if not os.path.exists(f'./download_confs/{repo_name}.dconf'):
-            dt.downloader(furl('[RURL]index.json'), "./temp_files/", "modlist.json", skip=True)
-            with open('./temp_files/modlist.json', 'r', encoding='utf-8') as f:
-                modlist = json.load(f)
-    
-            assert repo_name not in modlist, "mod not in modlist, cannot be removed."
 
-            dt.downloader(modlist[repo_name]["link"], './download_confs/', f'{repo_name}.dconf', skip=True)
+        dt.downloader(furl('[RURL]index.json'), "./temp_files/", "modlist.json", skip=True)
+        with open('./temp_files/modlist.json', 'r', encoding='utf-8') as f:
+            modlist = json.load(f)
+
+        assert repo_name not in modlist, "mod not in modlist, cannot be removed."
+        dt.downloader(modlist[repo_name]["link"], './download_confs/', f'{repo_name}.dconf', skip=True)
             
         with open(f'./download_confs/{repo_name}.dconf', 'r') as dconf_file:
             dconf = list(dconf_file.read().split('\n'))
@@ -119,7 +117,7 @@ def remove(repo_name):
                 else:
                     shutil.rmtree(path)
                     
-        bmod_conf[repo_name] = None
+        bmod_conf[repo_name] = None, modlist[repo_name]["tag"]
         autoupdate(skip=True)
         
     except Exception as e:
