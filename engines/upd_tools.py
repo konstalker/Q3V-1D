@@ -82,7 +82,7 @@ def update(repo_name, skip=False):
             dt.downloader(modlist[repo_name]["link"], './download_confs/', f'{repo_name}.dconf', skip=skip)
             list(dt.download(f'./download_confs/{repo_name}.dconf', skip=skip))
             
-            bmod_conf[repo_name] = version
+            bmod_conf[repo_name] = version, modlist[repo_name]["tag"]
             bmod_conf.save()
 
     except Exception as e:

@@ -1,3 +1,5 @@
+from typing_extensions import Iterable
+
 from base_methods import *
 
 import os
@@ -39,26 +41,26 @@ class bmod:
                     
         return '0'
 
-    def __setitem__(self, key, value, tag=''):
+    def __setitem__(self, key, value):
 
-        if not tag:
-            if key not in self.mod_info[tag]:
-                self.mod_info[tag][self.mod_info[tag].index(key)][0] = key
-                self.mod_info[tag][self.mod_info[tag].index(key)][1] = value
+        value, tag = value
+
+        if tag in self.mod_info:
+            
+            position = -1
+            for i, x in enumerate(self.mod_info[tag]):
+                if x[0] == key:
+                    position = i
+                    
+            if position >= 0:
+                self.mod_info[tag][position][0] = key
+                self.mod_info[tag][position][1] = value
             else:
                 self.mod_info[tag].append([key, value])
-            
-        for x in self.mod_info:
-            for y in range(len(self.mod_info[x])):
-                if self.mod_info[x][y][0] == key:
-                    if value == None:
-                        self.mod_info[key].remove(y)
-                        if not self.mod_info[key]:
-                            self.mod_info.pop(key)
-                    else:
-                        self.mod_info[x][y][1] = value
-                    return
-        
+                
+        else:
+            print(tag, key, value)
+            self.mod_info.update({tag: [[key, value]]})
     
     def mod_list(self):
         
