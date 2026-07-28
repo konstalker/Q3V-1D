@@ -33,10 +33,9 @@ git clone https://github.com/konstalker/Q3V-1D.git & cd Q3V-1D & first_launch.ba
 
 
 #### special thanks to:
-* q3e engine (quake3e engine, git: https://github.com/ec-/Quake3e)
 * diwoc (osp2-be creator, contacts: https://t.me/diwoc)
 * Mus1n (q3elite compilation creator, contacts: https://t.me/q3elite)
 * m1rage<-n8 (n8mare compilation creator, contacts: https://t.me/sxsqd)
 * jayjayNGL (creator of some packs, used in this compilationm, contacts: https://t.me/jayjayQ3)
-* meta (creator of metarena sever, contacts: https://t.me/lisabugx)
-* paragon (q3unite administrator, https://t.me/q3unite)
+* meta (metarena project founder, contacts: https://t.me/lisabugx)
+* paragon (q3unite project founder, https://t.me/q3unite)
