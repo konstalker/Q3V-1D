@@ -37,16 +37,20 @@ class bmod:
             if self.mod_info[x][-1][0] == key:
                 return self.mod_info[x][-1][1]
                     
-        raise KeyError(f'{key} modaification not found in active bmod list')
+        return '0'
 
     def __setitem__(self, key, value):
         
         for x in self.mod_info:
-            if self.mod_info[x][-1][0] == key:
-                self.mod_info[x][-1][1] = value
-                return
-
-        raise KeyError(f'{key} modaification not found in active bmod list')
+            for y in range(len(self.mod_info[x])):
+                if self.mod_info[x][y][0] == key:
+                    if value == None:
+                        self.mod_info[key].remove(y)
+                        if not self.mod_info[key]:
+                            self.mod_info.pop(key)
+                    else:
+                        self.mod_info[x][y][1] = value
+                    return
     
     def mod_list(self):
         
