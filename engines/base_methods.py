@@ -1,6 +1,7 @@
 from pathlib import Path
 import urllib.request
 import urllib.error
+from tkinter import END
 
 def check_url(url):
     try:
@@ -13,8 +14,6 @@ def caption():
     print("contacts of creator: https://telegram.me/konstalker")
     print("you can add issue on github: https://github.com/konstalker/Q3V-1D/issues")
     print("thank you for use Q3V#1D")
-    input("press enter to continue running")
-
 
 class C_INFO:
     def __init__(self):
@@ -50,6 +49,39 @@ def get_relative_paths(folder_path: str) -> list[str]:
             relative_paths.append(f"/{rel_path.as_posix()}")
             
     return relative_paths
+
+
+class RedirectToText:
+    def __init__(self, text_widget):
+        self.text_widget = text_widget
+
+    def write(self, string):
+        # Приводим Windows-стиль к Unix
+        string = string.replace('\r\n', '\n')
+
+        while '\r' in string:
+            before, after = string.split('\r', 1)
+
+            # Печатаем то, что было до \r
+            if before:
+                self.text_widget.insert(END, before)
+
+            # \r → удаляем текущую строку (с начала до конца)
+            line_start = self.text_widget.index("end-1c linestart")
+            self.text_widget.delete(line_start, END)
+
+            string = after
+
+        # Обычный текст (или то, что осталось после последнего \r)
+        if string:
+            self.text_widget.insert(END, string)
+
+        self.text_widget.see(END)
+        self.text_widget.update_idletasks()
+
+    def flush(self):
+        pass
+
 
 if __name__ == "__main__":
     print(check_url('git'))
