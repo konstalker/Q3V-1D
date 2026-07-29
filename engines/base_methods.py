@@ -56,23 +56,31 @@ class RedirectToText:
         self.text_widget = text_widget
 
     def write(self, string):
-        # Приводим Windows-стиль к Unix
+        # Приводим \r\n → \n
         string = string.replace('\r\n', '\n')
 
         while '\r' in string:
             before, after = string.split('\r', 1)
 
-            # Печатаем то, что было до \r
+            # Вставляем текст до \r
             if before:
                 self.text_widget.insert(END, before)
 
-            # \r → удаляем текущую строку (с начала до конца)
-            line_start = self.text_widget.index("end-1c linestart")
-            self.text_widget.delete(line_start, END)
+            # --- Главное исправление ---
+            # Проверяем, чем заканчивается текст
+            if self.text_widget.index("end-1c") != "1.0":
+                last_char = self.text_widget.get("end-2c")  # символ перед самым концом
+
+                # Если последний символ НЕ перевод строки —
+                # значит мы находимся внутри строки и её нужно очистить
+                if last_char != '\n':
+                    line_start = self.text_widget.index("end-1c linestart")
+                    self.text_widget.delete(line_start, "end-1c")
+            # -----------------------------
 
             string = after
 
-        # Обычный текст (или то, что осталось после последнего \r)
+        # Обычный текст (без \r)
         if string:
             self.text_widget.insert(END, string)
 
