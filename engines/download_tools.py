@@ -170,6 +170,7 @@ def download(conf_file, skip=False):
     arr = [None]
     
     try:
+        all_installed = []
     
         with open(conf_file, 'r') as pack_file:
             pack_list = pack_file.read().split('\n')
@@ -198,7 +199,9 @@ def download(conf_file, skip=False):
 
                         raise TypeError (f"Incorrect datatype: {arr[0]} in {arr[1]}")
 
-                yield installed
+                all_installed.extend(installed)
+                
+        return all_installed
 
     except Exception as err:
         print(f'[log] {err}')
