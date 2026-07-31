@@ -3,6 +3,57 @@ import urllib.request
 import urllib.error
 from tkinter import END
 
+import queue
+from tkinter import END
+
+class RedirectToText:
+    def __init__(self, text_widget):
+        self.text_widget = text_widget
+        self._queue = queue.Queue()
+        self._poll()  # первый вызов — из главного потока, при создании объекта
+
+    def write(self, string):
+        # это единственное, что может быть вызвано из фонового потока —
+        # queue.Queue потокобезопасна сама по себе
+        self._queue.put(string)
+
+    def flush(self):
+        pass
+
+    def _poll(self):
+        # выполняется ТОЛЬКО в главном потоке: и в первый раз (из __init__),
+        # и далее — т.к. self-планирование идёт изнутри колбэка mainloop'а
+        try:
+            while True:
+                string = self._queue.get_nowait()
+                self._write(string)
+        except queue.Empty:
+            pass
+        self.text_widget.after(100, self._poll)
+
+    def _write(self, string):
+        string = string.replace('\r\n', '\n')
+
+        while '\r' in string:
+            before, after = string.split('\r', 1)
+
+            if before:
+                self.text_widget.insert(END, before)
+
+            if self.text_widget.index("end-1c") != "1.0":
+                last_char = self.text_widget.get("end-2c")
+                if last_char != '\n':
+                    line_start = self.text_widget.index("end-1c linestart")
+                    self.text_widget.delete(line_start, "end-1c")
+
+            string = after
+
+        if string:
+            self.text_widget.insert(END, string)
+
+        self.text_widget.see(END)
+        self.text_widget.update_idletasks()
+
 def check_url(url):
     try:
         response = urllib.request.urlopen(url, timeout=5)
@@ -49,47 +100,6 @@ def get_relative_paths(folder_path: str) -> list[str]:
             relative_paths.append(f"/{rel_path.as_posix()}")
             
     return relative_paths
-
-
-class RedirectToText:
-    def __init__(self, text_widget):
-        self.text_widget = text_widget
-
-    def write(self, string):
-        # Приводим \r\n → \n
-        string = string.replace('\r\n', '\n')
-
-        while '\r' in string:
-            before, after = string.split('\r', 1)
-
-            # Вставляем текст до \r
-            if before:
-                self.text_widget.insert(END, before)
-
-            # --- Главное исправление ---
-            # Проверяем, чем заканчивается текст
-            if self.text_widget.index("end-1c") != "1.0":
-                last_char = self.text_widget.get("end-2c")  # символ перед самым концом
-
-                # Если последний символ НЕ перевод строки —
-                # значит мы находимся внутри строки и её нужно очистить
-                if last_char != '\n':
-                    line_start = self.text_widget.index("end-1c linestart")
-                    self.text_widget.delete(line_start, "end-1c")
-            # -----------------------------
-
-            string = after
-
-        # Обычный текст (без \r)
-        if string:
-            self.text_widget.insert(END, string)
-
-        self.text_widget.see(END)
-        self.text_widget.update_idletasks()
-
-    def flush(self):
-        pass
-
 
 if __name__ == "__main__":
     print(check_url('git'))
