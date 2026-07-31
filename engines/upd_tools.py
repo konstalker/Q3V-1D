@@ -43,7 +43,7 @@ def update(repo_name, skip=False):
         need_update = False
         
         version = modlist[repo_name]["version"]        
-        if (version[0] != 'v' or version[0] != 'git') and\
+        if (version[0] != 'v' and version[0] != 'git') and\
            check_url(modlist[repo_name]["version"]):
             dt.downloader(modlist[repo_name]["version"], './temp_files/', 'version.txt')
 
@@ -100,13 +100,15 @@ def remove(repo_name):
         with open('./temp_files/modlist.json', 'r', encoding='utf-8') as f:
             modlist = json.load(f)
 
-        assert repo_name not in modlist, "mod not in modlist, cannot be removed."
+        assert repo_name in modlist, "mod not in modlist, cannot be removed."
         dt.downloader(modlist[repo_name]["link"], './download_confs/', f'{repo_name}.dconf', skip=True)
             
         with open(f'./download_confs/{repo_name}.dconf', 'r') as dconf_file:
             dconf = list(dconf_file.read().split('\n'))
 
         for x in dconf:
+
+            # change for files
             x = list(x.split(';'))[4::2]
 
             for path in x:

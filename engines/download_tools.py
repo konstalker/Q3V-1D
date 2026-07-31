@@ -128,7 +128,7 @@ def unziper(file_url, name, file_paths=[], skip=False):
     
     installed = []
 
-    if os.path.exists("./temp_files/" + name) and not skip:
+    if os.path.exists("./cache/" + name) and not skip:
         os.remove("./temp_files/" + name)
     
     if not os.path.exists("./temp_files"):

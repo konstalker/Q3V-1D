@@ -18,19 +18,23 @@ app = App(title='Q3V#1D installer', icon='./icons/b3.png', size=(800, 600))
 app.page_area(size=(800, 600), pos=(0, 0))
 app.register(Terminal, 'terminal')
 
-# needed paths
-if not os.path.exists('../baseq3/mods/baseq3'):
-    os.mkdir('../baseq3/mods/baseq3')
+def main():
+    # needed paths
+    if not os.path.exists('../baseq3/mods/baseq3'):
+        os.mkdir('../baseq3/mods/baseq3')
 
-if not os.path.exists('../baseq3/mods/osp/demos'):
-    os.mkdir('../baseq3/mods/osp/demos')
+    if not os.path.exists('../baseq3/mods/osp/demos'):
+        os.mkdir('../baseq3/mods/osp/demos')
 
-if not os.path.exists('./cache'):
-    os.mkdir('./cache')
+    if not os.path.exists('./cache'):
+        os.mkdir('./cache')
 
 
-bmod_conf.save()
+    bmod_conf.save()
 
-list(dt.download('./download_confs/base.dconf', skip=True))
+    list(dt.download('./download_confs/base.dconf', skip=True))
 
-autoupdate()
+    autoupdate()
+
+Thread(targer=main).start()
+app.run()

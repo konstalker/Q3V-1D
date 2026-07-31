@@ -171,4 +171,3 @@ class App(tk.Tk):
 
     def run(self):
         self.mainloop()
-        
