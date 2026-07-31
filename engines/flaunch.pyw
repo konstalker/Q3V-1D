@@ -11,11 +11,11 @@ from base_methods import *
 
 class Terminal(Page):
     def setup(self):
-        text = self.text(size=(800, 600))
+        text = self.text(size=(800, 400))
         sys.stdout = RedirectToText(text)
 
-app = App(title='Q3V#1D installer', icon='./icons/b3.png', size=(800, 600))
-app.page_area(size=(800, 600), pos=(0, 0))
+app = App(title='Q3V#1D installer', icon='./icons/b3.png', size=(800, 400))
+app.page_area(size=(800, 400), pos=(0, 0))
 app.register(Terminal, 'terminal')
 
 def main():
