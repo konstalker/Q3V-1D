@@ -5,7 +5,7 @@ from gui_tools import *
 
 class Terminal(Page):
     def setup(self):
-        text = self.text(size=(800, 600))
+        text = self.text(size=(800, 400))
         sys.stdout = RedirectToText(text)
 
 class Terminal(Page):
