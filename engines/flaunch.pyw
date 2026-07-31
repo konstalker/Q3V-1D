@@ -36,5 +36,6 @@ def main():
 
     autoupdate()
 
-Thread(target=main).start()
-app.run()
+if __name__ == "__main__":
+    Thread(target=main).start()
+    app.run()
