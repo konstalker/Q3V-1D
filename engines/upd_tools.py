@@ -85,7 +85,7 @@ def update(repo_name, skip=False):
             # bmod changes
 
             dl_mods = bmod_conf.mod_info[modlist[repo_name]["tag"]]
-            for x in dl_mods:
+            for x in dl_mods[:-1]:
                 _rm(x)
                 bmod_conf[repo_name] = None, modlist[repo_name]['tag']
             
@@ -103,6 +103,7 @@ def _rm(repo_name):
         modlist = json.load(f)
 
     assert repo_name in modlist, "mod not in modlist, cannot be removed."
+    
     dt.downloader(modlist[repo_name]["link"], './download_confs/', f'{repo_name}.dconf', skip=True)
         
     with open(f'./download_confs/{repo_name}.dconf', 'r') as dconf_file:
@@ -124,15 +125,14 @@ def _rm(repo_name):
                     shutil.rmtree(path)
             except Exception:
                 print('[warning] files not found.')
+    
+    bmod_conf[repo_name] = None, modlist[repo_name]["tag"]
 
 def remove(repo_name):
     print(f'Removing {repo_name}...')
 
     try:
-
         _rm('repo_name')
-                    
-        bmod_conf[repo_name] = None, modlist[repo_name]["tag"]
         autoupdate(skip=True)
         
     except Exception as e:
