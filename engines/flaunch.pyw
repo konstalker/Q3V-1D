@@ -36,5 +36,5 @@ def main():
 
     autoupdate()
 
-Thread(targer=main).start()
+Thread(target=main).start()
 app.run()
