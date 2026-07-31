@@ -1,7 +1,14 @@
 import shlex
 from upd_tools import *
 import subprocess
+from gui_tools import *
 
+class Terminal(Page):
+    def setup(self):
+        text = self.text(size=(800, 600))
+        sys.stdout = RedirectToText(text)
+
+app = App(title='Q3V#1D')
 
 def launch(args='+set fs_homepath "../baseq3/mods" +set fs_basepath "../" +set fs_game "osp"'):
     autoupdate()
@@ -28,6 +35,8 @@ def launch(args='+set fs_homepath "../baseq3/mods" +set fs_basepath "../" +set f
     subprocess.call([engine] + shlex.split(args))
 
 
-if __name__ == "__main__":
+def main():
     launch()
-    
+
+if __name__ == "__main__":
+    main()

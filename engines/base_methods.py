@@ -13,16 +13,12 @@ class RedirectToText:
         self._poll()  # первый вызов — из главного потока, при создании объекта
 
     def write(self, string):
-        # это единственное, что может быть вызвано из фонового потока —
-        # queue.Queue потокобезопасна сама по себе
         self._queue.put(string)
 
     def flush(self):
         pass
 
     def _poll(self):
-        # выполняется ТОЛЬКО в главном потоке: и в первый раз (из __init__),
-        # и далее — т.к. self-планирование идёт изнутри колбэка mainloop'а
         try:
             while True:
                 string = self._queue.get_nowait()
@@ -89,7 +85,6 @@ def furl(url):
         url = url.replace(x[0], x[1])
     return url
 
-
 def get_relative_paths(folder_path: str) -> list[str]:
     base_dir = Path(folder_path)
     relative_paths = []
@@ -101,5 +96,8 @@ def get_relative_paths(folder_path: str) -> list[str]:
             
     return relative_paths
 
-if __name__ == "__main__":
-    print(check_url('git'))
+def check_worker(app, thread, interval, on_done):
+    if thread.is_alive():
+        app.after(interval, lambda: check_worker(app, thread, interval, on_done))
+    else:
+        on_done()

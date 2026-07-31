@@ -37,5 +37,7 @@ def main():
     autoupdate()
 
 if __name__ == "__main__":
-    Thread(target=main).start()
+    thread = Thread(target=main)
+    thread.start()
+    check_worker(app, thread, 100, exit)
     app.run()
