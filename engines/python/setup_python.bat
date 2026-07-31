@@ -1,6 +1,5 @@
 @echo off
 setlocal enabledelayedexpansion
-chcp 65001
 
 set "PYPY_URL=https://downloads.python.org/pypy/pypy3.11-v7.3.23-win64.zip"
 set "BASE_DIR=%~dp0"
@@ -13,26 +12,18 @@ set "PYTHON_EXEC="
 for /f "delims=" %%I in ('where pythonw 2^>nul') do (
     echo "%%I" | find /i "WindowsApps" >nul
     if errorlevel 1 (
-        if not defined PYTHON_EXEC set "PYTHON_EXEC="%%I""
-    )
-)
-if defined PYTHON_EXEC goto :run_python
-
-for /f "delims=" %%I in ('where pythonw 2^>nul') do (
-    echo "%%I" | find /i "WindowsApps" >nul
-    if errorlevel 1 (
-        if not defined PYTHON_EXEC set "PYTHON_EXEC="%%I""
+        if not defined PYTHON_EXEC set "PYTHON_EXEC=%%I"
     )
 )
 if defined PYTHON_EXEC goto :run_python
 
 :: 2. Если системного Python нет, ищем портативную версию
 if exist "%PYPY_FOLDER%\pypyw.exe" (
-    set "PYTHON_EXEC="%PYPY_FOLDER%\pypyw.exe""
+    set "PYTHON_EXEC=%PYPY_FOLDER%\pypyw.exe"
     goto :run_python
 )
 if exist "%PYPY_FOLDER%\pythonw.exe" (
-    set "PYTHON_EXEC="%PYPY_FOLDER%\pythonw.exe""
+    set "PYTHON_EXEC=%PYPY_FOLDER%\pythonw.exe"
     goto :run_python
 )
 
@@ -40,8 +31,8 @@ if exist "%PYPY_FOLDER%\pythonw.exe" (
 if not exist "%ZIP_FILE%" (
     echo Скачивание PyPy...
     curl -L -o "%ZIP_FILE%" "%PYPY_URL%"
-    if %ERRORLEVEL% neq 0 (
-        echo [error] archive didn't download.
+    if !ERRORLEVEL! neq 0 (
+        echo Ошибка: Не удалось скачать архив.
         exit /b 1
     )
 )
@@ -55,15 +46,15 @@ if not exist "%EXTRACT_DIR%" (
 
 :: 5. Проверяем после распаковки
 if exist "%PYPY_FOLDER%\python.exe" (
-    set "PYTHON_EXEC="%PYPY_FOLDER%\python.exe""
+    set "PYTHON_EXEC=%PYPY_FOLDER%\python.exe"
 ) else if exist "%PYPY_FOLDER%\pypy3.exe" (
-    set "PYTHON_EXEC="%PYPY_FOLDER%\pypy3.exe""
+    set "PYTHON_EXEC=%PYPY_FOLDER%\pypy3.exe"
 ) else (
-    echo [error] executable not found.
+    echo Ошибка: Исполняемый файл не найден.
     exit /b 1
 )
 
 :run_python
 :: 6. Запускаем интерпретатор с передачей всех аргументов (%*)
-start "" %PYTHON_EXEC% %*
+start "" "%PYTHON_EXEC%" %*
 exit
