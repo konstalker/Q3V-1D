@@ -18,7 +18,7 @@ def autoupdate(skip=False):
    
     with open("./temp_files/modlist.json", 'r') as f:
         for x in bmod_conf.mod_list():
-            update(x, skip=skip)
+            update(x, repare=skip)
 
     try:
         shutil.rmtree("./temp_files/")
@@ -26,7 +26,7 @@ def autoupdate(skip=False):
         pass
 
 
-def update(repo_name, skip=False):
+def update(repo_name, repare=False):
     print(f'Updating {repo_name}...')
     try:
         if not os.path.exists("./temp_files"):
@@ -78,9 +78,9 @@ def update(repo_name, skip=False):
         print(f'New version: {version}')
         print('Update required.' if need_update else 'Last version installed.')
 
-        if need_update:
-            dt.downloader(modlist[repo_name]["link"], './download_confs/', f'{repo_name}.dconf', skip=skip)
-            list(dt.download(f'./download_confs/{repo_name}.dconf', skip=skip))
+        if need_update or repare:
+            dt.downloader(modlist[repo_name]["link"], './download_confs/', f'{repo_name}.dconf', skip=repare)
+            list(dt.download(f'./download_confs/{repo_name}.dconf', skip=repare))
 
             # bmod changes
 
@@ -132,8 +132,9 @@ def remove(repo_name):
     print(f'Removing {repo_name}...')
 
     try:
-        _rm('repo_name')
+        _rm(repo_name)
         autoupdate(skip=True)
+        bmod_conf.save()
         
     except Exception as e:
         print(f"[error] not removed {repo_name}")

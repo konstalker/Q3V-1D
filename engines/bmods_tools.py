@@ -51,17 +51,17 @@ class bmod:
                     break
             
             if position >= 0:
-                self.mod_info[tag][position][0] = key
+                self.mod_info[tag][position] = [key, None]
                 if value == None:
-                    self.mod_info[key].pop(position)
-                    if not self.mod_info[key]:
-                        self.mod_info.pop(key)
+                    self.mod_info[tag].pop(position)
+                    if not self.mod_info[tag]:
+                        self.mod_info.pop(tag)
                 else:
                     self.mod_info[tag][position][1] = value
             elif value != None:
                 self.mod_info[tag].append([key, value])
                 
-        else:
+        elif value != None:
             self.mod_info.update({tag: [[key, value]]})
     
     def mod_list(self):
