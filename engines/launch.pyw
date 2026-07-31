@@ -2,6 +2,8 @@ import shlex
 from upd_tools import *
 import subprocess
 from gui_tools import *
+import sys
+from threading import Thread
 
 class Terminal(Page):
     def setup(self):

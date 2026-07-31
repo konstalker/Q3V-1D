@@ -206,7 +206,6 @@ def download(conf_file, skip=False):
     except Exception as err:
         print(f'[log] {err}')
         print(f"[error] not installed {arr[1]}")
-        input()
         if arr[0] == 'a':
             rmtree(f"./temp_files/{arr[1]}dir", )
         caption()
