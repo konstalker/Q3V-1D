@@ -45,6 +45,6 @@ def launch(args='+set fs_homepath "../baseq3/mods" +set fs_basepath "../" +set f
 if __name__ == "__main__":
     thread = Thread(target=autoupdate)
     thread.start()
-    check_worker(app, thread, 100, exit)
+    check_worker(app, thread, 100, app.destroy)
     app.run()
     launch()
