@@ -1,54 +1,6 @@
 from pathlib import Path
 import urllib.request
 import urllib.error
-from tkinter import END
-
-import queue
-from tkinter import END
-
-class RedirectToText:
-    def __init__(self, text_widget):
-        self.text_widget = text_widget
-        self._queue = queue.Queue()
-        self._poll()  # первый вызов — из главного потока, при создании объекта
-
-    def write(self, string):
-        self._queue.put(string)
-
-    def flush(self):
-        pass
-
-    def _poll(self):
-        try:
-            while True:
-                string = self._queue.get_nowait()
-                self._write(string)
-        except queue.Empty:
-            pass
-        self.text_widget.after(100, self._poll)
-
-    def _write(self, string):
-        string = string.replace('\r\n', '\n')
-
-        while '\r' in string:
-            before, after = string.split('\r', 1)
-
-            if before:
-                self.text_widget.insert(END, before)
-
-            if self.text_widget.index("end-1c") != "1.0":
-                last_char = self.text_widget.get("end-2c")
-                if last_char != '\n':
-                    line_start = self.text_widget.index("end-1c linestart")
-                    self.text_widget.delete(line_start, "end-1c")
-
-            string = after
-
-        if string:
-            self.text_widget.insert(END, string)
-
-        self.text_widget.see(END)
-        self.text_widget.update_idletasks()
 
 def check_url(url):
     try:

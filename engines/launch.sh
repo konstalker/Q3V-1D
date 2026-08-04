@@ -1,4 +1,4 @@
 #!/bin/bash
 cd $(dirname "$0")
 
-python launch.pyw
+./python/setup_python.sh launch.pyw
