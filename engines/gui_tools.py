@@ -39,22 +39,19 @@ class RedirectToText(QObject):
 
 
 class Page(QWidget):
-    """Базовый класс страницы. Наследуйтесь и переопределяйте setup(),
-    чтобы описать содержимое страницы."""
-
     def __init__(self, app):
         super().__init__()
         self.app = app
         self.layout_ = QVBoxLayout()
+        self.layout_.setContentsMargins(0, 0, 0, 0)  # убрать отступы от краёв
+        self.layout_.setSpacing(0)                   # убрать интервалы между виджетами
         self.setLayout(self.layout_)
         self.setup()
 
     def setup(self):
-        """Переопределяется в наследниках."""
         pass
 
     def text(self, size=(400, 300)):
-        """Добавляет на страницу read-only текстовое поле (консоль)."""
         widget = QTextEdit()
         widget.setReadOnly(True)
         widget.setFixedSize(QSize(*size))
@@ -73,12 +70,20 @@ class App:
         self.window.setWindowTitle(title)
         if icon:
             self.window.setWindowIcon(QIcon(icon))
-        self.window.resize(*size)
+        self.window.setFixedSize(QSize(*size))
 
         self.stack = QStackedWidget()
         self.window.setCentralWidget(self.stack)
 
         self._pages = {}
+
+        screen = self.qapp.primaryScreen()
+        screen_geometry = screen.availableGeometry()
+        window_geometry = self.window.frameGeometry()
+
+        center_point = screen_geometry.center()
+        window_geometry.moveCenter(center_point)
+        self.window.move(window_geometry.topLeft())
 
     def page_area(self, size=(800, 600), pos=(0, 0)):
         """Оставлено для совместимости с оригинальным API —
