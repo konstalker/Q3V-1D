@@ -9,7 +9,8 @@ if ! grep -qx "linux" "$SCRIPT_DIR/engines/mod_tree/branch.txt"; then
     echo "linux" >> "$SCRIPT_DIR/engines/mod_tree/branch.txt"
 fi
 
-python flaunch.pyw
+chmod +x "./python/setup_python.sh"
+./python/setup_python.sh flaunch.pyw
 
 cd "../"
 
