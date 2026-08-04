@@ -54,5 +54,5 @@ if not exist "%VENV_DIR%\Scripts\python.exe" (
 )
 
 :: === 4. Запуск скрипта пользователя внутри venv ===
-"%VENV_DIR%\Scripts\pythonw.exe" %*
+start "" "%VENV_DIR%\Scripts\pythonw.exe" %*
 exit
