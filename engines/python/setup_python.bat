@@ -78,5 +78,10 @@ if not exist "%VENV_DIR%\Scripts\python.exe" (
 set "VIRTUAL_ENV=%VENV_DIR%"
 set "PATH=%VENV_DIR%\Scripts;!BASE_PYTHON_DIR!;%PATH%"
 
+echo BASE_PYTHON_EXE=!BASE_PYTHON_EXE!
+echo BASE_PYTHON_DIR=!BASE_PYTHON_DIR!
+echo BASE_PYTHONW_EXE=!BASE_PYTHONW_EXE!
+pause
+
 start "" "!BASE_PYTHONW_EXE!" "%SCRIPT_PATH%" %*
 exit
