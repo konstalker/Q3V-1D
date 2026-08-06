@@ -45,7 +45,11 @@ if !ERRORLEVEL! neq 0 (
 :: === 3. Находим путь к базовому интерпретатору (не venv!), скачанному uv ===
 :: Нужен для обхода бага, при котором pythonw.exe в venv является копией python.exe
 :: (см. https://github.com/astral-sh/uv/issues/19226)
-for /f "delims=" %%P in ('"%UV_EXE%" python find %PYTHON_VERSION%') do set "BASE_PY=%%P"
+:: ВАЖНО: команда обёрнута через "call" - без этого у cmd.exe известный баг:
+:: если команда внутри for /f начинается с закавыченного пути с пробелами,
+:: cmd обрезает путь по первому пробелу ("...\Program' is not recognized...").
+:: call меняет способ построения внутренней команды и обходит баг.
+for /f "delims=" %%P in ('call "%UV_EXE%" python find %PYTHON_VERSION%') do set "BASE_PY=%%P"
 if not defined BASE_PY (
     echo Ошибка: не удалось определить путь к базовому интерпретатору.
     exit /b 1
@@ -77,5 +81,5 @@ if not exist "%VENV_DIR%\Scripts\python.exe" (
 :: PYTHONPATH указывает на site-packages venv, т.к. запускаем не через
 :: битый shim venv, а напрямую через базовый интерпретатор
 set "PYTHONPATH=%VENV_DIR%\Lib\site-packages"
-"%REAL_PYTHONW%" %*
+start "" "%REAL_PYTHONW%" "%*"
 exit
