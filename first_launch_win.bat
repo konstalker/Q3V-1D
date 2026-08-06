@@ -1,13 +1,13 @@
 @echo off
 
-cd /d %~dp0/engines
+cd /d "%~dp0/engines"
 
 findstr /C:"windows" "%~dp0engines\mod_tree\branch.txt" >nul
 if errorlevel 1 (
     echo windows>> "%~dp0engines\mod_tree\branch.txt"
 )
 
-start %~dp0/engines/python/setup_python.bat flaunch.pyw
+start "" "%~dp0/engines/python/setup_python.bat" "flaunch.pyw"
 
 cd /d %~dp0
 
