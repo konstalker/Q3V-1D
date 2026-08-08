@@ -9,7 +9,7 @@ if errorlevel 1 (
 
 start "" "%~dp0engines\python\setup_python.bat" "flaunch.pyw"
 
-cd /d %~dp0
+cd /d "%~dp0"
 
 set "shortcutName=%USERPROFILE%\Desktop\Q3V#1D.lnk"
 set "targetPath=%~dp0engines\launch.bat"
