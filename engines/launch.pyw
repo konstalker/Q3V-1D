@@ -19,7 +19,7 @@ app.page_area(size=(800, 400), pos=(0, 0))
 app.register(Terminal, 'terminal')
 
 
-def launch(args='+set fs_homepath "../baseq3/mods" +set fs_basepath "../" +set fs_game "osp"'):
+def launch(args='+set fs_homepath "../baseq3/mods" +set fs_basepath "../" +set fs_game "osp" +set com_viewlog "0"'):
     vk_engine, ogl_engine = None, False
     if os.path.exists('./engine.txt'):
         with open('./engine.txt') as engine_file:
