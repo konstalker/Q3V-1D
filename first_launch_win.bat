@@ -7,7 +7,7 @@ if errorlevel 1 (
     echo windows>> "%~dp0engines\mod_tree\branch.txt"
 )
 
-start "" "%~dp0/engines/python/setup_python.bat" "flaunch.pyw"
+start "" "%~dp0engines\python\setup_python.bat" "flaunch.pyw"
 
 cd /d %~dp0
 
