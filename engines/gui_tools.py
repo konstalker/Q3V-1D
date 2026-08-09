@@ -324,14 +324,11 @@ class Ui_MainWindow(object):
 
     def _setup_mod_table(self):
         self.tableWidget.setColumnCount(3)
-        self.tableWidget.setHorizontalHeaderLabels(["Название", "Описание", "Действие"])
+        self.tableWidget.setHorizontalHeaderLabels(["Name", "Description", "Action"])
 
         header_item_0 = self.tableWidget.horizontalHeaderItem(0)
-        header_item_0.setToolTip("Название мода")
         header_item_1 = self.tableWidget.horizontalHeaderItem(1)
-        header_item_1.setToolTip("Краткое описание мода")
         header_item_2 = self.tableWidget.horizontalHeaderItem(2)
-        header_item_2.setToolTip("Установить / удалить мод")
 
         header = self.tableWidget.horizontalHeader()
         header.setSectionResizeMode(0, QtWidgets.QHeaderView.ResizeMode.Fixed)
@@ -344,13 +341,6 @@ class Ui_MainWindow(object):
         self.tableWidget.setEditTriggers(QtWidgets.QAbstractItemView.EditTrigger.NoEditTriggers)
         self.tableWidget.setSelectionBehavior(QtWidgets.QAbstractItemView.SelectionBehavior.SelectRows)
 
-        # Подсказки на ячейках показываются автоматически при наведении,
-        # если у QTableWidgetItem задан setToolTip(...) — включаем отслеживание мыши.
-        self.tableWidget.setMouseTracking(True)
-        self.tableWidget.viewport().setMouseTracking(True)
-
-        # Прячем встроенный скроллбар таблицы — скроллить будем через
-        # self.verticalScrollBar, размещённый слева.
         self.tableWidget.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
         self.tableWidget.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarPolicy.ScrollBarAsNeeded)
 
@@ -384,12 +374,6 @@ class Ui_MainWindow(object):
         """Пример заполнения таблицы — замените на реальный список модов."""
 
         modlist = get_modlist()
-        
-        demo_mods = [
-            ("HD Textures", "Пакет текстур высокого разрешения", "Установить"),
-            ("Bot Overhaul", "Улучшенный ИИ ботов", "Установить"),
-            ("Weapon Pack", "Дополнительные модели оружия", "Установить"),
-        ]
         
         for x in modlist:
             self.add_mod_row(
