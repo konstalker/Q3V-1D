@@ -8,9 +8,20 @@ from upd_tools import *
 from gui_tools import *
 
 
+class Aupd(QtCore.QThread):
+    result_ready = QtCore.pyqtSignal(bool)
+
+    def run(self):
+        autoupdate()
+
 
 if __name__ == "__main__":
-    thread = Thread(target=autoupdate)
-    thread.start()
-    check_worker(app, thread, 100, app.qapp.quit)
-    launch()       # выполнится только после закрытия окна (см. правку ниже)
+    app = QApplication(sys.argv)
+    app.setStyleSheet(DARK_STYLE)
+    window = MainWindow()
+    window.show()
+    window.open_terminal()
+    aupd = Aupd()
+    aupd.finished.connect(window.close_terminal)
+    aupd.start()
+    sys.exit(app.exec())
