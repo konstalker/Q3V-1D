@@ -50,13 +50,7 @@ def get_relative_paths(folder_path: str) -> list[str]:
             relative_paths.append(f"/{rel_path.as_posix()}")
             
     return relative_paths
-
-def check_worker(app, thread, interval, on_done):
-    if thread.is_alive():
-        app.after(interval, lambda: check_worker(app, thread, interval, on_done))
-    else:
-        on_done()
-
+    
 def launch(args='+set fs_homepath "../baseq3/mods" +set fs_basepath "../" +set fs_game "osp" +set com_viewlog "0"'):
     vk_engine, ogl_engine = None, False
     if os.path.exists('./engine.txt'):
