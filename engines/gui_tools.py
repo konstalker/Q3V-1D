@@ -237,6 +237,7 @@ class Ui_MainWindow(object):
 
         self.pushButton_close = QtWidgets.QPushButton("×", parent=self.centralwidget)
         self.pushButton_close.setGeometry(QtCore.QRect(875, 0, 25, 25))
+        self.pushButton_close.setStyleSheet("QPushButton {color: #ff0000}")
         self.pushButton_close.clicked.connect(self.close)
 
     def retranslateUi(self, MainWindow):
