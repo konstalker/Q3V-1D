@@ -71,4 +71,4 @@ def launch(args='+set fs_homepath "../baseq3/mods" +set fs_basepath "../" +set f
     if c_info.s_data == 'linux':
         os.system(f'chmod +x {engine}')
 
-    subprocess.call([engine] + shlex.split(args))
+    subprocess.Popen([engine] + shlex.split(args))
