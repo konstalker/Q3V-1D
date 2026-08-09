@@ -6,9 +6,9 @@ gui_tools.py — общий PyQt6-фреймворк для GUI.
 import sys
 from PyQt6.QtWidgets import (
     QApplication, QMainWindow, QWidget, QStackedWidget,
-    QTextEdit, QVBoxLayout
+    QTextEdit, QVBoxLayout, QHBoxLayout, QPushButton
 )
-from PyQt6.QtCore import QObject, pyqtSignal, QTimer, QSize
+from PyQt6.QtCore import QObject, pyqtSignal, QTimer, QSize, Qt
 from PyQt6.QtGui import QIcon, QTextCursor
 
 
@@ -51,12 +51,75 @@ class Page(QWidget):
     def setup(self):
         pass
 
-    def text(self, size=(400, 300)):
+    def _place(self, target_layout, widget, index=None, alignment=None):
+        """Общая логика добавления виджета в layout: в конец, в конкретную
+        позицию (index) и/или с выравниванием (alignment)."""
+        kwargs = {} if alignment is None else {'alignment': alignment}
+        if index is None:
+            target_layout.addWidget(widget, **kwargs)
+        else:
+            target_layout.insertWidget(index, widget, **kwargs)
+
+    def text(self, size=(400, 300), layout=None, index=None, alignment=None):
         widget = QTextEdit()
         widget.setReadOnly(True)
         widget.setFixedSize(QSize(*size))
-        self.layout_.addWidget(widget)
+        self._place(layout or self.layout_, widget, index=index, alignment=alignment)
         return widget
+
+    def button(self, label, callback=None, size=(400, 40), visible=True, enabled=True,
+               layout=None, index=None, alignment=None):
+        """Кнопка с тем же паттерном, что и text(): создаётся, сразу
+        добавляется в layout страницы и возвращается наружу, чтобы
+        вызывающий код мог её показывать/прятать/включать по своей логике.
+
+        layout — если нужно поместить кнопку не в основной вертикальный
+        layout страницы, а, например, в ряд, созданный через row().
+        index — позиция внутри layout (0 = в начало), по умолчанию — в конец.
+        alignment — Qt.AlignmentFlag.AlignHCenter/AlignLeft/AlignRight и т.п.,
+        актуально когда виджет уже, чем страница/ряд."""
+        widget = QPushButton(label)
+        widget.setFixedSize(QSize(*size))
+        widget.setVisible(visible)
+        widget.setEnabled(enabled)
+        if callback is not None:
+            widget.clicked.connect(callback)
+        self._place(layout or self.layout_, widget, index=index, alignment=alignment)
+        return widget
+
+    def row(self, spacing=None, margins=None, index=None):
+        """Создаёт горизонтальный QHBoxLayout, кладёт его в основной layout
+        страницы и возвращает — передавайте его как layout=... в text()/
+        button(), чтобы расположить несколько виджетов в один ряд:
+
+            row = self.row(spacing=8)
+            self.button('Да', layout=row, size=(190, 40))
+            self.button('Нет', layout=row, size=(190, 40))
+        """
+        row_layout = QHBoxLayout()
+        if spacing is not None:
+            row_layout.setSpacing(spacing)
+        if margins is not None:
+            row_layout.setContentsMargins(*margins)
+        if index is None:
+            self.layout_.addLayout(row_layout)
+        else:
+            self.layout_.insertLayout(index, row_layout)
+        return row_layout
+
+    def stretch(self, layout=None):
+        """Добавляет растягивающийся пустой промежуток — раздвигает
+        соседние виджеты к краям (например, прижимает кнопку к низу
+        страницы, если вызвать stretch() перед её добавлением)."""
+        (layout or self.layout_).addStretch()
+
+    def spacing(self, px):
+        """Промежуток между виджетами в основном layout страницы."""
+        self.layout_.setSpacing(px)
+
+    def margins(self, left, top, right, bottom):
+        """Отступы всего layout страницы от краёв окна."""
+        self.layout_.setContentsMargins(left, top, right, bottom)
 
 
 class App:
