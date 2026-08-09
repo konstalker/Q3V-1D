@@ -145,9 +145,17 @@ if __name__ == "__main__":
         def __init__(self):
             super().__init__()
             self.setupUi(self)
+            self._center_on_screen()
 
             self.pushButton.clicked.connect(self.launch)
-    
+
+        def _center_on_screen(self):
+            screen = QApplication.primaryScreen()
+            screen_geometry = screen.availableGeometry()
+            window_geometry = self.frameGeometry()
+            window_geometry.moveCenter(screen_geometry.center())
+            self.move(window_geometry.topLeft())
+        
         def launch(self):
             self.open_terminal()
             print("Launch clicked")
