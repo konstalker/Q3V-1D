@@ -19,6 +19,11 @@ def get_modlist():
     with open('./temp_files/modlist.json', 'r', encoding='utf-8') as f:
         modlist = json.load(f)
 
+    try:
+        shutil.rmtree("./temp_files/")
+    except Exception:
+        pass
+
     return modlist
     
 

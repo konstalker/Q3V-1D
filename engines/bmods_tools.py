@@ -89,5 +89,7 @@ class bmod:
     def __iter__(self):
         return self.mod_info
 
+    def __contains__(self, x):
+        return x in self.mod_list()
 
 bmod_conf = bmod()

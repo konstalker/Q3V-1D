@@ -13,6 +13,7 @@ from PyQt6.QtGui import QTextCursor, QPixmap, QPalette, QBrush, QPainter, QColor
 
 from base_methods import *
 from upd_tools import *
+from bmods_tools import *
 
 
 DARK_STYLE = """
@@ -379,7 +380,7 @@ class Ui_MainWindow(object):
             self.add_mod_row(
                 x,
                 modlist[x]["description"],
-                button_text="download",
+                button_text="download" if x not in bmod_conf else "delete",
                 on_click=self.on_mod_button_clicked
             )
 
@@ -425,6 +426,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def close_terminal(self):
         self.setFixedSize(900, 600)
         self.terminal.hide()
+        
 
 if __name__ == "__main__":
 
