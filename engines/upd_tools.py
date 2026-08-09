@@ -10,6 +10,18 @@ from base_methods import *
 from bmods_tools import bmod_conf
 
 
+def get_modlist():
+    if not os.path.exists("./temp_files"):
+        os.mkdir("./temp_files")
+
+    dt.downloader(furl('[RURL]index.json'), "./temp_files/", "modlist.json", skip=True)
+   
+    with open('./temp_files/modlist.json', 'r', encoding='utf-8') as f:
+        modlist = json.load(f)
+
+    return modlist
+    
+
 def autoupdate(skip=False):
     if not os.path.exists("./temp_files"):
         os.mkdir("./temp_files")
@@ -32,9 +44,7 @@ def update(repo_name, repare=False):
         if not os.path.exists("./temp_files"):
             os.mkdir("./temp_files")
     
-        dt.downloader(furl('[RURL]index.json'), "./temp_files/", "modlist.json", skip=True)
-        with open('./temp_files/modlist.json', 'r', encoding='utf-8') as f:
-            modlist = json.load(f)
+        modlist = get_modlist()
 
         if repo_name not in modlist:
             print(f'{repo_name} not in modlist, skipping.')
