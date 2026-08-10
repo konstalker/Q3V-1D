@@ -32,7 +32,7 @@ def downloader(file_url, file_path, file_name, skip=False, max_attempts=10):
             # 1. Быстро узнаем размер файла через HEAD-запрос (без скачивания тела)
             try:
                 head_req = urllib.request.Request(file_url, headers=headers, method='HEAD')
-                with urllib.request.urlopen(head_req, timeout=9) as resp:
+                with urllib.request.urlopen(head_req, timeout=1) as resp:
                     total_length = resp.info().get('Content-Length')
                     if total_length is not None:
                         total_length = int(total_length)
@@ -60,7 +60,7 @@ def downloader(file_url, file_path, file_name, skip=False, max_attempts=10):
             req = urllib.request.Request(file_url, headers=req_headers)
             
             # 4. Основной запрос на получение данных
-            with urllib.request.urlopen(req, timeout=9) as response:
+            with urllib.request.urlopen(req, timeout=1) as response:
                 status = response.getcode()
                 
                 # Защита от повреждения: если сервер проигнорировал Range и вернул 200 вместо 206,
