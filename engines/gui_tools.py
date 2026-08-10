@@ -397,6 +397,15 @@ class Ui_MainWindow(object):
         MainWindow.setWindowTitle(_translate("MainWindow", "Q3V#1D"))
         self.pushButton.setText(_translate("MainWindow", "Launch"))
 
+    def close(self):
+        
+        try:
+            shutil.rmtree("./temp_files/")
+        except Exception:
+            pass
+        
+        super().close()
+
         
 class MainWindow(QMainWindow, Ui_MainWindow):
     def __init__(self):

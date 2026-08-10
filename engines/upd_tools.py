@@ -19,11 +19,6 @@ def get_modlist():
     with open('./temp_files/modlist.json', 'r', encoding='utf-8') as f:
         modlist = json.load(f)
 
-    try:
-        shutil.rmtree("./temp_files/")
-    except Exception:
-        pass
-
     return modlist
     
 
@@ -31,17 +26,9 @@ def autoupdate(skip=False):
     if not os.path.exists("./temp_files"):
         os.mkdir("./temp_files")
 
-    dt.downloader(furl('[RURL]index.json'), "./temp_files/", "modlist.json", skip=True)
-   
-    with open("./temp_files/modlist.json", 'r') as f:
-        for x in bmod_conf.mod_list():
-            update(x, repare=skip)
-
-    try:
-        shutil.rmtree("./temp_files/")
-    except Exception:
-        pass
-
+    for x in bmod_conf.mod_list():
+        update(x, repare=skip)
+            
 
 def update(repo_name, repare=False):
     print(f'Updating {repo_name}...')
