@@ -28,7 +28,12 @@ def autoupdate(skip=False):
 
     for x in bmod_conf.mod_list():
         update(x, repare=skip)
-            
+
+    try:
+        shutil.rmtree("./temp_files/")
+    except Exception:
+        pass
+
 
 def update(repo_name, repare=False):
     print(f'Updating {repo_name}...')
