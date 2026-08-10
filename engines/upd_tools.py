@@ -1,5 +1,5 @@
 import shutil
-from sys import version, argv
+from sys import argv, version
 import zipfile
 import os
 import json
@@ -15,7 +15,9 @@ def get_modlist():
         os.mkdir("./temp_files")
 
     dt.downloader(furl('[RURL]index.json'), "./temp_files/", "modlist.json", skip=True)
-   
+
+    if not os.path.exists('./temp_files/modlist.json'):
+        return False
     with open('./temp_files/modlist.json', 'r', encoding='utf-8') as f:
         modlist = json.load(f)
 
@@ -23,81 +25,80 @@ def get_modlist():
     
 
 def autoupdate(skip=False):
-    if not os.path.exists("./temp_files"):
-        os.mkdir("./temp_files")
+    updates = get_updates()
 
-    for x in bmod_conf.mod_list():
-        update(x, repare=skip)
+    for x in updates:
+        update(x)
 
-    try:
-        shutil.rmtree("./temp_files/")
-    except Exception:
+
+def get_version(repo_name):
+    modlist = get_modlist()
+    if not modlist:
+        return 0
+        
+    version = modlist[repo_name]["version"]
+    if (version[0] != 'v' and version[0] != 'git') and\
+    check_url(modlist[repo_name]["version"]):
+        dt.downloader(modlist[repo_name]["version"], './temp_files/', 'version.txt')
+
+        with open('./temp_files/version.txt', 'r') as file:
+            version = file.read().rstrip()
+    elif version == 'git':
+        version = '1'
+    elif version[0] == 'v':
         pass
+    return version
+
+def get_updates():
+    needed = []
+    modlist = get_modlist()
+    if not modlist:
+        return []
+    for repo_name in bmod_conf.mod_list():
+
+        print(f'Check updates for {repo_name}')
+        
+        if repo_name not in modlist:
+            print(f'{repo_name} not in modlist, skipping.')
+            continue
+        
+        need_update = False
+        version = get_version(repo_name)
+        
+        if bmod_conf[repo_name] < version:
+            need_update = True
+
+        if need_update:
+            needed.append(repo_name)
+            
+            print(f'Old version: {bmod_conf[repo_name]}')
+            print(f'New version: {version}')
+            print('Update required.')
+            
+    return needed
 
 
 def update(repo_name, repare=False):
     print(f'Updating {repo_name}...')
     try:
-        if not os.path.exists("./temp_files"):
-            os.mkdir("./temp_files")
-    
         modlist = get_modlist()
-
-        if repo_name not in modlist:
-            print(f'{repo_name} not in modlist, skipping.')
+        
+        if not modlist:
             return
-        
-        need_update = False
-        
-        version = modlist[repo_name]["version"]        
-        if (version[0] != 'v' and version[0] != 'git') and\
-           check_url(modlist[repo_name]["version"]):
-            dt.downloader(modlist[repo_name]["version"], './temp_files/', 'version.txt')
 
-            with open('./temp_files/version.txt', 'r') as file:
-                version = file.read().rstrip()
-        
-        if bmod_conf[repo_name] == '0':
+        dt.downloader(modlist[repo_name]["link"], './download_confs/', f'{repo_name}.dconf', skip=repare)
+        dt.download(f'./download_confs/{repo_name}.dconf', skip=repare)
 
-            if version == 'git':
-                version = '1'
-            need_update = True
+        # bmod changes
 
-        else:
+        dl_mods = bmod_conf.mod_info[modlist[repo_name]["tag"]]
+        for x in dl_mods[:-1]:
+            _rm(x)
+            bmod_conf[repo_name] = None, modlist[repo_name]['tag']
 
-            if version == 'git':
-                version = "1" # need to check hash
-                if bmod_conf[repo_name] != version:
-                    need_update = True
-            
-            elif version[0] == 'v':
-                if bmod_conf[repo_name] < version:
-                   need_update = True
-            
-            else:
-                with open('./temp_files/version.txt', 'r') as file:
-                    version = file.read().rstrip()
-                
-                if version > bmod_conf[repo_name]:
-                    need_update = True
-                
-        print(f'Old version: {bmod_conf[repo_name]}')
-        print(f'New version: {version}')
-        print('Update required.' if need_update else 'Last version installed.')
-
-        if need_update or repare:
-            dt.downloader(modlist[repo_name]["link"], './download_confs/', f'{repo_name}.dconf', skip=repare)
-            list(dt.download(f'./download_confs/{repo_name}.dconf', skip=repare))
-
-            # bmod changes
-
-            dl_mods = bmod_conf.mod_info[modlist[repo_name]["tag"]]
-            for x in dl_mods[:-1]:
-                _rm(x)
-                bmod_conf[repo_name] = None, modlist[repo_name]['tag']
-            
-            bmod_conf[repo_name] = version, modlist[repo_name]["tag"]
-            bmod_conf.save()
+        version = get_version(repo_name)
+        bmod_conf[repo_name] = version, modlist[repo_name]["tag"]
+        bmod_conf.save()
 
     except Exception as e:
         print(f"[error] not installed {repo_name}")

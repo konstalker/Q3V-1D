@@ -24,6 +24,12 @@ class FDownload(QtCore.QThread):
         list(dt.download('./download_confs/base.dconf', skip=True))
         autoupdate()
 
+class MDownload(QtCore.QThread):
+    result_ready = QtCore.pyqtSignal(bool)
+    
+    def run(self):
+        get_modlist()
+
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
@@ -32,7 +38,10 @@ if __name__ == "__main__":
     window.show()
     window.open_terminal()
     fdownload = FDownload()
+    mdownload = MDownload()
+    mdownload.finished.connect(lambda: window.upd_status(False))
     fdownload.finished.connect(window.close_terminal)
     fdownload.start()
+    mdownload.start()
     sys.exit(app.exec())
     

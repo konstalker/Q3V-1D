@@ -16,74 +16,18 @@ from upd_tools import *
 from bmods_tools import *
 
 
-DARK_STYLE = """
-QWidget {
-    background-color: #2b2b2b;
-    color: #ffffff;
-    font-family: Arial;
-    font-size: 11pt;
-}
+def load_tab_icon(path, size=32, counter_rotate=90):
+    pixmap = QtGui.QPixmap(path).scaled(
+        size, size,
+        QtCore.Qt.AspectRatioMode.KeepAspectRatio,
+        QtCore.Qt.TransformationMode.SmoothTransformation
+    )
+    transform = QtGui.QTransform().rotate(counter_rotate)
+    return QtGui.QIcon(pixmap.transformed(transform, QtCore.Qt.TransformationMode.SmoothTransformation))
 
-QPushButton {
-    background-color: #3c3c3c;
-    color: #ffffff;
-    border: 1px solid #555555;
-    border-radius: 4px;
-    padding: 6px;
-}
 
-QPushButton:hover {
-    background-color: #4a4a4a;
-}
-
-QPushButton:pressed {
-    background-color: #2a2a2a;
-}
-
-QPushButton:disabled {
-    background-color: #262626;
-    color: #808080;
-}
-
-QTabWidget::pane {
-    border: 0px;
-}
-
-QTabBar::tab {
-    background-color: #3c3c3c;
-    color: #ffffff;
-    padding: 8px 16px;
-}
-
-QTabBar::tab:selected {
-    background-color: #505050;
-}
-
-QTableWidget {
-    background-color: #2b2b2b;
-    color: #ffffff;
-    gridline-color: #555555;
-}
-
-QHeaderView::section {
-    background-color: #3c3c3c;
-    color: #ffffff;
-    padding: 4px;
-    border: 1px solid #555555;
-}
-
-QScrollBar:vertical {
-    background: #2b2b2b;
-    width: 12px;
-    margin: 0px;
-}
-
-QScrollBar::handle:vertical {
-    background: #555555;
-    border-radius: 6px;
-    min-height: 20px;
-}
-"""
+with open('./ui/style.css', 'r') as f:
+    DARK_STYLE = f.read()
 
 def load_cover_pixmap(path, target_w, target_h):
     pixmap = QtGui.QPixmap(path)
@@ -95,6 +39,23 @@ def load_cover_pixmap(path, target_w, target_h):
     x = (scaled.width() - target_w) // 2
     y = (scaled.height() - target_h) // 2
     return scaled.copy(x, y, target_w, target_h)
+
+def make_rotated_tab_icon(icon_path, angle=90, icon_size=28, tab_size=60):
+    pixmap = QPixmap(icon_path).scaled(
+        icon_size, icon_size,
+        Qt.AspectRatioMode.KeepAspectRatio,
+        Qt.TransformationMode.SmoothTransformation
+    )
+    rotated = pixmap.transformed(
+        QTransform().rotate(angle),
+        Qt.TransformationMode.SmoothTransformation
+    )
+
+    label = QLabel()
+    label.setPixmap(rotated)
+    label.setFixedSize(tab_size, tab_size)   # размер = размеру вкладки
+    label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+    return label
 
 
 class DragHandle(QtWidgets.QWidget):
@@ -209,6 +170,133 @@ class Terminal(QTextEdit):
         self.setTextCursor(cursor)
         self.ensureCursorVisible()
 
+
+class ModTableWidget(QtWidgets.QTableWidget):
+    """Таблица модов (имя / описание / кнопка действия).
+
+    Вся логика настройки колонок, добавления строк, заполнения по списку
+    и очистки инкапсулирована здесь — снаружи достаточно вызывать
+    populate()/add_mod_row()/clear_mods().
+
+    background_path/darken — опциональная картинка фона под содержимым
+    таблицы; рисуется в paintEvent поверх viewport, затемняется darken."""
+
+    #: сигнал испускается при клике по кнопке в строке — (row, mod_name)
+    mod_button_clicked = pyqtSignal(int, str)
+
+    def __init__(self, parent=None, background_path=None, darken=0):
+        super().__init__(parent)
+        self.setObjectName("tableWidget")
+
+        self._background_pixmap = QtGui.QPixmap(background_path) if background_path else None
+        self._darken = darken
+
+        self._setup_table()
+
+    def _setup_table(self):
+        self.setColumnCount(3)
+        self.setHorizontalHeaderLabels(["Name", "Description", "Action"])
+
+        header = self.horizontalHeader()
+        header.setSectionResizeMode(0, QtWidgets.QHeaderView.ResizeMode.Fixed)
+        header.setSectionResizeMode(1, QtWidgets.QHeaderView.ResizeMode.Stretch)
+        header.setSectionResizeMode(2, QtWidgets.QHeaderView.ResizeMode.Fixed)
+        self.setColumnWidth(0, 150)
+        self.setColumnWidth(2, 110)
+
+        self.verticalHeader().setVisible(False)
+        self.setEditTriggers(QtWidgets.QAbstractItemView.EditTrigger.NoEditTriggers)
+        self.setSelectionBehavior(QtWidgets.QAbstractItemView.SelectionBehavior.SelectRows)
+
+        self.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
+        self.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarPolicy.ScrollBarAsNeeded)
+
+        # ВАЖНО: никакого background-image в стилях — фон рисуется в
+        # paintEvent, тут только прозрачность, чтобы он был виден сквозь ячейки.
+        self.setStyleSheet('''
+            QTableWidget {
+                background: transparent;
+            }
+            QTableWidget::item {
+                background: transparent;
+            }
+        ''')
+
+    def scrollContentsBy(self, dx, dy):
+        # без этого QWidget::scroll() просто сдвигает уже отрисованные
+        # пиксели и фоновая картинка «размазывается» при прокрутке
+        self.viewport().update()
+        super().scrollContentsBy(dx, dy)
+
+    def paintEvent(self, event):
+        if self._background_pixmap and not self._background_pixmap.isNull():
+            painter = QtGui.QPainter(self.viewport())
+            vp = self.viewport().size()
+            scaled = self._background_pixmap.scaled(
+                vp,
+                QtCore.Qt.AspectRatioMode.KeepAspectRatioByExpanding,
+                QtCore.Qt.TransformationMode.SmoothTransformation
+            )
+            x = (scaled.width() - vp.width()) // 2
+            y = (scaled.height() - vp.height()) // 2
+            painter.drawPixmap(0, 0, scaled, x, y, vp.width(), vp.height())
+            painter.fillRect(self.viewport().rect(), QtGui.QColor(0, 0, 0, self._darken))
+            painter.end()
+        super().paintEvent(event)
+
+    def add_mod_row(self, name, description, button_text="Установить", on_click=None, tooltip=None):
+        """Добавляет одну строку: имя, описание и кнопку в 3-й колонке.
+        tooltip — необязательный текст подсказки при наведении на строку
+        (по умолчанию используется description).
+        on_click(row) — колбэк на клик по кнопке; если не передан,
+        используется self.on_mod_button_clicked (испускает mod_button_clicked)."""
+        row = self.rowCount()
+        self.insertRow(row)
+
+        tip = tooltip if tooltip is not None else description
+
+        name_item = QtWidgets.QTableWidgetItem(name)
+        name_item.setToolTip(tip)
+        self.setItem(row, 0, name_item)
+
+        desc_item = QtWidgets.QTableWidgetItem(description)
+        desc_item.setToolTip(tip)
+        self.setItem(row, 1, desc_item)
+
+        button = QtWidgets.QPushButton(button_text)
+        button.setCursor(QtCore.Qt.CursorShape.PointingHandCursor)
+        button.setToolTip(tip)
+        handler = on_click if on_click is not None else self.on_mod_button_clicked
+        button.clicked.connect(lambda checked=False, r=row: handler(r))
+        self.setCellWidget(row, 2, button)
+
+        return row
+
+    def populate(self, modlist, on_click=None):
+        """Полностью пересобирает таблицу по словарю модов вида
+        {name: {"description": ...}, ...}. Старое содержимое очищается."""
+        self.clear_mods()
+        for name, info in modlist.items():
+            self.add_mod_row(
+                name,
+                info["description"],
+                button_text="download" if name not in bmod_conf else "delete",
+                on_click=on_click,
+            )
+
+    def clear_mods(self):
+        """Полностью очищает таблицу от строк модов."""
+        self.setRowCount(0)
+
+    def on_mod_button_clicked(self, row):
+        """Обработчик кнопки по умолчанию: печатает имя мода и
+        испускает сигнал mod_button_clicked(row, mod_name)."""
+        name_item = self.item(row, 0)
+        mod_name = name_item.text() if name_item else f"row {row}"
+        print(f"[mods] Кнопка нажата для: {mod_name}")
+        self.mod_button_clicked.emit(row, mod_name)
+
+
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("Q3V#1D")
@@ -227,21 +315,13 @@ class Ui_MainWindow(object):
         self.mod_repo = QtWidgets.QWidget()
         self.mod_repo.setObjectName("mod_repo")
 
-        self.tableWidget = QtWidgets.QTableWidget(parent=self.mod_repo)
+        self.tableWidget = ModTableWidget(
+            parent=self.mod_repo,
+            background_path='./icons/back.jpg',
+            darken=140
+        )
         self.tableWidget.setGeometry(QtCore.QRect(0, 0, 850, 600))
-        self.tableWidget.setObjectName("tableWidget")
-        self.tableWidget.setColumnCount(0)
-        self.tableWidget.setRowCount(0)
-        self.tableWidget.setStyleSheet('''
-            QTableWidget
-            {
-                background: url(./icons/tback.png);
-                background-repeat: no-repeat;
-                background-position: center;
-            }''')
-        
-        self._setup_mod_table()
-        self._populate_demo_mods()
+        self.tableWidget.populate({})
 
         self.launch_2.addTab(self.mod_repo, "")
 
@@ -266,8 +346,9 @@ class Ui_MainWindow(object):
             './icons/back.jpg', 875, 600
         ))
         self.pushButton = QtWidgets.QPushButton(parent=self.launch_1)
-        self.pushButton.setGeometry(QtCore.QRect(630, 500, 200, 60))
+        self.pushButton.setGeometry(QtCore.QRect(600, 500, 200, 60))
         self.pushButton.setObjectName("pushButton")
+        self.pushButton.setStyleSheet("QPushButton {border-radius: 30px}")
         
         MainWindow.setCentralWidget(self.centralwidget)
         self.retranslateUi(MainWindow)
@@ -275,7 +356,7 @@ class Ui_MainWindow(object):
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
         # полоска для перетаскивания безрамочного окна (тянуть за верхний край)
-        self.drag_handle = DragHandle(parent=self.centralwidget, height=6, opacity=110)
+        self.drag_handle = DragHandle(parent=self.centralwidget, height=25, opacity=110)
         self.drag_handle.setGeometry(QtCore.QRect(0, 0, 900, 6))
         self.drag_handle.raise_()
 
@@ -323,88 +404,14 @@ class Ui_MainWindow(object):
         self._close_anim.setEndValue(target)
         self._close_anim.start()
 
-    def _setup_mod_table(self):
-        self.tableWidget.setColumnCount(3)
-        self.tableWidget.setHorizontalHeaderLabels(["Name", "Description", "Action"])
-
-        header_item_0 = self.tableWidget.horizontalHeaderItem(0)
-        header_item_1 = self.tableWidget.horizontalHeaderItem(1)
-        header_item_2 = self.tableWidget.horizontalHeaderItem(2)
-
-        header = self.tableWidget.horizontalHeader()
-        header.setSectionResizeMode(0, QtWidgets.QHeaderView.ResizeMode.Fixed)
-        header.setSectionResizeMode(1, QtWidgets.QHeaderView.ResizeMode.Stretch)
-        header.setSectionResizeMode(2, QtWidgets.QHeaderView.ResizeMode.Fixed)
-        self.tableWidget.setColumnWidth(0, 150)
-        self.tableWidget.setColumnWidth(2, 110)
-
-        self.tableWidget.verticalHeader().setVisible(False)
-        self.tableWidget.setEditTriggers(QtWidgets.QAbstractItemView.EditTrigger.NoEditTriggers)
-        self.tableWidget.setSelectionBehavior(QtWidgets.QAbstractItemView.SelectionBehavior.SelectRows)
-
-        self.tableWidget.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
-        self.tableWidget.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarPolicy.ScrollBarAsNeeded)
-
-    def add_mod_row(self, name, description, button_text="Установить", on_click=None, tooltip=None):
-        """Добавляет строку в таблицу модов: имя, описание и кнопку в 3-й колонке.
-        tooltip — необязательный текст подсказки при наведении на строку
-        (по умолчанию используется description)."""
-        row = self.tableWidget.rowCount()
-        self.tableWidget.insertRow(row)
-
-        tip = tooltip if tooltip is not None else description
-
-        name_item = QtWidgets.QTableWidgetItem(name)
-        name_item.setToolTip(tip)
-        self.tableWidget.setItem(row, 0, name_item)
-
-        desc_item = QtWidgets.QTableWidgetItem(description)
-        desc_item.setToolTip(tip)
-        self.tableWidget.setItem(row, 1, desc_item)
-
-        button = QtWidgets.QPushButton(button_text)
-        button.setCursor(QtCore.Qt.CursorShape.PointingHandCursor)
-        button.setToolTip(tip)
-        if on_click is not None:
-            button.clicked.connect(lambda checked=False, r=row: on_click(r))
-        self.tableWidget.setCellWidget(row, 2, button)
-
-        return row
-
-    def _populate_demo_mods(self):
-        """Пример заполнения таблицы — замените на реальный список модов."""
-
-        modlist = get_modlist()
-        
-        for x in modlist:
-            self.add_mod_row(
-                x,
-                modlist[x]["description"],
-                button_text="download" if x not in bmod_conf else "delete",
-                on_click=self.on_mod_button_clicked
-            )
-
-    def on_mod_button_clicked(self, row):
-        """Заглушка обработчика кнопки в строке таблицы модов."""
-        name_item = self.tableWidget.item(row, 0)
-        mod_name = name_item.text() if name_item else f"row {row}"
-        print(f"[mods] Кнопка нажата для: {mod_name}")
-
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
-        self.launch_2.setTabText(self.launch_2.indexOf(self.launch_1), _translate("MainWindow", "launch"))
+        self.launch_2.setTabIcon(self.launch_2.indexOf(self.launch_1), load_tab_icon("./icons/b3.png"))
+        self.launch_2.setIconSize(QtCore.QSize(30, 30))
         self.launch_2.setTabText(self.launch_2.indexOf(self.mod_repo), _translate("MainWindow", "mods"))
         MainWindow.setWindowTitle(_translate("MainWindow", "Q3V#1D"))
-        self.pushButton.setText(_translate("MainWindow", "Launch"))
-
-    def close(self):
-        
-        try:
-            shutil.rmtree("./temp_files/")
-        except Exception:
-            pass
-        
-        super().close()
+        self.pushButton.setText(_translate("MainWindow", "Checking..."))
+        self.pushButton.setEnabled(False)
 
         
 class MainWindow(QMainWindow, Ui_MainWindow):
@@ -413,8 +420,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.setupUi(self)
         self.setWindowFlags(QtCore.Qt.WindowType.FramelessWindowHint)
         self._center_on_screen()
-
-        self.pushButton.clicked.connect(self.launch)
 
     def _center_on_screen(self):
         screen = QApplication.primaryScreen()
@@ -435,12 +440,36 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def close_terminal(self):
         self.setFixedSize(900, 600)
         self.terminal.hide()
+
+    def closeEvent(self, a0: QtGui.QCloseEvent | None) -> None:
+        try:
+            shutil.rmtree("./temp_files/")
+        except Exception:
+            pass
+        return super().closeEvent(a0)
+
+    def upd_status(self, need_update):
+        _translate = QtCore.QCoreApplication.translate
+        if not os.path.exists('./temp_files/modlist.json'):
+            self.tableWidget.populate({})
+        else:
+            self.tableWidget.populate(get_modlist())
         
+        if need_update:
+            self.pushButton.setText(_translate("MainWindow", "Update"))
+            self.pushButton.setEnabled(True)
+            self.pushButton.clicked.connect(autoupdate)
+        else:
+            self.pushButton.setText(_translate("MainWindow", "Launch"))
+            self.pushButton.setEnabled(True)
+            self.pushButton.clicked.connect(self.launch)
+
 
 if __name__ == "__main__":
-
     app = QApplication(sys.argv)
     app.setStyleSheet(DARK_STYLE)
     window = MainWindow()
     window.show()
+    QTimer.singleShot(4000, lambda: window.upd_status(True))
+    QTimer.singleShot(8000, lambda: window.upd_status(False))
     sys.exit(app.exec())

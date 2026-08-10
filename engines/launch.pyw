@@ -8,7 +8,7 @@ from upd_tools import *
 from gui_tools import *
 
 
-class Aupd(QtCore.QThread):
+class Get_modlist(QtCore.QThread):
     result_ready = QtCore.pyqtSignal(bool)
 
     def run(self):
@@ -18,6 +18,8 @@ class Aupd(QtCore.QThread):
 if __name__ == "__main__":
     app = QApplication(sys.argv)
     app.setStyleSheet(DARK_STYLE)
+    upd_checked = False
+    for_upd = []
     window = MainWindow()
     window.show()
     window.open_terminal()
