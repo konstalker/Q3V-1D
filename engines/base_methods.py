@@ -50,6 +50,7 @@ def get_relative_paths(folder_path: str) -> list[str]:
             relative_paths.append(f"/{rel_path.as_posix()}")
             
     return relative_paths
+
     
 def launch(args='+set fs_homepath "../baseq3/mods" +set fs_basepath "../" +set fs_game "osp" +set com_viewlog "0"'):
     vk_engine, ogl_engine = None, False
@@ -60,6 +61,8 @@ def launch(args='+set fs_homepath "../baseq3/mods" +set fs_basepath "../" +set f
                 vk_engine, ogl_engine = engine_conf[:2]
             else:
                 vk_engine, ogl_engine = engine_conf[0], False
+    else:
+        return False
 
     has_vulkan = (
         os.path.exists(os.path.expandvars(r'%SystemRoot%\System32\vulkan-1.dll')) or
@@ -72,3 +75,4 @@ def launch(args='+set fs_homepath "../baseq3/mods" +set fs_basepath "../" +set f
         os.system(f'chmod +x {engine}')
 
     subprocess.Popen([engine] + shlex.split(args))
+    return True

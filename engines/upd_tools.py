@@ -100,7 +100,7 @@ def update(repo_name, repare=False):
 
         # bmod changes
 
-        dl_mods = bmod_conf.mod_info[modlist[repo_name]["tag"]]
+        dl_mods = bmod_conf.mod_info.get(modlist[repo_name]["tag"], [])
         for x in dl_mods[:-1]:
             _rm(x)
             bmod_conf[repo_name] = None, modlist[repo_name]['tag']
@@ -129,7 +129,7 @@ def _rm(repo_name):
     with open(f'./download_confs/{repo_name}.dconf', 'r') as dconf_file:
         dconf = list(dconf_file.read().split('\n'))
 
-    for x in dconf:
+    for x in dconf[::-1]:
 
         # change for files
         if not x:
@@ -139,13 +139,14 @@ def _rm(repo_name):
             file = list(x.split(';'))[3::2]
             
         else:
-            path = list(x.split(';'))[3:2]
-            file = list(x.split(';'))[2:2]
+            path = list(x.split(';'))[3::2]
+            file = [list(x.split(';'))[1]]
 
         paths = _create_paths(paths=path, files=file)
         
         for path in paths:
 
+            path = furl(path)
             print('remove:', path)
 
             try:
@@ -163,13 +164,17 @@ def remove(repo_name):
 
     try:
         _rm(repo_name)
-        autoupdate(skip=True)
-        bmod_conf.save()
-        
+        bmod_conf.save()          # фиксируем удаление сразу, не дожидаясь autoupdate
     except Exception as e:
         print(f"[error] not removed {repo_name}")
         print(f"[log] error: {e}")
+        return
 
+    try:
+        autoupdate(skip=True)
+        bmod_conf.save()
+    except Exception as e:
+        print(f"[warning] auto-update after removal failed: {e}")
 
 if __name__ == "__main__":
     update(argv[1])

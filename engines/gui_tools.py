@@ -716,8 +716,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.move(window_geometry.topLeft())
     
     def launch(self):
-        launch()
-        self.close()
+        if launch():
+            self.close()
+        else:
+            ToastNotification.show_warning(self.centralwidget, 'Launch error!\nCheck "engine" installiation.')
 
     def qerror(self, error):
         ToastNotification.show_error(self.centralwidget, error)
