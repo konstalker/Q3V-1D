@@ -18,15 +18,16 @@ def get_modlist():
 
     if not os.path.exists('./temp_files/modlist.json'):
         return False
-    with open('./temp_files/modlist.json', 'r', encoding='utf-8') as f:
-        modlist = json.load(f)
+    else:
+        with open('./temp_files/modlist.json', 'r', encoding='utf-8') as f:
+            modlist = json.load(f)
 
     return modlist
     
 
 def autoupdate(skip=False):
     updates = get_updates()
-
+    
     for x in updates:
         update(x)
 

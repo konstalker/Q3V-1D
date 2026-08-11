@@ -1,6 +1,5 @@
 import os
 import sys
-from threading import Thread
 
 import download_tools as dt
 from upd_tools import autoupdate
@@ -11,7 +10,7 @@ from gui_tools import *
 
 
 class FDownload(QtCore.QThread):
-    result_ready = QtCore.pyqtSignal(bool)
+    result_ready = pyqtSignal(bool)
     
     def run(self):
         if not os.path.exists('../baseq3/mods/baseq3'):
@@ -25,10 +24,15 @@ class FDownload(QtCore.QThread):
         autoupdate()
 
 class MDownload(QtCore.QThread):
-    result_ready = QtCore.pyqtSignal(bool)
+    result_ready = pyqtSignal(bool)
     
     def run(self):
         get_modlist()
+
+def mdlist_check():
+    window.upd_status(False)
+    if not os.path.exists('./temp_files/modlist.json'):
+        window.qerror('Internet connection error.')
 
 
 if __name__ == "__main__":
@@ -39,9 +43,9 @@ if __name__ == "__main__":
     window.open_terminal()
     fdownload = FDownload()
     mdownload = MDownload()
-    mdownload.finished.connect(lambda: window.upd_status(False))
+    mdownload.finished.connect(mdlist_check)
     fdownload.finished.connect(window.close_terminal)
-    fdownload.start()
     mdownload.start()
+    fdownload.start()
     sys.exit(app.exec())
     

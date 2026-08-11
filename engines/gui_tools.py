@@ -58,6 +58,187 @@ def make_rotated_tab_icon(icon_path, angle=90, icon_size=28, tab_size=60):
     return label
 
 
+class ToastNotification(QtWidgets.QWidget):
+    """Всплывающее уведомление поверх содержимого окна.
+
+    Это НЕ отдельное системное окно (в отличие от QMessageBox) — обычный
+    дочерний виджет поверх centralwidget, который сам анимированно
+    выезжает сверху, держится duration мс и плавно исчезает. Несколько
+    уведомлений подряд складываются в стек друг под другом.
+
+    Использование:
+        ToastNotification.show_error(self.centralwidget, "Не удалось подключиться к серверу")
+        ToastNotification.show_warning(self.centralwidget, "Соединение нестабильно")
+        ToastNotification.show_info(self.centralwidget, "Список модов обновлён")
+    """
+
+    _active_toasts = []  # общий для класса стек показанных уведомлений
+
+    LEVEL_COLORS = {
+        "error":   "#e74c3c",
+        "warning": "#f1c40f",
+        "info":    "#3498db",
+        "success": "#2ecc71",
+    }
+
+    def __init__(self, parent, message, level="error", duration=4000, width=320):
+        super().__init__(parent)
+        self._duration = duration
+        self._width = width
+
+        self._build_ui(message, level)
+        self._install_effects()
+        self._position()
+
+        ToastNotification._active_toasts.append(self)
+        self.show()
+        self._animate_in()
+        QtCore.QTimer.singleShot(self._duration, self._animate_out)
+
+    # ---------- построение внешнего вида ----------
+
+    def _build_ui(self, message, level):
+        color = self.LEVEL_COLORS.get(level, self.LEVEL_COLORS["info"])
+        self.setFixedWidth(self._width)
+
+        self.setStyleSheet(f'''
+            QWidget#toastBody {{
+                background-color: rgba(30, 30, 30, 235);
+                border-left: 4px solid {color};
+                border-radius: 8px;
+            }}
+            QLabel {{
+                color: #ffffff;
+                background: transparent;
+            }}
+            QPushButton {{
+                color: #aaaaaa;
+                background: transparent;
+                border: none;
+                font-weight: bold;
+            }}
+            QPushButton:hover {{
+                color: #ffffff;
+            }}
+        ''')
+
+        outer = QtWidgets.QHBoxLayout(self)
+        outer.setContentsMargins(0, 0, 0, 0)
+
+        body = QtWidgets.QWidget(self)
+        body.setObjectName("toastBody")
+        body_layout = QtWidgets.QHBoxLayout(body)
+        body_layout.setContentsMargins(12, 10, 8, 10)
+
+        label = QtWidgets.QLabel(message, body)
+        label.setWordWrap(True)
+        body_layout.addWidget(label, 1)
+
+        close_btn = QtWidgets.QPushButton("×", body)
+        close_btn.setCursor(QtCore.Qt.CursorShape.PointingHandCursor)
+        close_btn.setFixedSize(18, 18)
+        close_btn.clicked.connect(self._animate_out)
+        body_layout.addWidget(close_btn, 0, QtCore.Qt.AlignmentFlag.AlignTop)
+
+        outer.addWidget(body)
+        self.adjustSize()
+
+    def _install_effects(self):
+        self._opacity_effect = QtWidgets.QGraphicsOpacityEffect(self)
+        self._opacity_effect.setOpacity(0.0)
+        self.setGraphicsEffect(self._opacity_effect)
+
+        self._fade_anim = QtCore.QPropertyAnimation(self._opacity_effect, b"opacity")
+        self._fade_anim.setDuration(200)
+
+        self._slide_anim = QtCore.QPropertyAnimation(self, b"pos")
+        self._slide_anim.setDuration(200)
+        self._slide_anim.setEasingCurve(QtCore.QEasingCurve.Type.OutCubic)
+
+    # ---------- позиционирование и стек ----------
+
+    def _target_pos(self):
+        """Место в правом верхнем углу родителя с учётом уже показанных
+        уведомлений — каждое следующее встаёт ниже предыдущего."""
+        parent_rect = self.parentWidget().rect()
+        margin, spacing = 16, 8
+
+        y = margin
+        for toast in ToastNotification._active_toasts:
+            if toast is self:
+                continue
+            y += toast.height() + spacing
+
+        x = parent_rect.width() - self._width - margin
+        return QtCore.QPoint(x, y)
+
+    def _position(self):
+        target = self._target_pos()
+        self.move(target.x(), target.y() - 20)  # старт чуть выше — для эффекта выезда
+        self.raise_()
+
+    # ---------- анимации появления/исчезновения ----------
+
+    def _animate_in(self):
+        target = self._target_pos()
+
+        self._fade_anim.stop()
+        self._fade_anim.setStartValue(0.0)
+        self._fade_anim.setEndValue(1.0)
+        self._fade_anim.start()
+
+        self._slide_anim.stop()
+        self._slide_anim.setStartValue(self.pos())
+        self._slide_anim.setEndValue(target)
+        self._slide_anim.start()
+
+    def _animate_out(self):
+        self._fade_anim.stop()
+        self._fade_anim.setStartValue(self._opacity_effect.opacity())
+        self._fade_anim.setEndValue(0.0)
+        self._fade_anim.finished.connect(self._on_hidden)
+        self._fade_anim.start()
+
+    def _on_hidden(self):
+        try:
+            self._fade_anim.finished.disconnect(self._on_hidden)
+        except TypeError:
+            pass
+        if self in ToastNotification._active_toasts:
+            ToastNotification._active_toasts.remove(self)
+        self._reflow_remaining()
+        self.deleteLater()
+
+    def _reflow_remaining(self):
+        """После закрытия одного уведомления подтягивает оставшиеся вверх."""
+        for toast in list(ToastNotification._active_toasts):
+            anim = QtCore.QPropertyAnimation(toast, b"pos")
+            anim.setDuration(150)
+            anim.setEasingCurve(QtCore.QEasingCurve.Type.OutCubic)
+            anim.setStartValue(toast.pos())
+            anim.setEndValue(toast._target_pos())
+            anim.start()
+            toast._reflow_anim = anim  # держим ссылку, чтобы GC не убил анимацию раньше времени
+
+    # ---------- удобные статические конструкторы ----------
+
+    @staticmethod
+    def show_error(parent, message, duration=4000):
+        return ToastNotification(parent, message, level="error", duration=duration)
+
+    @staticmethod
+    def show_warning(parent, message, duration=4000):
+        return ToastNotification(parent, message, level="warning", duration=duration)
+
+    @staticmethod
+    def show_info(parent, message, duration=3000):
+        return ToastNotification(parent, message, level="info", duration=duration)
+
+    @staticmethod
+    def show_success(parent, message, duration=3000):
+        return ToastNotification(parent, message, level="success", duration=duration)
+
+
 class DragHandle(QtWidgets.QWidget):
     """Тонкая затемнённая полоска сверху окна. У окна нет системного заголовка
     (FramelessWindowHint), поэтому таскать его можно только за эту полоску:
@@ -431,6 +612,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def launch(self):
         launch()
         self.close()
+
+    def qerror(self, error):
+        ToastNotification.show_error(self.centralwidget, error)
+        QTimer.singleShot(3000, self.close)
     
     def open_terminal(self):
         self.terminal.raise_()
@@ -470,6 +655,5 @@ if __name__ == "__main__":
     app.setStyleSheet(DARK_STYLE)
     window = MainWindow()
     window.show()
-    QTimer.singleShot(4000, lambda: window.upd_status(True))
-    QTimer.singleShot(8000, lambda: window.upd_status(False))
+    QTimer.singleShot(4000, lambda: ToastNotification.show_warning(window, 'connection'))
     sys.exit(app.exec())
