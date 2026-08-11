@@ -643,12 +643,24 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         if need_update:
             self.pushButton.setText(_translate("MainWindow", "Update"))
             self.pushButton.setEnabled(True)
-            self.pushButton.clicked.connect(autoupdate)
+            self.pushButton.clicked.connect(self.start_update)
         else:
             self.pushButton.setText(_translate("MainWindow", "Launch"))
             self.pushButton.setEnabled(True)
             self.pushButton.clicked.connect(self.launch)
 
+    class Update(QtCore.QThread):
+        result_ready = QtCore.pyqtSignal(bool)
+
+        def run(self):
+            autoupdate()
+            self.result_ready.emit(True)
+
+    def start_update(self):
+        self.open_terminal()
+        self.update_thread = self.Update()
+        self.update_thread.finished.connect(lambda: (self.close_terminal(), self.upd_status(False)))
+        self.update_thread.start()
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
