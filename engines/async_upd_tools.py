@@ -21,7 +21,6 @@ class Update(QtCore.QThread):
 
     def run(self):
         update(self.repo_name)
-        bmod_conf.save()
         self.result_ready.emit(True)
 
 class Remove(QtCore.QThread):
@@ -33,5 +32,4 @@ class Remove(QtCore.QThread):
 
     def run(self):
         remove(self.repo_name)
-        bmod_conf.save()
         self.result_ready.emit(True)

@@ -10,6 +10,14 @@ from base_methods import *
 from bmods_tools import bmod_conf
 
 
+def _create_paths(paths, files):
+    
+    paths = list(zip(paths, files))
+    for i, x in enumerate(paths):
+        paths[i] = x[0] + x[1][(x[1].rindex('/') + 1 if '/' in x[1] else 0):]
+
+    return paths
+
 def get_modlist():
     if not os.path.exists("./temp_files"):
         os.mkdir("./temp_files")
@@ -115,7 +123,7 @@ def _rm(repo_name):
         raise KeyError(f"{repo_name} mod not in modlist, cannot be removed.")
     
     dt.downloader(modlist[repo_name]["link"], './download_confs/', f'{repo_name}.dconf', skip=True)
-    if not os.path.exists(f'/download_confs/{repo_name}.dconf'):
+    if not os.path.exists(f'./download_confs/{repo_name}.dconf'):
         raise FileNotFoundError(f"Didn't installed dconf for {repo_name}, cannot be removed.")
         
     with open(f'./download_confs/{repo_name}.dconf', 'r') as dconf_file:
@@ -124,9 +132,19 @@ def _rm(repo_name):
     for x in dconf:
 
         # change for files
-        x = list(x.split(';'))[4::2]
+        if not x:
+            continue
+        if x[0] == 'a':
+            path = list(x.split(';'))[4::2]
+            file = list(x.split(';'))[3::2]
+            
+        else:
+            path = list(x.split(';'))[3:2]
+            file = list(x.split(';'))[2:2]
 
-        for path in x:
+        paths = _create_paths(paths=path, files=file)
+        
+        for path in paths:
 
             print('remove:', path)
 
