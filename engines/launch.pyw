@@ -23,8 +23,20 @@ class Get_Upd(QtCore.QThread):
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
+    
     app.setStyleSheet(DARK_STYLE)
     window = MainWindow()
+
+    font_id = QFontDatabase.addApplicationFont("./ui/FiraCode-Regular.ttf")
+    if font_id == -1:
+        print("Ошибка: не удалось загрузить шрифт :/fonts/MyFont.ttf")
+        # Можно поставить запасной шрифт
+        family = "Arial"
+    else:
+        family = QFontDatabase.applicationFontFamilies(font_id)[0]
+
+    window.terminal.set_font(family)
+    
     window.show()
 
     aupd = Get_Upd()

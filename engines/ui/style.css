@@ -1,7 +1,12 @@
+@font-face {
+    font-family: 'ShareTech';
+    src: url('./ui/ShareTech-Regular.ttf');
+}
+
 QWidget {
     background-color: #2b2b2b;
     color: #ffffff;
-    font-family: Arial;
+    font-family: ShareTech;
     font-size: 11pt;
 }
 
@@ -28,16 +33,28 @@ QPushButton:disabled {
 
 QTabWidget::pane {
     border: 0px;
+    margin-left: -60px;
+    background-color: #262626;
+}
+
+QTabBar {
+    background: transparent;
+    background-color: rgba(0, 0, 0, 130);
 }
 
 QTabBar::tab {
-    background-color: #3c3c3c;
+    background: transparent;
     color: #ffffff;
     padding: 8px 16px;
 }
 
 QTabBar::tab:selected {
-    background-color: #505050;
+    background-color: rgba(80, 80, 80, 130);
+    border-radius: 4px;
+}
+
+QTabBar::tab:!selected {
+    background: transparent;
 }
 
 QTableWidget {
