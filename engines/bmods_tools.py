@@ -45,10 +45,11 @@ class bmod:
         if tag in self.mod_info:
             
             position = -1
-            for i, x in enumerate(self.mod_info[tag]):
-                if x[0] == key:
-                    position = i
-                    break
+            if tag in self.mod_info:
+                for i, x in enumerate(self.mod_info[tag]):
+                    if x[0] == key:
+                        position = i
+                        break
             
             if position >= 0:
                 self.mod_info[tag][position] = [key, None]

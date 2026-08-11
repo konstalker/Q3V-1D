@@ -29,7 +29,7 @@ def autoupdate(skip=False):
     updates = get_updates()
     
     for x in updates:
-        update(x)
+        update(x, repare=skip)
 
 
 def get_version(repo_name):
@@ -107,13 +107,16 @@ def update(repo_name, repare=False):
         caption()
 
 def _rm(repo_name):
-    dt.downloader(furl('[RURL]index.json'), "./temp_files/", "modlist.json", skip=True)
-    with open('./temp_files/modlist.json', 'r', encoding='utf-8') as f:
-        modlist = json.load(f)
+    modlist = get_modlist()
+    if not modlist:
+        raise FileNotFoundError(f"Cannot delete mod, modlist not found.")
 
-    assert repo_name in modlist, "mod not in modlist, cannot be removed."
+    if repo_name not in modlist:
+        raise KeyError(f"{repo_name} mod not in modlist, cannot be removed.")
     
     dt.downloader(modlist[repo_name]["link"], './download_confs/', f'{repo_name}.dconf', skip=True)
+    if not os.path.exists(f'/download_confs/{repo_name}.dconf'):
+        raise FileNotFoundError(f"Didn't installed dconf for {repo_name}, cannot be removed.")
         
     with open(f'./download_confs/{repo_name}.dconf', 'r') as dconf_file:
         dconf = list(dconf_file.read().split('\n'))

@@ -17,6 +17,7 @@ from PyQt6.QtGui import QFontDatabase
 from base_methods import *
 from upd_tools import *
 from bmods_tools import *
+import async_upd_tools as aut
 
 def load_tab_icon(path, size=32, counter_rotate=90):
     pixmap = QtGui.QPixmap(path).scaled(
@@ -374,9 +375,10 @@ class ModTableWidget(QtWidgets.QTableWidget):
     #: сигнал испускается при клике по кнопке в строке — (row, mod_name)
     mod_button_clicked = pyqtSignal(int, str)
 
-    def __init__(self, parent=None, background_path=None, darken=0):
+    def __init__(self, parent=None, window=None, background_path=None, darken=0):
         super().__init__(parent)
         self.setObjectName("tableWidget")
+        self.window = window
 
         self._background_pixmap = QtGui.QPixmap(background_path) if background_path else None
         self._darken = darken
@@ -411,6 +413,9 @@ class ModTableWidget(QtWidgets.QTableWidget):
                 background: transparent;
             }
         ''')
+
+    def connect_window(self, window):
+        self.window = window
 
     def scrollContentsBy(self, dx, dy):
         # без этого QWidget::scroll() просто сдвигает уже отрисованные
@@ -471,7 +476,7 @@ class ModTableWidget(QtWidgets.QTableWidget):
                 name,
                 info["description"],
                 button_text="download" if name not in bmod_conf else "delete",
-                on_click=on_click,
+                on_click=on_click
             )
 
     def clear_mods(self):
@@ -483,7 +488,18 @@ class ModTableWidget(QtWidgets.QTableWidget):
         испускает сигнал mod_button_clicked(row, mod_name)."""
         name_item = self.item(row, 0)
         mod_name = name_item.text() if name_item else f"row {row}"
-        print(f"[mods] Кнопка нажата для: {mod_name}")
+        if name_item == 'script':
+            pass
+        elif name_item in bmod_conf:
+            self.window.open_terminal()
+            self.operation = aut.Remove(mod_name)
+            self.operation.finished.connect(lambda: (self.populate(get_modlist()), self.window.close_terminal()))
+            self.operation.start()
+        else:
+            self.window.open_terminal()
+            self.operation = aut.Update(mod_name)
+            self.operation.finished.connect(lambda: (self.populate(get_modlist()), self.window.close_terminal()))
+            self.operation.start()
         self.mod_button_clicked.emit(row, mod_name)
 
 
@@ -509,7 +525,7 @@ class Ui_MainWindow(object):
 
         self.tableWidget = ModTableWidget(
             parent=self.mod_repo,
-            background_path='./icons/back.png',
+            background_path='./icons/tback.png',
             darken=140
         )
         self.tableWidget.setGeometry(QtCore.QRect(0, 0, 900, 600))
@@ -686,6 +702,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def __init__(self):
         super().__init__()
         self.setupUi(self)
+        
+        self.tableWidget.window = self
+        
         self.setWindowFlags(QtCore.Qt.WindowType.FramelessWindowHint)
         self._center_on_screen()
 
@@ -736,16 +755,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.pushButton.setEnabled(True)
             self.pushButton.clicked.connect(self.launch)
 
-    class Update(QtCore.QThread):
-        result_ready = QtCore.pyqtSignal(bool)
-
-        def run(self):
-            autoupdate()
-            self.result_ready.emit(True)
-
     def start_update(self):
         self.open_terminal()
-        self.update_thread = self.Update()
+        self.update_thread = aut.AutoUpdate()
         self.update_thread.finished.connect(lambda: (self.close_terminal(), self.upd_status(False)))
         self.update_thread.start()
 
