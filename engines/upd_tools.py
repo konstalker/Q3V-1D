@@ -138,27 +138,26 @@ def get_updates():
             
     return needed
 
-
 def update(repo_name, repare=False):
     print(f'Updating {repo_name}...')
     try:
         modlist = get_modlist()
-        
         if not modlist:
             return
+
+        tag = modlist[repo_name]["tag"]
+
+        # Если под этим тегом уже стоит ДРУГОЙ мод — сносим его перед установкой нового
+        current = bmod_conf.mod_info.get(tag)
+        if current and current[1] != '0' and current[0] != repo_name:
+            print(f'{current[0]} occupies tag "{tag}", removing before installing {repo_name}...')
+            _rm(current[0])
 
         dt.downloader(modlist[repo_name]["link"], './download_confs/', f'{repo_name}.dconf', skip=repare)
         dt.download(f'./download_confs/{repo_name}.dconf', skip=repare)
 
-        # bmod changes
-
-        dl_mods = bmod_conf.mod_info.get(modlist[repo_name]["tag"], [])
-        for x in dl_mods[:-1]:
-            _rm(x)
-            bmod_conf[repo_name] = None, modlist[repo_name]['tag']
-
         version = get_version(repo_name)
-        bmod_conf[repo_name] = version, modlist[repo_name]["tag"]
+        bmod_conf[repo_name] = version, tag
         bmod_conf.save()
 
     except Exception as e:
@@ -241,11 +240,10 @@ def remove(repo_name):
 
     try:
         _rm(repo_name)
-        bmod_conf.save()          # фиксируем удаление сразу, не дожидаясь autoupdate
+        bmod_conf.save()
     except Exception as e:
         print(f"[error] not removed {repo_name}")
         print(f"[log] error: {e}")
-        return
 
     try:
         autoupdate(skip=True)

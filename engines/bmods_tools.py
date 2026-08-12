@@ -3,94 +3,82 @@ import os
 
 
 class bmod:
-    def __init__(self):
+    """
+    Хранит по одному активному моду на тег: {tag: [name, version]}.
+    Инвариант "1 тег — 1 мод" соблюдается на уровне __setitem__: установка
+    нового мода под тем же тегом просто перезаписывает запись, старое имя
+    там больше не значится установленным (реальное удаление файлов —
+    забота вызывающего кода, см. upd_tools.update()).
+    """
 
+    def __init__(self):
         with open(f"./mod_tree/{c_info.mod_branch}.bmod", 'r') as mod_branch:
             self.mod_info = {}
 
-            mod_branch = list(mod_branch.read().rstrip().split('\n'))
+            for line in mod_branch.read().rstrip().split('\n'):
+                if not line:
+                    continue
 
-            for line in mod_branch:
-                line = list(line.split(';'))
-                tag, line, mods = line[0], line[1:], []
-                
-                for i, x in enumerate(line):
-                    mods.append(list(x.split('|')))
-                    
-                    if mods[-1][1] == '@':
-                        if len(line) == i + 1:
-                            mods[-1][1] = c_info.version
-                        else:
-                            mods[-1][1] = "0"
+                parts = line.split(';')
+                tag, entries = parts[0], parts[1:]
 
-                    if mods[-1][1] == '$':
-                        if len(line) == i + 1:
-                            mods[-1][1] = c_info.sversion
-                        else:
-                            mods[-1][1] = "0"
+                # На тег допустима только одна активная запись — берём последнюю.
+                # Более ранние записи (могли остаться в файле со старого формата,
+                # где на тег было по несколько записей) отбрасываем как неактуальные.
+                name, version = entries[-1].split('|')
 
-                self.mod_info.update({tag: mods})
-    
+                if version == '@':
+                    version = c_info.version
+                elif version == '$':
+                    version = c_info.sversion
+
+                self.mod_info[tag] = [name, version]
+
     def __getitem__(self, key):
-        for x in self.mod_info:
-            if self.mod_info[x][-1][0] == key:
-                return self.mod_info[x][-1][1]
-                    
+        for name, version in self.mod_info.values():
+            if name == key:
+                return version
         return '0'
 
     def __setitem__(self, key, value):
+        """
+        bmod_conf[key] = version, tag
 
-        value, tag = value
+        version is not None -> key становится единственным модом под этим tag
+                                (полностью заменяет то, что там было).
+        version is None     -> tag помечается как "не установлен" (версия '0'),
+                                но только если key совпадает с текущим активным
+                                модом этого tag (защита от случайной отмены
+                                чужой/более новой записи).
+        """
+        version, tag = value
 
-        if tag in self.mod_info:
-            
-            position = -1
-            if tag in self.mod_info:
-                for i, x in enumerate(self.mod_info[tag]):
-                    if x[0] == key:
-                        position = i
-                        break
-            
-            if position >= 0:
-                self.mod_info[tag][position] = [key, None]
-                if value == None:
-                    self.mod_info[tag].pop(position)
-                    if not self.mod_info[tag]:
-                        self.mod_info.pop(tag)
-                else:
-                    self.mod_info[tag][position][1] = value
-            elif value != None:
-                self.mod_info[tag].append([key, value])
-                
-        elif value != None:
-            self.mod_info.update({tag: [[key, value]]})
-    
+        if version is None:
+            current = self.mod_info.get(tag)
+            if current and current[0] == key:
+                self.mod_info[tag] = [key, '0']
+            return
+
+        self.mod_info[tag] = [key, version]
+
     def mod_list(self):
-        
-        mods = []
+        """Имена реально установленных модов (версия != '0')."""
+        return [name for name, version in self.mod_info.values() if version != '0']
 
-        for x in self.mod_info:
-            mods.append(self.mod_info[x][-1][0])
-
-        return mods
-        
     def save(self):
-
         print('saving')
-        
+
         with open(f'./mod_tree/{c_info.mod_branch}.bmod', 'w') as mod_branch:
-            for x in self.mod_info:
-                s = ""
-                for y in self.mod_info[x]:
-                    s += f';{y[0]}|{y[1]}'
-                mod_branch.write(f'{x}{s}\n')
+            for tag, (name, version) in self.mod_info.items():
+                mod_branch.write(f'{tag};{name}|{version}\n')
 
         print('saved')
-    
+
     def __iter__(self):
-        return self.mod_info
+        return iter(self.mod_info)
 
     def __contains__(self, x):
         return x in self.mod_list()
+
 
 bmod_conf = bmod()
