@@ -71,14 +71,14 @@ def downloader(file_url, file_path, file_name, skip=False, max_attempts=10):
                     downloaded = 0
 
                 # Если не получили размер из HEAD, берем из текущего ответа
-                if total_length is None or status == 206:
+                if total_length is None or status == 206 or total_length == 0:
                     content_len = response.info().get('Content-Length')
                     if content_len is not None:
                         total_length = downloaded + int(content_len) if status == 206 else int(content_len)
 
                 # Если размер так и остался неизвестным, ставим заглушку
                 if total_length is None or total_length <= 0:
-                    total_length = chunk_size
+                    total_length = None
 
                 percent = 0
 
