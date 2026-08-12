@@ -475,7 +475,7 @@ class ModTableWidget(QtWidgets.QTableWidget):
             self.add_mod_row(
                 name,
                 info["description"],
-                button_text="download" if name not in bmod_conf else "delete",
+                button_text = "update" if name == "scripts" else ("download" if name not in bmod_conf else "delete"),
                 on_click=on_click
             )
 
@@ -489,7 +489,10 @@ class ModTableWidget(QtWidgets.QTableWidget):
         name_item = self.item(row, 0)
         mod_name = name_item.text() if name_item else f"row {row}"
         if mod_name == 'scripts':
-            pass
+            self.window.open_terminal()
+            self.operation = aut.Update(mod_name)
+            self.operation.finished.connect(lambda: (self.populate(get_modlist()), self.window.close_terminal()))
+            self.operation.start()
         elif mod_name in bmod_conf:
             self.window.open_terminal()
             self.operation = aut.Remove(mod_name)

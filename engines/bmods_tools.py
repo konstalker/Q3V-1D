@@ -14,6 +14,9 @@ class bmod:
     def __init__(self):
         with open(f"./mod_tree/{c_info.mod_branch}.bmod", 'r') as mod_branch:
             self.mod_info = {}
+            
+            with open('../version', 'r') as vfile, open('../sversion', 'r') as svfile:
+                version, sversion =  vfile.read().rstrip(), svfile.read().rstrip()
 
             for line in mod_branch.read().rstrip().split('\n'):
                 if not line:
@@ -28,9 +31,9 @@ class bmod:
                 name, version = entries[-1].split('|')
 
                 if version == '@':
-                    version = c_info.version
+                    version = version
                 elif version == '$':
-                    version = c_info.sversion
+                    version = sversion
 
                 self.mod_info[tag] = [name, version]
 
