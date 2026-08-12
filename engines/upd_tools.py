@@ -169,10 +169,11 @@ def _is_protected_path(path):
     """Не даём снести общие/системные директории целиком."""
     abs_path = os.path.abspath(path)
     protected = {
-        os.path.abspath('.'),               # сама папка engines — НИКОГДА не удаляем
-        os.path.abspath('..'),              # корень репозитория
-        os.path.abspath('../baseq3'),       # общая папка игры
-        os.path.abspath('../baseq3/mods'),  # общая папка модов (родитель для всех модов)
+        os.path.abspath('.'),
+        os.path.abspath('..'),
+        os.path.abspath('../baseq3'),
+        os.path.abspath('../baseq3/mods'),
+        os.path.abspath('../baseq3/mods/osp'),
     }
     return abs_path in protected
 
