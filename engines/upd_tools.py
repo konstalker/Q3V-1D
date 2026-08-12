@@ -86,24 +86,36 @@ def get_version(repo_name):
     modlist = get_modlist()
     if not modlist:
         return 0
-        
-    version = modlist[repo_name]["version"]
-    if (version[0] != 'v' and version[0] != 'git') and\
-    check_url(modlist[repo_name]["version"]):
-        dt.downloader(modlist[repo_name]["version"], './temp_files/', 'version.txt')
+
+    entry = modlist[repo_name]
+    version_type = entry.get("version_type")
+    version = entry.get("version")
+
+    if version_type == "url":
+        if not check_url(version):
+            print(f'[warning] {repo_name}: version_type is "url", but "version" ({version}) is not a reachable url.')
+            return version
+
+        dt.downloader(version, './temp_files/', 'version.txt')
 
         with open('./temp_files/version.txt', 'r') as file:
             version = file.read().rstrip()
-    elif version == 'git':
-        repo = modlist[repo_name].get('repo')
+
+    elif version_type == "git":
+        repo = version
         if not repo:
-            print(f'[warning] {repo_name}: version is "git", but no "repo" field in modlist (format "owner/name"), skipping hash lookup.')
+            print(f'[warning] {repo_name}: version_type is "git", but "version" (repo, format "owner/name") is not set, skipping hash lookup.')
             version = '1'
         else:
             git_hash = get_git_hash(repo)
             version = git_hash if git_hash else '1'
-    elif version[0] == 'v':
+
+    elif version_type == "version":
         pass
+
+    else:
+        print(f'[warning] {repo_name}: unknown version_type "{version_type}", expected "version", "url" or "git".')
+
     return version
 
 def get_updates():
@@ -122,7 +134,7 @@ def get_updates():
         need_update = False
         version = get_version(repo_name)
 
-        if modlist[repo_name]["version"] == 'git':
+        if modlist[repo_name].get("version_type") == 'git':
             # хэш коммита нельзя сравнивать через "<" — сравниваем на несовпадение
             if bmod_conf[repo_name] != version:
                 need_update = True
