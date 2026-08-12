@@ -92,9 +92,9 @@ def get_version(repo_name):
     version = entry.get("version")
 
     if version_type == "url":
-        if not check_url(version):
-            print(f'[warning] {repo_name}: version_type is "url", but "version" ({version}) is not a reachable url.')
-            return version
+        if not check_url(furl(version)):
+            print(f'[warning] {repo_name}: version_type is "url", but "version" ({furl(version)}) is not a reachable url.')
+            return furl(version)
 
         dt.downloader(version, './temp_files/', 'version.txt')
 

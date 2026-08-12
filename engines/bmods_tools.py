@@ -49,17 +49,17 @@ class bmod:
 
         version is not None -> key становится единственным модом под этим tag
                                 (полностью заменяет то, что там было).
-        version is None     -> tag помечается как "не установлен" (версия '0'),
-                                но только если key совпадает с текущим активным
-                                модом этого tag (защита от случайной отмены
-                                чужой/более новой записи).
+        version is None     -> запись тега стирается целиком (тег снова
+                                свободен), но только если key совпадает с
+                                текущим активным модом этого tag (защита от
+                                случайной отмены чужой/более новой записи).
         """
         version, tag = value
 
         if version is None:
             current = self.mod_info.get(tag)
             if current and current[0] == key:
-                self.mod_info[tag] = [key, '0']
+                del self.mod_info[tag]
             return
 
         self.mod_info[tag] = [key, version]
