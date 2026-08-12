@@ -3,6 +3,8 @@ from sys import argv, version
 import zipfile
 import os
 import json
+import urllib.request
+import urllib.error
 
 import download_tools as dt
 from base_methods import *
@@ -40,6 +42,46 @@ def autoupdate(skip=False):
         update(x, repare=skip)
 
 
+def get_git_hash(repo):
+    """
+    repo: репозиторий в формате 'owner/name' (GitHub).
+    Возвращает хэш коммита последнего релиза, либо None при ошибке.
+    """
+    headers = {
+        'Accept': 'application/vnd.github+json',
+        'User-Agent': 'upd_tools',
+    }
+
+    try:
+        req = urllib.request.Request(
+            f'https://api.github.com/repos/{repo}/releases/latest',
+            headers=headers,
+        )
+        with urllib.request.urlopen(req, timeout=10) as resp:
+            release = json.load(resp)
+
+        tag = release.get('tag_name')
+        if not tag:
+            print(f'[warning] no tag_name found for latest release of {repo}')
+            return None
+
+        req = urllib.request.Request(
+            f'https://api.github.com/repos/{repo}/commits/{tag}',
+            headers=headers,
+        )
+        with urllib.request.urlopen(req, timeout=10) as resp:
+            commit = json.load(resp)
+
+        return commit.get('sha')
+
+    except urllib.error.HTTPError as e:
+        print(f'[error] GitHub API error for {repo}: {e}')
+        return None
+    except Exception as e:
+        print(f'[error] failed to get git hash for {repo}: {e}')
+        return None
+
+
 def get_version(repo_name):
     modlist = get_modlist()
     if not modlist:
@@ -53,7 +95,13 @@ def get_version(repo_name):
         with open('./temp_files/version.txt', 'r') as file:
             version = file.read().rstrip()
     elif version == 'git':
-        version = '1'
+        repo = modlist[repo_name].get('repo')
+        if not repo:
+            print(f'[warning] {repo_name}: version is "git", but no "repo" field in modlist (format "owner/name"), skipping hash lookup.')
+            version = '1'
+        else:
+            git_hash = get_git_hash(repo)
+            version = git_hash if git_hash else '1'
     elif version[0] == 'v':
         pass
     return version
@@ -73,8 +121,12 @@ def get_updates():
         
         need_update = False
         version = get_version(repo_name)
-        
-        if bmod_conf[repo_name] < version:
+
+        if modlist[repo_name]["version"] == 'git':
+            # хэш коммита нельзя сравнивать через "<" — сравниваем на несовпадение
+            if bmod_conf[repo_name] != version:
+                need_update = True
+        elif bmod_conf[repo_name] < version:
             need_update = True
 
         if need_update:
