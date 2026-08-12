@@ -166,6 +166,18 @@ def update(repo_name, repare=False):
         print(f"[log] error: {e}")
         caption()
 
+def _is_protected_path(path):
+    """Не даём снести общие/системные директории целиком."""
+    abs_path = os.path.abspath(path)
+    protected = {
+        os.path.abspath('.'),               # сама папка engines — НИКОГДА не удаляем
+        os.path.abspath('..'),              # корень репозитория
+        os.path.abspath('../baseq3'),       # общая папка игры
+        os.path.abspath('../baseq3/mods'),  # общая папка модов (родитель для всех модов)
+    }
+    return abs_path in protected
+
+
 def _rm(repo_name):
     modlist = get_modlist()
     if not modlist:
@@ -188,26 +200,39 @@ def _rm(repo_name):
         arr = line.split(';')
 
         if arr[0] == 'f':
-            targets = [os.path.join(arr[3], arr[1])]
+            entries = [(arr[1], arr[3])]      # (src_name, dest_dir)
         elif arr[0] == 'a':
-            targets = []
-            for src, dest in zip(arr[3::2], arr[4::2]):
-                targets.append(os.path.join(dest, os.path.basename(src)))
-                targets.append(dest.rstrip('/'))
+            entries = list(zip(arr[3::2], arr[4::2]))
         else:
             continue
 
-        for path in targets:
-            print('remove:', path)
+        for src, dest in entries:
+            file_path = os.path.join(dest, os.path.basename(src))
+            dir_path = dest.rstrip('/') or '.'
+
+            # 1. Пробуем удалить как конкретный файл — это безопасно всегда
             try:
-                if os.path.isfile(path):
-                    os.remove(path)
-                    if arr[0] == 'f':
-                        break
-                elif os.path.isdir(path):
-                    shutil.rmtree(path)
+                if os.path.isfile(file_path):
+                    print('remove file:', file_path)
+                    os.remove(file_path)
+                    continue
             except Exception as e:
-                print(f'[warning] could not remove {path}: {e}')
+                print(f'[warning] could not remove {file_path}: {e}')
+                continue
+
+            # 2. Фоллбэк на удаление целой папки — только если это НЕ общая/системная директория
+            if _is_protected_path(dir_path):
+                print(f'[warning] refusing to delete shared/system directory: {dir_path}')
+                continue
+
+            try:
+                if os.path.isdir(dir_path):
+                    print('remove dir:', dir_path)
+                    shutil.rmtree(dir_path)
+                else:
+                    print(f'[warning] path not found: {file_path} / {dir_path}')
+            except Exception as e:
+                print(f'[warning] could not remove {dir_path}: {e}')
 
     bmod_conf[repo_name] = None, modlist[repo_name]["tag"]
 
