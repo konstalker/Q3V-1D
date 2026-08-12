@@ -65,8 +65,7 @@ class bmod:
         self.mod_info[tag] = [key, version]
 
     def mod_list(self):
-        """Имена реально установленных модов (версия != '0')."""
-        return [name for name, version in self.mod_info.values() if version != '0']
+        return [name for name, version in self.mod_info.values()]
 
     def save(self):
         print('saving')
