@@ -16,7 +16,7 @@ class bmod:
             self.mod_info = {}
             
             with open('../version', 'r') as vfile, open('../sversion', 'r') as svfile:
-                version, sversion =  vfile.read().rstrip(), svfile.read().rstrip()
+                v, sv =  vfile.read().rstrip(), svfile.read().rstrip()
 
             for line in mod_branch.read().rstrip().split('\n'):
                 if not line:
@@ -31,9 +31,9 @@ class bmod:
                 name, version = entries[-1].split('|')
 
                 if version == '@':
-                    version = version
+                    version = v
                 elif version == '$':
-                    version = sversion
+                    version = sv
 
                 self.mod_info[tag] = [name, version]
 
