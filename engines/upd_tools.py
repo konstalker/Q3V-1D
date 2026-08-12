@@ -121,42 +121,42 @@ def _rm(repo_name):
 
     if repo_name not in modlist:
         raise KeyError(f"{repo_name} mod not in modlist, cannot be removed.")
-    
+
     dt.downloader(modlist[repo_name]["link"], './download_confs/', f'{repo_name}.dconf', skip=True)
     if not os.path.exists(f'./download_confs/{repo_name}.dconf'):
         raise FileNotFoundError(f"Didn't installed dconf for {repo_name}, cannot be removed.")
-        
+
     with open(f'./download_confs/{repo_name}.dconf', 'r') as dconf_file:
-        dconf = list(dconf_file.read().split('\n'))
+        dconf = dconf_file.read().split('\n')
 
-    for x in dconf[::-1]:
-
-        # change for files
-        if not x:
+    for line in dconf:
+        if ';' not in line:
             continue
-        if x[0] == 'a':
-            path = list(x.split(';'))[4::2]
-            file = list(x.split(';'))[3::2]
-            
+
+        arr = line.split(';')
+
+        if arr[0] == 'f':
+            targets = [os.path.join(arr[3], arr[1])]
+        elif arr[0] == 'a':
+            targets = []
+            for src, dest in zip(arr[3::2], arr[4::2]):
+                targets.append(os.path.join(dest, os.path.basename(src)))
+                targets.append(dest.rstrip('/'))
         else:
-            path = list(x.split(';'))[3::2]
-            file = [list(x.split(';'))[1]]
+            continue
 
-        paths = _create_paths(paths=path, files=file)
-        
-        for path in paths:
-
-            path = furl(path)
+        for path in targets:
             print('remove:', path)
-
             try:
                 if os.path.isfile(path):
                     os.remove(path)
-                else:
+                    if arr[0] == 'f':
+                        break
+                elif os.path.isdir(path):
                     shutil.rmtree(path)
-            except Exception:
-                print('[warning] files not found.')
-    
+            except Exception as e:
+                print(f'[warning] could not remove {path}: {e}')
+
     bmod_conf[repo_name] = None, modlist[repo_name]["tag"]
 
 def remove(repo_name):
