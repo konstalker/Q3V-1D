@@ -19,12 +19,9 @@ def caption():
 
 class C_INFO:
     def __init__(self):
-            
-        with open('./mod_tree/branch.txt', 'w') as bfile:
-            bfile.write(text)
         
         with open("./mod_tree/branch.txt", 'r') as f:
-            self.compilation_branch, self.mod_branch, self.repo_url, self.s_data = f.read().split('\n')[:6]
+            self.compilation_branch, self.mod_branch, self.repo_url, self.s_data = f.read().split('\n')[:4]
         self.values = [["[OS]", self.s_data],
                        ["[CBRANCH]", self.compilation_branch],
                        ["[RURL]", self.repo_url]
