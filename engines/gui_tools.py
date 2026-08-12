@@ -488,7 +488,7 @@ class ModTableWidget(QtWidgets.QTableWidget):
         испускает сигнал mod_button_clicked(row, mod_name)."""
         name_item = self.item(row, 0)
         mod_name = name_item.text() if name_item else f"row {row}"
-        if mod_name == 'script':
+        if mod_name == 'scripts':
             pass
         elif mod_name in bmod_conf:
             self.window.open_terminal()
