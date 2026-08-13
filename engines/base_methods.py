@@ -90,11 +90,9 @@ def launch(args='+set fs_homepath "../baseq3/mods" +set fs_basepath "../" +set f
     vk_engine, ogl_engine = None, None
     if os.path.exists('./engine.txt'):
         with open('./engine.txt') as engine_file:
-            engine_conf = engine_file.read().split('\n')
+            engine_conf = engine_file.read().rstrip().split('\n')
             if len(engine_conf) == 2:
                 vk_engine, ogl_engine = engine_conf[:2]
-            else:
-                return False
 
             if not os.path.exists(vk_engine) and not os.path.exists(ogl_engine):
                 return False
