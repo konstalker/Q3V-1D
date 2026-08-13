@@ -10,7 +10,7 @@ class AutoUpdate(QtCore.QThread):
     result_ready = QtCore.pyqtSignal(bool)
 
     def run(self):
-        forupd = get_forupd()
+        forupd = get_updates()
         autoupdate()
         if "scripts" in forupd:
             update("scripts")
