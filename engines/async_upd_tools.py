@@ -1,3 +1,4 @@
+import sys
 from PyQt6 import QtCore
 
 from upd_tools import *
@@ -9,7 +10,15 @@ class AutoUpdate(QtCore.QThread):
     result_ready = QtCore.pyqtSignal(bool)
 
     def run(self):
+        forupd = get_forupd()
         autoupdate()
+        if "scripts" in forupd:
+            update("scripts")
+            if c_info.s_data == "windows":
+                subprocess.Popen(["./python/setup_python.bat", "./launch.pyw"])
+            else:
+                subprocess.Popen(["./python/setup_python.sh", "scripts/upd_tools.py"])
+            sys.exit(0)
         self.result_ready.emit(True)
 
 class Update(QtCore.QThread):
