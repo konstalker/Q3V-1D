@@ -14,6 +14,7 @@ set "VENV_DIR=%PY_ROOT%\venv"
 set "REQUIREMENTS=%BASE_DIR%requirements.txt"
 set "PYTHON_VERSION=3.12"
 set "UV_ZIP_URL=https://github.com/astral-sh/uv/releases/latest/download/uv-x86_64-pc-windows-msvc.zip"
+chcp 65001 >nul
 
 :: === Полная изоляция: перенаправляем ВСЕ рабочие каталоги uv внутрь PY_ROOT ===
 set "UV_CACHE_DIR=%PY_ROOT%\cache"
