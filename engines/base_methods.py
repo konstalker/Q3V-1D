@@ -101,7 +101,7 @@ def launch(args='+set fs_homepath "../baseq3/mods" +set fs_basepath "../" +set f
 
     has_vulkan = check_vulkan_support()
 
-    engine = vk_engine if (not force_ogl and (c_info.s_data == "linux" or has_vulkan)) else ogl_engine
+    engine = vk_engine if (not force_ogl and has_vulkan) else ogl_engine
 
     if c_info.s_data == 'linux':
         os.system(f'chmod +x {engine}')
