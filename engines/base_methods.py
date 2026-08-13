@@ -4,6 +4,48 @@ import urllib.error
 import os
 import subprocess
 import shlex
+import vulkan as vk
+
+def check_vulkan_support() -> bool:
+    """
+    Честно проверяет поддержку Vulkan:
+    1. Наличие системного Loader'а.
+    2. Успешность создания VkInstance.
+    3. Наличие хотя бы одного совместимого GPU.
+    """
+    instance = None
+    try:
+        # Минимальная спецификация приложения
+        app_info = vk.VkApplicationInfo(
+            sType=vk.VK_STRUCTURE_TYPE_APPLICATION_INFO,
+            pApplicationName="VulkanCheck",
+            applicationVersion=vk.VK_MAKE_VERSION(1, 0, 0),
+            pEngineName="NoEngine",
+            engineVersion=vk.VK_MAKE_VERSION(1, 0, 0),
+            apiVersion=vk.VK_API_VERSION_1_0,
+        )
+
+        create_info = vk.VkInstanceCreateInfo(
+            sType=vk.VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO,
+            pApplicationInfo=app_info,
+        )
+
+        # 1. Попытка создания инстанса (упадет, если нет Vulkan Loader или драйвера)
+        instance = vk.vkCreateInstance(create_info, None)
+
+        # 2. Перечисление доступных видеокарт
+        devices = vk.vkEnumeratePhysicalDevices(instance)
+
+        return len(devices) > 0
+
+    except (vk.VkError, Exception):
+        # Падает с ошибками VK_ERROR_INCOMPATIBLE_DRIVER, OSError и т.д.
+        return False
+
+    finally:
+        # Всегда корректно освобождаем ресурсы
+        if instance is not None:
+            vk.vkDestroyInstance(instance, None)
 
 def check_url(url):
     try:
@@ -58,10 +100,7 @@ def launch(args='+set fs_homepath "../baseq3/mods" +set fs_basepath "../" +set f
     else:
         return False
 
-    has_vulkan = (
-        os.path.exists(os.path.expandvars(r'%SystemRoot%\System32\vulkan-1.dll')) or
-        os.path.exists(os.path.expandvars(r'%SystemRoot%\SysWOW64\vulkan-1.dll'))
-    )
+    has_vulkan = check_vulkan_support()
 
     engine = vk_engine if (has_vulkan or not ogl_engine) else ogl_engine
 
