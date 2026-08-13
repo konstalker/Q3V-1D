@@ -562,7 +562,7 @@ class Ui_MainWindow(object):
         self.pushButton.setStyleSheet("QPushButton {border-radius: 30px}")
 
         self.checkbox_opengl = QtWidgets.QCheckBox("Force OpenGL", parent=self.launch_1)
-        self.checkbox_opengl.setGeometry(QtCore.QRect(600, 550, 180, 30))
+        self.checkbox_opengl.setGeometry(QtCore.QRect(660, 570, 180, 20))
         self.checkbox_opengl.setObjectName("checkbox_opengl")
         self.checkbox_opengl.setText("Force OpenGL launch")
         self.checkbox_opengl.setChecked(False)

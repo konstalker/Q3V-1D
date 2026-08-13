@@ -37,15 +37,13 @@ def check_vulkan_support() -> bool:
         devices = vk.vkEnumeratePhysicalDevices(instance)
 
         return len(devices) > 0
-
-    except (vk.VkError, Exception):
-        # Падает с ошибками VK_ERROR_INCOMPATIBLE_DRIVER, OSError и т.д.
-        return False
-
-    finally:
-        # Всегда корректно освобождаем ресурсы
+    
         if instance is not None:
             vk.vkDestroyInstance(instance, None)
+
+    except Exception:
+        # Падает с ошибками VK_ERROR_INCOMPATIBLE_DRIVER, OSError и т.д.
+        return False
 
 def check_url(url):
     try:
