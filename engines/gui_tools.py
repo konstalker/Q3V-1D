@@ -562,7 +562,7 @@ class Ui_MainWindow(object):
         self.pushButton.setStyleSheet("QPushButton {border-radius: 30px}")
 
         self.checkbox_opengl = QtWidgets.QCheckBox("Force OpenGL", parent=self.launch_1)
-        self.checkbox_opengl.setGeometry(QtCore.QRect(760, 500, 180, 30))
+        self.checkbox_opengl.setGeometry(QtCore.QRect(600, 550, 180, 30))
         self.checkbox_opengl.setObjectName("checkbox_opengl")
         self.checkbox_opengl.setText("Force OpenGL launch")
         self.checkbox_opengl.setChecked(False)
@@ -726,7 +726,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     
     def launch(self):
         is_opengl_forced = self.checkbox_opengl.isChecked()
-        if launch(forced_opengl=is_opengl_forced):
+        if launch(force_ogl=is_opengl_forced):
             self.close()
         else:
             ToastNotification.show_warning(self.centralwidget, 'Launch error!\nCheck "engine" installiation.')
