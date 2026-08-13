@@ -81,3 +81,13 @@ QScrollBar::handle:vertical {
     border-radius: 6px;
     min-height: 20px;
 }
+QCheckBox {
+color: #ffffff;
+background: transparent;
+font-size: 13px;
+}
+
+QCheckBox::indicator {
+width: 15px;
+height: 15px;
+}
