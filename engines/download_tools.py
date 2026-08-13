@@ -110,7 +110,7 @@ def downloader(file_url, file_path, file_name, skip=False, max_attempts=10):
                             print(f'\rDownloaded: {downloaded// 1048576}MB', end='')
 
                 # Проверяем целостность скачанного файла по размеру
-                if downloaded >= total_length:
+                if total_length is None or downloaded >= total_length:
                     print("\nDownloaded successfully.")
                     return full_path
                 else:
