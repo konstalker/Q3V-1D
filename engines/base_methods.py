@@ -87,20 +87,20 @@ def get_relative_paths(folder_path: str) -> list[str]:
 
     
 def launch(args='+set fs_homepath "../baseq3/mods" +set fs_basepath "../" +set fs_game "osp" +set com_viewlog "0"', force_ogl=False):
-    vk_engine, ogl_engine = None, False
+    vk_engine, ogl_engine = None, None
     if os.path.exists('./engine.txt'):
         with open('./engine.txt') as engine_file:
             engine_conf = engine_file.read().split('\n')
             if len(engine_conf) == 2:
                 vk_engine, ogl_engine = engine_conf[:2]
             else:
-                vk_engine, ogl_engine = engine_conf[0], False
+                return False
     else:
         return False
 
     has_vulkan = check_vulkan_support()
 
-    engine = ogl_engine if (force_ogl or not c_info.s_data == 'linux' or not has_vulkan) else vk_engine
+    engine = vk_engine if (not force_ogl and (c_info.s_data == "linux" or has_vulkan)) else ogl_engine
 
     if c_info.s_data == 'linux':
         os.system(f'chmod +x {engine}')
