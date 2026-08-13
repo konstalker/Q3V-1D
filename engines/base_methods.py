@@ -95,6 +95,9 @@ def launch(args='+set fs_homepath "../baseq3/mods" +set fs_basepath "../" +set f
                 vk_engine, ogl_engine = engine_conf[:2]
             else:
                 return False
+
+            if not os.path.exists(vk_engine) and not os.path.exists(ogl_engine):
+                return False
     else:
         return False
 
