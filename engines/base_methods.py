@@ -4,7 +4,6 @@ import urllib.error
 import os
 import subprocess
 import shlex
-import vulkan as vk
 
 def check_vulkan_support() -> bool:
     """
@@ -16,6 +15,7 @@ def check_vulkan_support() -> bool:
     instance = None
     try:
         # Минимальная спецификация приложения
+        import vulkan as vk
         app_info = vk.VkApplicationInfo(
             sType=vk.VK_STRUCTURE_TYPE_APPLICATION_INFO,
             pApplicationName="VulkanCheck",
