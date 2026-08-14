@@ -37,9 +37,21 @@ def get_modlist():
 
 def autoupdate(skip=False):
     updates = get_updates()
-    
+    modlist = get_modlist()
+
+    # Приоритет теперь (branch, index). Сортировка Python сравнивает tuple
+    # поэлементно — сначала по имени ветки, затем по индексу внутри неё.
+    # Порядок МЕЖДУ ветками тут произвольный (алфавит имени ветки), и это
+    # нормально: раз ветки не пересекаются по файлам, порядок установки
+    # между ними не влияет на результат. Важен только порядок ВНУТРИ
+    # ветки — он соблюдается корректно.
+    if modlist:
+        updates.sort(key=lambda r: bmod_conf.priority_of_tag(modlist[r]['tag']) if r in modlist else ('~unknown', 999999))
+
     for x in updates:
         update(x, repare=skip)
+
+    bmod_conf.check_priority_sanity()
 
 
 def get_git_hash(repo):
@@ -166,16 +178,69 @@ def update(repo_name, repare=False):
             _rm(current[0])
 
         dt.downloader(modlist[repo_name]["link"], './download_confs/', f'{repo_name}.dconf', skip=repare)
-        dt.download(f'./download_confs/{repo_name}.dconf', skip=repare)
+        installed_files = dt.download(f'./download_confs/{repo_name}.dconf', skip=repare)
+
+        # Манифест — это то, что реально легло на диск сейчас, а не то,
+        # что "должно было" по .dconf. При первой установке файла с
+        # деревом ещё не было — он и появляется этой строкой.
+        bmod_conf.save_manifest(repo_name, installed_files or [])
 
         version = get_version(repo_name)
         bmod_conf[repo_name] = version, tag
         bmod_conf.save()
 
+        # repo_name мог физически перезаписать файлы, которыми уже владел
+        # какой-то более приоритетный (по тегу) активный мод — например,
+        # сборку скачали ПОСЛЕ уже установленного точечного аддона.
+        # Порядок закачки в этом случае не важен: пересобираем поверх.
+        _reapply_higher_priority(repo_name, tag, modlist)
+
     except Exception as e:
         print(f"[error] not installed {repo_name}")
         print(f"[log] error: {e}")
         caption()
+
+
+def _reapply_higher_priority(repo_name, tag, modlist):
+    """После установки repo_name — переустановить поверх все активные моды
+    с более высоким приоритетом ВНУТРИ ТОЙ ЖЕ ВЕТКИ tag_order.txt, чьи
+    файлы реально пересекаются с только что установленными. Переустанавливаются
+    ТОЛЬКО конкретные пересекающиеся файлы (wanted_paths), а не весь
+    архив/мод целиком. Манифест затронутого мода при этом не трогаем.
+
+    Если пересечение находится с модом из ДРУГОЙ ветки — по конфигурации
+    это не должно происходить, поэтому вместо угадывания победителя
+    печатается предупреждение и ничего не восстанавливается автоматически."""
+    my_priority = bmod_conf.priority_of_tag(tag)
+    my_files = set(bmod_conf.load_manifest(repo_name))
+    if not my_files:
+        return
+
+    for other_tag, (other_repo, _version) in list(bmod_conf.mod_info.items()):
+        if other_repo == repo_name:
+            continue
+
+        other_priority = bmod_conf.priority_of_tag(other_tag)
+        other_files = set(bmod_conf.load_manifest(other_repo))
+        overlap = my_files & other_files
+        if not overlap:
+            continue
+
+        if other_priority[0] != my_priority[0]:
+            print(f'[warning] {other_repo} (ветка {other_priority[0]}) неожиданно делит '
+                  f'{len(overlap)} файлов с {repo_name} (ветка {my_priority[0]}) — ветки не '
+                  f'связаны в tag_order.txt, авто-восстановление пропускаю, проверьте конфиг')
+            continue
+
+        if other_priority[1] <= my_priority[1]:
+            continue
+
+        print(f'[reconcile] {other_repo} (приоритет {other_priority[1]} в ветке {other_priority[0]}) '
+              f'пересекается с {repo_name} по {len(overlap)} файлам — восстанавливаю только их')
+        try:
+            dt.download(f'./download_confs/{other_repo}.dconf', skip=True, wanted_paths=overlap)
+        except Exception as e:
+            print(f'[warning] не удалось восстановить файлы {other_repo} поверх {repo_name}: {e}')
 
 def _is_protected_path(path):
     """Не даём снести общие/системные директории целиком."""
@@ -191,6 +256,18 @@ def _is_protected_path(path):
 
 
 def _rm(repo_name):
+    """Удаляет мод по его манифесту (bmod_conf.load_manifest): точный список
+    того, что реально было положено на диск при установке, а не
+    реконструкция по (возможно уже изменившемуся) .dconf.
+
+    Файл удаляется, только если он до сих пор реально принадлежит этому
+    мода (build_ownership) — если его уже перекрыл более приоритетный
+    мод, трогать его нельзя: он больше не "наш".
+
+    Для модов, установленных ДО этого патча (манифеста ещё нет) —
+    фоллбэк на старый способ через парсинг .dconf, чтобы не оставлять
+    файлы-сироты на диске молча.
+    """
     modlist = get_modlist()
     if not modlist:
         raise FileNotFoundError(f"Cannot delete mod, modlist not found.")
@@ -198,6 +275,34 @@ def _rm(repo_name):
     if repo_name not in modlist:
         raise KeyError(f"{repo_name} mod not in modlist, cannot be removed.")
 
+    if not bmod_conf.has_manifest(repo_name):
+        print(f'[info] нет манифеста для {repo_name} (стоял до этого патча) — '
+              f'удаляю по старой схеме через .dconf')
+        _rm_legacy(repo_name, modlist)
+        bmod_conf[repo_name] = None, modlist[repo_name]["tag"]
+        return
+
+    owners = bmod_conf.build_ownership()
+
+    for path in bmod_conf.load_manifest(repo_name):
+        owner = owners.get(path)
+        if owner and owner[0] != repo_name:
+            print(f'[skip] {path}: сейчас реально принадлежит {owner[0]}, не трогаю')
+            continue
+        try:
+            if os.path.isfile(path):
+                print('remove file:', path)
+                os.remove(path)
+        except Exception as e:
+            print(f'[warning] could not remove {path}: {e}')
+
+    bmod_conf.delete_manifest(repo_name)
+    bmod_conf[repo_name] = None, modlist[repo_name]["tag"]
+
+
+def _rm_legacy(repo_name, modlist):
+    """Старая логика удаления через разбор .dconf — только как фоллбэк
+    для модов без манифеста (см. _rm)."""
     dt.downloader(modlist[repo_name]["link"], './download_confs/', f'{repo_name}.dconf', skip=True)
     if not os.path.exists(f'./download_confs/{repo_name}.dconf'):
         raise FileNotFoundError(f"Didn't installed dconf for {repo_name}, cannot be removed.")
@@ -246,7 +351,6 @@ def _rm(repo_name):
             except Exception as e:
                 print(f'[warning] could not remove {dir_path}: {e}')
 
-    bmod_conf[repo_name] = None, modlist[repo_name]["tag"]
 
 def remove(repo_name):
     print(f'Removing {repo_name}...')

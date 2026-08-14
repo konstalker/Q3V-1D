@@ -125,11 +125,23 @@ def downloader(file_url, file_path, file_name, skip=False, max_attempts=10):
     return None
 
 
-def unziper(file_url, name, file_paths=[], skip=False):
+def unziper(file_url, name, file_paths=[], skip=False, wanted_paths=None):
+    """wanted_paths: если задан (set нормализованных путей назначения) —
+    обрабатываются только те записи из file_paths, чей путь назначения
+    в него входит. Остальные пропускаются без сети и без распаковки."""
 
     file_url = furl(file_url)
 
     installed = []
+
+    if wanted_paths is not None:
+        file_paths = [
+            fp for fp in file_paths
+            if os.path.normpath(os.path.join(fp[1], os.path.basename(fp[0]))) in wanted_paths
+        ]
+        if not file_paths:
+            print(f'[skip] {name}: ни один файл не нужен, архив не скачивается')
+            return installed
 
     if os.path.exists("./cache/" + name) and not skip:
         os.remove("./cache/" + name)
@@ -147,18 +159,25 @@ def unziper(file_url, name, file_paths=[], skip=False):
 
     for file_path in file_paths:
         temp_name = furl(f"./temp_files/{name}dir/{file_path[0]}")
+        dest = file_path[1]
 
         assert os.path.exists(temp_name), f"No such file or directory: {temp_name}"
 
         if os.path.isfile(temp_name):
             print(temp_name)
-            shutil.copy(temp_name, file_path[1])
-            installed.append(temp_name)
+            shutil.copy(temp_name, dest)
+            dest_file = os.path.join(dest, os.path.basename(temp_name))
+            installed.append(os.path.normpath(dest_file))
         else:
-            if os.path.exists(temp_name) and os.path.exists(file_path[1]):
-                shutil.rmtree(temp_name, file_path[1])
-            shutil.copytree(temp_name, file_path[1])
-            installed.extend(get_relative_paths(file_path[1]))
+            # dest мог остаться от предыдущей установки/обновления этого же мода —
+            # copytree падает, если директория назначения уже существует
+            if os.path.exists(dest):
+                shutil.rmtree(dest)
+            shutil.copytree(temp_name, dest)
+            installed.extend(
+                os.path.normpath(dest.rstrip('/') + p)
+                for p in get_relative_paths(dest)
+            )
 
     try:
         rmtree("./temp_files")
@@ -168,7 +187,12 @@ def unziper(file_url, name, file_paths=[], skip=False):
     return installed
 
 
-def download(conf_file, skip=False):
+def download(conf_file, skip=False, wanted_paths=None):
+    """wanted_paths: если задан (set нормализованных путей назначения) —
+    из .dconf обрабатываются только записи, дающие хотя бы один из этих
+    путей. 'f'-записи вне набора пропускаются вообще без сети,
+    'a'-записи — без скачивания и распаковки архива, если внутри него
+    нет ни одного нужного файла."""
 
     arr = [None]
 
@@ -192,11 +216,15 @@ def download(conf_file, skip=False):
                         for start, end in zip(arr[3::2], arr[4::2]):
                             files.append([start, end])
 
-                        unziper(furl(url), name, files, skip=skip)
+                        installed = unziper(furl(url), name, files, skip=skip, wanted_paths=wanted_paths)
 
                     elif arr[0] == 'f':
 
-                        installed.append(downloader(furl(arr[2]), arr[3], arr[1], skip=skip))
+                        dest_path = os.path.normpath(os.path.join(arr[3], arr[1]))
+                        if wanted_paths is not None and dest_path not in wanted_paths:
+                            print(f'[skip] {arr[1]}: не нужен, не скачиваю')
+                        else:
+                            installed.append(downloader(furl(arr[2]), arr[3], arr[1], skip=skip))
 
                     else:
 

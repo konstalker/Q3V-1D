@@ -36,34 +36,41 @@ def mdlist_check():
 
 
 if __name__ == "__main__":
-    app = QApplication(sys.argv)
-    font_id = QFontDatabase.addApplicationFont("./ui/FiraCode-Regular.ttf")
-    if font_id == -1:
-        print("Ошибка: не удалось загрузить шрифт :/fonts/MyFont.ttf")
-        # Можно поставить запасной шрифт
-        family = "Arial"
-    else:
-        families = QFontDatabase.applicationFontFamilies(font_id)
-    app.setStyleSheet(DARK_STYLE)
-    window = MainWindow()
-
-    font_id = QFontDatabase.addApplicationFont("./ui/FiraCode-Regular.ttf")
-    if font_id == -1:
-        print("Ошибка: не удалось загрузить шрифт :/fonts/MyFont.ttf")
-        # Можно поставить запасной шрифт
-        family = "Arial"
-    else:
-        family = QFontDatabase.applicationFontFamilies(font_id)[0]
-
-    window.terminal.set_font(family)
+    try:
+        
+        app = QApplication(sys.argv)
+        font_id = QFontDatabase.addApplicationFont("./ui/FiraCode-Regular.ttf")
+        if font_id == -1:
+            print("Ошибка: не удалось загрузить шрифт :/fonts/MyFont.ttf")
+            # Можно поставить запасной шрифт
+            family = "Arial"
+        else:
+            families = QFontDatabase.applicationFontFamilies(font_id)
+        app.setStyleSheet(DARK_STYLE)
+        window = MainWindow()
     
-    window.show()
-    window.open_terminal()
-    fdownload = FDownload()
-    mdownload = MDownload()
-    mdownload.finished.connect(mdlist_check)
-    fdownload.finished.connect(window.close_terminal)
-    mdownload.start()
-    fdownload.start()
-    sys.exit(app.exec())
+        font_id = QFontDatabase.addApplicationFont("./ui/FiraCode-Regular.ttf")
+        if font_id == -1:
+            print("Ошибка: не удалось загрузить шрифт :/fonts/MyFont.ttf")
+            # Можно поставить запасной шрифт
+            family = "Arial"
+        else:
+            family = QFontDatabase.applicationFontFamilies(font_id)[0]
+    
+        window.terminal.set_font(family)
+        
+        window.show()
+        window.open_terminal()
+        fdownload = FDownload()
+        mdownload = MDownload()
+        mdownload.finished.connect(mdlist_check)
+        fdownload.finished.connect(window.close_terminal)
+        mdownload.start()
+        fdownload.start()
+        sys.exit(app.exec())
+    
+    except Exception as error:
+        message = f"{type(error).__name__}: {error}"
+    
+        show_error(message, lambda: update("scripts"))
     

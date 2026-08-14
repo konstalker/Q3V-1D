@@ -11,7 +11,7 @@ from PyQt6 import QtCore, QtGui, QtWidgets
 import sys
 from PyQt6.QtWidgets import QTextEdit, QApplication, QMainWindow
 from PyQt6.QtCore import pyqtSignal, QTimer
-from PyQt6.QtGui import QTextCursor, QPixmap, QPalette, QBrush, QPainter, QColor
+from PyQt6.QtGui import QIcon, QTextCursor, QPixmap, QPalette, QBrush, QPainter, QColor
 from PyQt6.QtGui import QFontDatabase
 
 from base_methods import *
@@ -716,6 +716,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         
         self.setWindowFlags(QtCore.Qt.WindowType.FramelessWindowHint)
         self._center_on_screen()
+        self.icon = QIcon("./icons/b3.png")
+        self.setWindowIcon(self.icon)
 
     def _center_on_screen(self):
         screen = QApplication.primaryScreen()

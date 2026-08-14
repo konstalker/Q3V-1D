@@ -1,0 +1,14 @@
+[core]
+scripts
+engine
+ 
+[osp]
+osp2
+compilation
+configs
+weapons
+rocket
+rail
+ 
+[defrag]
+defrag

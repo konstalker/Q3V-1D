@@ -108,3 +108,83 @@ def launch(args='+set fs_homepath "../baseq3/mods" +set fs_basepath "../" +set f
 
     subprocess.Popen([engine] + shlex.split(args))
     return True
+
+
+from PyQt6.QtCore import QThread, pyqtSignal, Qt
+from PyQt6.QtWidgets import (
+    QApplication,
+    QDialog,
+    QLabel,
+    QPushButton,
+    QVBoxLayout,
+)
+import sys
+
+class UpdateWorker(QThread):
+    finished = pyqtSignal()
+
+    def __init__(self, update_function):
+        super().__init__()
+        self.update_function = update_function
+
+    def run(self):
+        try:
+            self.update_function()
+        finally:
+            self.finished.emit()
+
+
+class ErrorDialog(QDialog):
+    def __init__(self, error, update_function):
+        super().__init__()
+        self.setWindowFlags(Qt.WindowType.FramelessWindowHint)
+
+        self.setWindowTitle("Something wrong!")
+        self.setFixedWidth(400)
+
+        message = QLabel(
+            f"{type(error).__name__}: {error}"
+        )
+        message.setWordWrap(True)
+
+        self.button = QPushButton("Updating...")
+        self.button.setEnabled(False)
+
+        layout = QVBoxLayout(self)
+        layout.addWidget(message)
+        layout.addWidget(self.button)
+
+        # Запускаем обновление в отдельном потоке
+        self.worker = UpdateWorker(update_function)
+        self.worker.finished.connect(self.update_finished)
+        self.worker.start()
+
+    def update_finished(self):
+        self.button.setText("Ok")
+        self.button.setEnabled(True)
+        self.button.clicked.connect(self.close)
+        self.worker.deleteLater()
+
+
+def show_error(error, update_function):
+    app = QApplication.instance()
+
+    if app is None:
+        app = QApplication(sys.argv)
+
+    dialog = ErrorDialog(error, update_function)
+    dialog.exec()
+
+
+# Например:
+def updated():
+    import time
+    time.sleep(5)
+    print("Обновление завершено")
+
+
+if __name__ == "__main__":
+    try:
+        raise ValueError("Something went wrong!")
+    except Exception as error:
+        show_error(error, updated)
