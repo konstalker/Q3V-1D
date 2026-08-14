@@ -1,6 +1,5 @@
 @echo off
 setlocal enabledelayedexpansion
-chcp 65001 >nul
 
 set "BASE_DIR=%~dp0"
 set "PY_ROOT=%BASE_DIR%pyenv"
@@ -20,54 +19,54 @@ set "UV_PYTHON_PREFERENCE=only-managed"
 if not exist "%PY_ROOT%" mkdir "%PY_ROOT%"
 
 if not exist "%UV_EXE%" (
-    echo Скачивание uv...
+    echo Downloading uv...
     set "UV_ZIP=%PY_ROOT%\uv.zip"
     powershell -NoProfile -Command ^
         "[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; Invoke-WebRequest -Uri '%UV_ZIP_URL%' -OutFile '!UV_ZIP!'"
     if !ERRORLEVEL! neq 0 (
-        echo Ошибка: не удалось скачать uv.
+        echo ERROR: failed to download uv.
         exit /b 1
     )
     powershell -NoProfile -Command "Expand-Archive -Path '!UV_ZIP!' -DestinationPath '%PY_ROOT%' -Force"
     del "!UV_ZIP!" >nul 2>&1
     if not exist "%UV_EXE%" (
-        echo Ошибка: uv.exe не найден после распаковки.
+        echo ERROR: uv.exe not found after extraction.
         exit /b 1
     )
 )
 
 "%UV_EXE%" python install %PYTHON_VERSION% --no-registry
 if !ERRORLEVEL! neq 0 (
-    echo Ошибка при установке Python.
+    echo ERROR: failed to install Python.
     exit /b 1
 )
 
 for /f "delims=" %%P in ('"%UV_EXE%" python find %PYTHON_VERSION%') do set "BASE_PYTHON=%%P"
 if not defined BASE_PYTHON (
-    echo Ошибка: не удалось найти базовый интерпретатор Python.
+    echo ERROR: could not find base Python interpreter.
     exit /b 1
 )
 for %%F in ("%BASE_PYTHON%") do set "BASE_PY_DIR=%%~dpF"
 set "REAL_PYTHONW=%BASE_PY_DIR%pythonw.exe"
 if not exist "%REAL_PYTHONW%" (
-    echo Ошибка: pythonw.exe не найден рядом с базовым python.exe.
-    echo Путь: %REAL_PYTHONW%
+    echo ERROR: pythonw.exe not found next to base python.exe.
+    echo Path: %REAL_PYTHONW%
     exit /b 1
 )
 
 if not exist "%VENV_DIR%\Scripts\python.exe" (
-    echo Создание виртуального окружения...
+    echo Creating virtual environment...
     "%UV_EXE%" venv "%VENV_DIR%" --python %PYTHON_VERSION%
     if !ERRORLEVEL! neq 0 (
-        echo Ошибка при создании venv.
+        echo ERROR: failed to create venv.
         exit /b 1
     )
 
     if exist "%REQUIREMENTS%" (
-        echo Установка зависимостей...
+        echo Installing dependencies...
         "%UV_EXE%" pip install --python "%VENV_DIR%\Scripts\python.exe" --link-mode copy -r "%REQUIREMENTS%"
         if !ERRORLEVEL! neq 0 (
-            echo Ошибка при установке зависимостей.
+            echo ERROR: failed to install dependencies.
             exit /b 1
         )
     )
