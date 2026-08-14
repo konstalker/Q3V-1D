@@ -166,7 +166,7 @@ class ErrorDialog(QDialog):
         self.worker.deleteLater()
 
 
-def show_error(error, update_function):
+def show_error(text, update_function):
     app = QApplication.instance()
 
     if app is None:

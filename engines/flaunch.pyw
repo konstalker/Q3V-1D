@@ -70,7 +70,9 @@ if __name__ == "__main__":
         sys.exit(app.exec())
     
     except Exception as error:
-        message = f"{type(error).__name__}: {error}"
+        message = f"""{type(error).__name__}: {error}
+If after restart you see this message, write me (t.me/konstalker)
+    """
     
         show_error(message, lambda: update("scripts"))
     
