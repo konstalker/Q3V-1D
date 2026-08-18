@@ -86,8 +86,11 @@ def get_relative_paths(folder_path: str) -> list[str]:
     return relative_paths
 
     
-def launch(args='+set fs_homepath "../baseq3/mods" +set fs_basepath "../" +set fs_game "osp" +set com_viewlog "0"', force_ogl=False):
+def launch(args='+set fs_homepath "@/baseq3/mods" +set fs_basepath "@/" +set fs_game "osp" +set com_viewlog "0"', args2='', force_ogl=False):
     vk_engine, ogl_engine = None, None
+    path = os.getcwd()
+    parent = os.path.dirname(path)
+    args, args2 = args.replace("@", parent), args2.replace("@", parent)
     if os.path.exists('./engine.txt'):
         with open('./engine.txt') as engine_file:
             engine_conf = engine_file.read().rstrip().split('\n')

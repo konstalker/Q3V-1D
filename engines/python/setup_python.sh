@@ -38,11 +38,11 @@ fi
 if [ ! -x "$VENV_DIR/bin/python" ]; then
     echo "Создание виртуального окружения..."
     "$UV_BIN" venv "$VENV_DIR" --python "$PYTHON_VERSION"
+fi
 
-    if [ -f "$REQUIREMENTS" ]; then
-        echo "Установка зависимостей..."
-        "$UV_BIN" pip install --python "$VENV_DIR/bin/python" -r "$REQUIREMENTS"
-    fi
+if [ -f "$REQUIREMENTS" ]; then
+    echo "Установка зависимостей..."
+    "$UV_BIN" pip install --python "$VENV_DIR/bin/python" -r "$REQUIREMENTS"
 fi
 
 # === 4. Запуск пользовательского скрипта внутри venv ===

@@ -61,14 +61,14 @@ if not exist "%VENV_DIR%\Scripts\python.exe" (
         echo ERROR: failed to create venv.
         exit /b 1
     )
+)
 
-    if exist "%REQUIREMENTS%" (
-        echo Installing dependencies...
-        "%UV_EXE%" pip install --python "%VENV_DIR%\Scripts\python.exe" --link-mode copy -r "%REQUIREMENTS%"
-        if !ERRORLEVEL! neq 0 (
-            echo ERROR: failed to install dependencies.
-            exit /b 1
-        )
+if exist "%REQUIREMENTS%" (
+    echo Installing dependencies...
+    "%UV_EXE%" pip install --python "%VENV_DIR%\Scripts\python.exe" --link-mode copy -r "%REQUIREMENTS%"
+    if !ERRORLEVEL! neq 0 (
+        echo ERROR: failed to install dependencies.
+        exit /b 1
     )
 )
 
