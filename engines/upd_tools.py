@@ -194,6 +194,14 @@ def update(repo_name, repare=False):
         # сборку скачали ПОСЛЕ уже установленного точечного аддона.
         # Порядок закачки в этом случае не важен: пересобираем поверх.
         _reapply_higher_priority(repo_name, tag, modlist)
+        
+        if repo_name == "scrips":
+            if c_info.s_data == "windows":
+                subprocess.Popen(["./python/setup_python.bat", "./launch.pyw"])
+            else:
+                os.system("chmod +x ./python/setup_python.sh")
+                subprocess.Popen(["./python/setup_python.sh", "scripts/upd_tools.py"])
+            sys.exit(0)
 
     except Exception as e:
         print(f"[error] not installed {repo_name}")
