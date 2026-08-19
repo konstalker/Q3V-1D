@@ -200,7 +200,7 @@ def update(repo_name, repare=False):
                 subprocess.Popen(["./python/setup_python.bat", "./launch.pyw"])
             else:
                 os.system("chmod +x ./python/setup_python.sh")
-                subprocess.Popen(["./python/setup_python.sh", "scripts/upd_tools.py"])
+                subprocess.Popen(["./python/setup_python.sh", "./launch.pyw", "upd"])
             sys.exit(0)
 
     except Exception as e:

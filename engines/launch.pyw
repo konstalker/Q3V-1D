@@ -38,7 +38,13 @@ if __name__ == "__main__":
         window.terminal.set_font(family)
         
         window.show()
-    
+
+        if len(sys.argv) > 2 and sys.argv[1] == 'upd':
+            window.open_terminal()
+            update_thread = aut.AutoUpdate()
+            update_thread.finished.connect(lambda: (self.close_terminal(), self.upd_status(False)))
+            update_thread.start()
+        
         aupd = Get_Upd()
         aupd.result_ready.connect(window.upd_status)
         aupd.modlist_failed.connect(
