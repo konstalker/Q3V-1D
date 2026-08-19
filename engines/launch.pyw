@@ -1,28 +1,26 @@
-import os
-import sys
-import shlex
-import subprocess
-from threading import Thread
-
-from upd_tools import *
-from gui_tools import *
-
-
-class Get_Upd(QtCore.QThread):
-    result_ready = QtCore.pyqtSignal(bool)
-    modlist_failed = QtCore.pyqtSignal(str)
-
-    def run(self):
-        modlist = get_modlist()
-        if modlist == False:
-            self.modlist_failed.emit('Не удалось загрузить список модов')
-            return
-        updates = get_updates()
-        self.result_ready.emit(bool(updates))
-
-
 if __name__ == "__main__":
     try:
+        import os
+        import sys
+        import shlex
+        import subprocess
+        from threading import Thread
+        
+        from upd_tools import *
+        from gui_tools import *
+        
+        class Get_Upd(QtCore.QThread):
+            result_ready = QtCore.pyqtSignal(bool)
+            modlist_failed = QtCore.pyqtSignal(str)
+        
+            def run(self):
+                modlist = get_modlist()
+                if modlist == False:
+                    self.modlist_failed.emit('Не удалось загрузить список модов')
+                    return
+                updates = get_updates()
+                self.result_ready.emit(bool(updates))
+                
         
         app = QApplication(sys.argv)
         
@@ -51,6 +49,8 @@ if __name__ == "__main__":
         sys.exit(app.exec())
         
     except Exception as error:
+        from base_methods import show_error
+        
         message = f"{type(error).__name__}: {error}"
     
         show_error(message, lambda: update("scripts"))

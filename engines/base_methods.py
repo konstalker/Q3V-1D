@@ -175,7 +175,7 @@ def show_error(text, update_function):
     if app is None:
         app = QApplication(sys.argv)
 
-    dialog = ErrorDialog(error, update_function)
+    dialog = ErrorDialog(text, update_function)
     dialog.exec()
 
 
