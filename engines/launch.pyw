@@ -42,7 +42,7 @@ if __name__ == "__main__":
         if len(sys.argv) >= 2 and sys.argv[1] == 'upd':
             window.open_terminal()
             update_thread = aut.AutoUpdate()
-            update_thread.finished.connect(lambda: (self.close_terminal(), self.upd_status(False)))
+            update_thread.finished.connect(lambda: (window.close_terminal(), window.upd_status(False)))
             update_thread.start()
         
         aupd = Get_Upd()
