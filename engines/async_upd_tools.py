@@ -11,25 +11,35 @@ class AutoUpdate(QtCore.QThread):
 
     def run(self):
         forupd = get_updates()
-        autoupdate()
         if "scripts" in forupd:
             update("scripts")
             if c_info.s_data == "windows":
                 subprocess.Popen(["./python/setup_python.bat", "./launch.pyw"])
             else:
+                os.system("chmod +x ./python/setup_python.sh")
                 subprocess.Popen(["./python/setup_python.sh", "scripts/upd_tools.py"])
             sys.exit(0)
+        autoupdate()
         self.result_ready.emit(True)
 
 class Update(QtCore.QThread):
     result_ready = QtCore.pyqtSignal(bool)
     
     def __init__(self, repo_name):
+        if repo_name == "scripts":
+            
         self.repo_name = repo_name
         super().__init__()
 
     def run(self):
         update(self.repo_name)
+        if self.repo_name == "scrips":
+            if c_info.s_data == "windows":
+                subprocess.Popen(["./python/setup_python.bat", "./launch.pyw"])
+            else:
+                os.system("chmod +x ./python/setup_python.sh")
+                subprocess.Popen(["./python/setup_python.sh", "scripts/upd_tools.py"])
+            sys.exit(0)
         self.result_ready.emit(True)
 
 class Remove(QtCore.QThread):
