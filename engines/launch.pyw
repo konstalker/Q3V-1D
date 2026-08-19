@@ -39,7 +39,7 @@ if __name__ == "__main__":
         
         window.show()
 
-        if len(sys.argv) > 2 and sys.argv[1] == 'upd':
+        if len(sys.argv) >= 2 and sys.argv[1] == 'upd':
             window.open_terminal()
             update_thread = aut.AutoUpdate()
             update_thread.finished.connect(lambda: (self.close_terminal(), self.upd_status(False)))
