@@ -195,7 +195,7 @@ def update(repo_name, repare=False):
         # Порядок закачки в этом случае не важен: пересобираем поверх.
         _reapply_higher_priority(repo_name, tag, modlist)
         
-        if repo_name == "scrips":
+        if repo_name == "scripts":
             if c_info.s_data == "windows":
                 subprocess.Popen(["./python/setup_python.bat", "./launch.pyw"])
             else:
