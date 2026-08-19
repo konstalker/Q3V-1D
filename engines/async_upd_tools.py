@@ -26,8 +26,6 @@ class Update(QtCore.QThread):
     result_ready = QtCore.pyqtSignal(bool)
     
     def __init__(self, repo_name):
-        if repo_name == "scripts":
-            
         self.repo_name = repo_name
         super().__init__()
 
