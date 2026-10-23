@@ -21,7 +21,7 @@ lines.append("vstr step0")
 with open(out_cfg, "w") as f:
     f.write("\n".join(lines))
 
-print(f"Готово: {out_cfg}, демок: {len(demos)}")
+print('[info] Demo conversion complete: {} demos written to {}'.format(len(demos), out_cfg))
 
-print('starting quake')
+print('[info] Starting Q3 quake...')
 launch(args2="+exec video.cfg +exec batchconvert.cfg")

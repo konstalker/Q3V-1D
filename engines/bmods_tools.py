@@ -173,8 +173,8 @@ class bmod:
         print('saving')
 
         with open(f'./mod_tree/{c_info.mod_branch}.bmod', 'w') as mod_branch:
-            for tag, (name, version) in self.mod_info.items():
-                mod_branch.write(f'{tag};{name}|{version}\n')
+            lines = [f'{tag};{name}|{version}\n' for tag, (name, version) in self.mod_info.items()]
+            mod_branch.writelines(lines)
 
         print('saved')
 
@@ -185,19 +185,17 @@ class bmod:
         return x in self.mod_list()
 
     # -----------------------------------------------------------------
-    # Приоритет по тегам, с ветками
+    # Tag priority system by branch
     #
-    # mod_tree/tag_order.txt разбит на секции [branch]. Внутри секции —
+    # mod_tree/tag_order.txt is divided into sections [branch]. Within a section -
     # тег на строку, от "базы" к "надстройкам", как раньше: индекс тега
     # внутри своей ветки и есть его приоритет.
     #
-    # Ветки нужны потому, что не все моды вообще способны конфликтовать
-    # друг с другом: defrag — отдельная папка мода, никогда не пересекается
-    # по файлам с содержимым osp/compilation; UI-скины — свой набор путей.
-    # Заставлять мейнтейнера решать "defrag выше или ниже compilation?"
-    # бессмысленно, если они физически не могут перекрыть друг друга.
+    # Not all mods are able to conflict with each other: defrag is a separate folder,
+    # never overlapping with osp/compilation; UI skins have their own path set.
+    # We don't need the maintainer to decide "defrag above or below compilation?" 
     #
-    # Приоритет — это tuple (branch, index). Сравнение имеет смысл ТОЛЬКО
+    # Priority is a tuple (branch, index). Comparison makes sense ONLY
     # между тегами одной ветки. Если два мода из разных веток внезапно
     # реально делят файл (build_ownership/_reapply_higher_priority) — это
     # не должно происходить по конфигурации, поэтому в этом случае мы не
@@ -205,8 +203,7 @@ class bmod:
     # автоматически: это сигнал поправить tag_order.txt, а не тихо
     # разрешаемый конфликт.
     #
-    # Тег, которого нет ни в одной ветке (новый мод, который никто не
-    # зарегистрировал), получает свою СОБСТВЕННУЮ уникальную ветку — то
+    # Register a tag not existing in any branch (a new unregistered mod) to its own unique branch. — то
     # есть по умолчанию гарантированно ни с кем не сравнивается. Раньше
     # такой тег молча уезжал в конец общего списка (максимальный
     # приоритет) — теперь вместо этого при реальном пересечении файлов
@@ -231,19 +228,17 @@ class bmod:
                 elif branch is not None:
                     self._tag_order[branch].append(line)
                 else:
-                    print(f'[warning] тег "{line}" в {TAG_ORDER_FILE} указан вне секции '
-                          f'[branch] — игнорирую, оберните его в секцию')
+                    print('[warning] tag "{}" is outside any section in {}'.format(line, TAG_ORDER_FILE))
 
     def reload_tag_order(self):
         self._load_tag_order()
 
     def priority_of_tag(self, tag):
-        """Возвращает (branch, index_внутри_branch)."""
+        """Return (branch, index_within_branch)."""
         for branch, tags in self._tag_order.items():
             if tag in tags:
                 return (branch, tags.index(tag))
-        print(f'[warning] tag "{tag}" не зарегистрирован ни в одной ветке {TAG_ORDER_FILE} — '
-              f'помещаю в отдельную ветку "unregistered:{tag}" (по умолчанию ни с кем не сравнивается)')
+        print('[warning] tag "{}" not registered in any section of {}'.format(tag, TAG_ORDER_FILE))
         return (f'unregistered:{tag}', 0)
 
     def priority_of(self, repo_name, modlist=None):
@@ -309,9 +304,31 @@ class bmod:
         return _paths_to_tree(self._manifests.get(repo_name, []))
 
     def delete_manifest(self, repo_name):
+        # 1. Удаляем запись из self._manifests
         if repo_name in self._manifests:
             del self._manifests[repo_name]
             self._save_all_manifests()
+        
+        # 2. Также удаляем запись из файла .bmod
+        bmod_file = f'./mod_tree/{c_info.mod_branch}.bmod'
+        with open(bmod_file, 'r') as rf:
+            lines = []
+            for line in rf:
+                line = line.strip()
+                # Запись в формате: tag;branch|version
+                if not line or ';' not in line:
+                    continue
+                try:
+                    tag, rest = line.split(';', 1)
+                    tag = tag.strip()
+                    if tag != repo_name:
+                        lines.append(line)
+                except:
+                    # Если не удалось разбить, оставляем строку
+                    lines.append(line)
+            
+            with open(bmod_file, 'w') as wf:
+                wf.writelines(f"{line}\n" for line in lines)
 
     # -----------------------------------------------------------------
     # Владение файлами
@@ -346,7 +363,7 @@ class bmod:
                           f'оставляю текущего владельца')
                     continue
 
-                if current_priority[1] <= priority[1]:
+                if priority[1] > current_priority[1]:  # БОЛЬШЕЙ индекс побеждает (периферия важнее ядра)
                     owners[path] = (repo_name, priority)
         return owners
 
@@ -354,12 +371,12 @@ class bmod:
         return self.build_ownership().get(_normalize_path(path))
 
     def check_priority_sanity(self):
-        """Не источник истины для приоритета (см. комментарий у priority_of_tag) —
-        просто эвристическая подсказка поверх явного tag_order.txt: внутри
-        одной ветки мод с более высоким приоритетом обычно задуман как более
-        точечный/специфичный и логично ожидать, что он трогает МЕНЬШЕ файлов,
-        чем то, что стоит под ним. Если наоборот и разница в разы — вероятно,
-        порядок в ветке перепутан местами. Только печатает предупреждение."""
+        """Not the source of truth for priority (see comment at priority_of_tag) -
+        heuristic guide on top of explicit tag_order.txt: within
+        one branch, mod with higher priority is usually intended to be
+        more focused/specific and logically expects to touch FEWER files
+        than what's below it. If opposite and difference is orders of magnitude -
+        order in branch is probably swapped. Only prints a warning."""
         for branch, tags in self._tag_order.items():
             sized = []
             for t in tags:
@@ -368,14 +385,15 @@ class bmod:
                     continue
                 repo_name = entry[0]
                 if not self.has_manifest(repo_name):
-                    continue  # мод стоял до этого патча — файлы не посчитаны, сравнивать не с чем
+                    continue  # mod appeared before this patch - files not counted, nothing to compare
                 sized.append((t, repo_name, len(self.load_manifest(repo_name))))
 
             for (tag_lo, repo_lo, n_lo), (tag_hi, repo_hi, n_hi) in zip(sized, sized[1:]):
                 if n_lo and n_hi and n_hi > n_lo * 5:
-                    print(f'[warning] ветка "{branch}": {repo_hi} (тег {tag_hi}, приоритет выше) '
-                          f'трогает в {n_hi // n_lo}x больше файлов, чем {repo_lo} (тег {tag_lo}, '
-                          f'приоритет ниже) — обычно бывает наоборот, проверьте порядок в tag_order.txt')
+                    print('[warning] Branch "{}": {} (tag {}, priority higher) '
+                          'touches {}x more files than {} (tag {}, '
+                          'priority lower) - typically it should be reversed, check order in tag_order.txt'.format(
+                        branch, repo_hi, tag_hi, n_hi // n_lo, repo_lo, tag_lo))
 
 
 bmod_conf = bmod()

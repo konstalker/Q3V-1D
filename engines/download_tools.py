@@ -21,7 +21,7 @@ def downloader(file_url, file_path, file_name, skip=False, max_attempts=10):
     full_path = os.path.join(file_path, file_name)
     os.makedirs(file_path, exist_ok=True)
 
-    print(f"Downloading {file_name}...")
+    print('[info] Downloading {}'.format(file_name))
     headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)'}
     attempt = 0
     chunk_size = 16384
@@ -31,7 +31,7 @@ def downloader(file_url, file_path, file_name, skip=False, max_attempts=10):
         try:
             total_length = None
 
-            # 1. Быстро узнаем размер файла через HEAD-запрос (без скачивания тела)
+            # 1. Quickly get file size via HEAD request (without downloading body)
             try:
                 head_req = urllib.request.Request(file_url, headers=headers, method='HEAD')
                 with urllib.request.urlopen(head_req, timeout=timeout) as resp:
@@ -44,8 +44,11 @@ def downloader(file_url, file_path, file_name, skip=False, max_attempts=10):
             # 2. Проверяем, скачан ли уже файл полностью
             if skip and total_length and os.path.exists(full_path):
                 if os.path.getsize(full_path) == total_length:
-                    print(f"\nFile {file_name} already exists and is complete. Skipping.")
+                    print('[info] {} already exists and is complete'.format(file_name))
                     return full_path
+            else:
+                # File not fully downloaded yet
+                pass
 
             # 3. Настраиваем докачку (Range Request)
             downloaded = 0
@@ -60,23 +63,22 @@ def downloader(file_url, file_path, file_name, skip=False, max_attempts=10):
 
             req = urllib.request.Request(file_url, headers=req_headers)
 
-            # 4. Основной запрос на получение данных
+            # 4. Main data request
             with urllib.request.urlopen(req, timeout=timeout) as response:
                 status = response.getcode()
 
-                # Защита от повреждения: если сервер проигнорировал Range и вернул 200 вместо 206,
-                # значит докачка не поддерживается. Сбрасываем запись на начало файла ('wb')
+                # Handle corruption protection
                 if write_mode == 'ab' and status != 206:
                     write_mode = 'wb'
                     downloaded = 0
 
-                # Если не получили размер из HEAD, берем из текущего ответа
+                # If no size from HEAD request, get it from current response
                 if total_length is None or status == 206 or total_length == 0:
                     content_len = response.info().get('Content-Length')
                     if content_len is not None:
                         total_length = downloaded + int(content_len) if status == 206 else int(content_len)
 
-                # Если размер так и остался неизвестным, ставим заглушку
+                # If size still unknown, set default placeholder
                 if total_length is None or total_length <= 0:
                     total_length = None
 
@@ -85,10 +87,10 @@ def downloader(file_url, file_path, file_name, skip=False, max_attempts=10):
                 with open(full_path, write_mode) as out_file:
                     while True:
                         try:
-                            # Читаем данные чанками
+                            # Read data in chunks
                             chunk = response.read(chunk_size)
                         except http.client.IncompleteRead as e:
-                            # Важно: если связь оборвалась на полуслове, спасаем то, что успело прийти
+                            # If connection dropped mid-transfer, save what we have
                             chunk = e.partial
 
                         if not chunk:
@@ -97,7 +99,7 @@ def downloader(file_url, file_path, file_name, skip=False, max_attempts=10):
                         out_file.write(chunk)
                         downloaded += len(chunk)
 
-                        # Вывод прогресс-бара
+                        # Display progress bar
                         if total_length:
                             last_percent = percent
                             percent = int((downloaded / total_length) * 100)
@@ -109,19 +111,19 @@ def downloader(file_url, file_path, file_name, skip=False, max_attempts=10):
                         else:
                             print(f'\rDownloaded: {downloaded// 1048576}MB', end='')
 
-                # Проверяем целостность скачанного файла по размеру
+                # Check integrity of downloaded file by size
                 if total_length is None or downloaded >= total_length:
-                    print("\nDownloaded successfully.")
+                    print('[info] Downloaded successfully')
                     return full_path
                 else:
                     raise Exception("Connection closed prematurely (size mismatch).")
 
         except (urllib.error.URLError, ConnectionError, TimeoutError, http.client.HTTPException, OSError) as e:
             attempt += 1
-            print(f'\nNetwork issue: {e}. Retrying ({attempt}/{max_attempts})...')
+            print('[warning] Network issue: {}. Retrying {}/{...}'.format(e, attempt, max_attempts))
             time.sleep(1)
 
-    print(f"\nFailed to download {file_name} after {max_attempts} attempts.")
+    print('[warning] Failed to download {} after {} attempts'.format(file_name, max_attempts))
     return None
 
 
@@ -140,7 +142,7 @@ def unziper(file_url, name, file_paths=[], skip=False, wanted_paths=None):
             if os.path.normpath(os.path.join(fp[1], os.path.basename(fp[0]))) in wanted_paths
         ]
         if not file_paths:
-            print(f'[skip] {name}: ни один файл не нужен, архив не скачивается')
+            print('[skip] {}: no files needed, skipping archive download'.format(name))
             return installed
 
     if os.path.exists("./cache/" + name) and not skip:
@@ -222,7 +224,7 @@ def download(conf_file, skip=False, wanted_paths=None):
 
                         dest_path = os.path.normpath(os.path.join(arr[3], arr[1]))
                         if wanted_paths is not None and dest_path not in wanted_paths:
-                            print(f'[skip] {arr[1]}: не нужен, не скачиваю')
+                            print('[skip] {}: not needed, skipping download'.format(arr[1]))
                         else:
                             installed.append(downloader(furl(arr[2]), arr[3], arr[1], skip=skip))
 
@@ -235,7 +237,7 @@ def download(conf_file, skip=False, wanted_paths=None):
         return all_installed
 
     except Exception as err:
-        print(f'[log] {err}')
+        print('[warning] Error downloading {}: {}'.format(file_name, err))
         print(f"[error] not installed {arr[1]}")
         if arr[0] == 'a':
             rmtree(f"./temp_files/{arr[1]}dir", )

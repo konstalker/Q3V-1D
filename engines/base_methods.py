@@ -179,11 +179,10 @@ def show_error(text, update_function):
     dialog.exec()
 
 
-# Например:
 def updated():
     import time
     time.sleep(5)
-    print("Обновление завершено")
+    print("Update complited")
 
 
 if __name__ == "__main__":
